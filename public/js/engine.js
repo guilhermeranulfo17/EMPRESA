@@ -25,6 +25,8 @@ export class Escritorio {
       agentes: {},
       mensagens: [],
       ideias: [],
+      entregas: [],
+      dados: null,
       pausado: false,
       velocidade: 1,
       modo: cerebro.nome,
@@ -57,14 +59,27 @@ export class Escritorio {
     return structuredClone(this.estado);
   }
 
-  // Recupera mensagens e ideias salvas (o server usa isso para manter o histórico entre reinícios).
+  // Recupera o que foi salvo (servidor: data/estado.json; página no Claude: armazenamento do artefato).
   restaurar(salvo) {
     if (!salvo) return;
     this.estado.mensagens = (salvo.mensagens ?? []).slice(-LIMITE_MENSAGENS);
     this.estado.ideias = salvo.ideias ?? [];
+    const ids = new Set(this.estado.mensagens.map((m) => m.id));
+    this.pendencias = (salvo.pendencias ?? []).filter((p) => this.estado.agentes[p.agente] && ids.has(p.mensagemId));
     for (const [id, a] of Object.entries(salvo.agentes ?? {})) {
       if (this.estado.agentes[id]) this.estado.agentes[id].atividade = a.atividade ?? this.estado.agentes[id].atividade;
     }
+  }
+
+  // O que precisa ser guardado para continuar de onde parou.
+  exportar() {
+    const { mensagens, ideias, agentes } = this.estado;
+    return {
+      mensagens,
+      ideias,
+      pendencias: this.pendencias,
+      agentes: Object.fromEntries(Object.values(agentes).map((a) => [a.id, { atividade: a.atividade }])),
+    };
   }
 
   // ---------- ciclo ----------
@@ -189,9 +204,32 @@ export class Escritorio {
     this.emitir('foto', this.foto());
   }
 
+  // ---------- entregas e números reais ----------
+  // Um material pronto para usar (mensagens de WhatsApp, roteiro, plano...). Avisa o CEO na caixa.
+  registrarEntrega(entrega, { avisar = true } = {}) {
+    const i = this.estado.entregas.findIndex((e) => e.id === entrega.id);
+    if (i >= 0) this.estado.entregas[i] = entrega;
+    else this.estado.entregas.push(entrega);
+    this.emitir('entrega', entrega);
+    if (avisar) {
+      const texto = entrega.versao > 1 ? `Refiz "${entrega.titulo}" (versão ${entrega.versao}). Está na aba Entregas.` : `Entreguei "${entrega.titulo}". Está na aba Entregas, pronto para usar.`;
+      this.registrar({ de: entrega.autor, para: 'ceo', tipo: 'entrega', entregaId: entrega.id, texto, profundidade: PROFUNDIDADE_MAXIMA });
+    }
+    return entrega;
+  }
+
+  carregarEntregas(entregas) {
+    this.estado.entregas = [...entregas].sort((a, b) => a.ts - b.ts);
+  }
+
+  definirDados(dados) {
+    this.estado.dados = dados;
+    this.emitir('dados', dados);
+  }
+
   // ---------- aplicar ações ----------
   aplicar(agente, acao, pendencia) {
-    acao = { ...acao, texto: String(acao.texto ?? '').trim().slice(0, 1200) };
+    acao = { ...acao, texto: String(acao.texto ?? '').trim().slice(0, acao.acao === 'entrega' ? 6000 : 1200) };
     if (!acao.texto) {
       this.atualizarAgente(agente.id, { status: 'trabalhando' });
       return;
@@ -223,6 +261,12 @@ export class Escritorio {
         const [escolhido] = outros.splice(Math.floor(Math.random() * outros.length), 1);
         this.pendencias.push({ agente: escolhido.id, mensagemId: mensagem.id, profundidade });
       }
+    } else if (acao.acao === 'entrega' && acao.entrega_titulo?.trim()) {
+      const entrega = this.registrarEntrega(
+        { id: novoId('entrega'), autor: agente.id, titulo: acao.entrega_titulo.trim().slice(0, 90), conteudo: acao.texto, origem: 'rodada', versao: 1, ts: Date.now() },
+        { avisar: false },
+      );
+      mensagem = this.registrar({ de: agente.id, para: 'ceo', tipo: 'entrega', entregaId: entrega.id, texto: `Preparei "${entrega.titulo}". Está na aba Entregas.`, profundidade });
     } else if (acao.acao === 'votar' && ideia && ideia.status === 'em discussão' && !ideia.apoios.includes(agente.id)) {
       const voto = acao.voto === 'questionar' ? 'questionar' : 'apoiar';
       if (voto === 'apoiar') ideia.apoios.push(agente.id);

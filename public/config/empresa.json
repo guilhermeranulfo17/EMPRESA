@@ -10,7 +10,8 @@
       "A venda é feita por uma IA que conversa com o buffet no WhatsApp. Se o buffet quiser, a equipe faz uma apresentação mostrando como o sistema funciona.",
       "Meta: R$ 5.000 de receita recorrente mensal (MRR) em 3 meses. Isso dá cerca de 15 clientes a R$ 347, ou 5 vendas novas por mês."
     ],
-    "objetivo_do_trimestre": "Chegar a R$ 5.000 de MRR em 3 meses: 5 vendas novas por mês a R$ 347."
+    "objetivo_do_trimestre": "Chegar a R$ 5.000 de MRR em 3 meses: 5 vendas novas por mês a R$ 347.",
+    "meta": { "mrr": 5000, "vendas_mes": 5, "ticket": 347 }
   },
   "setores": [
     {

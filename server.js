@@ -47,9 +47,8 @@ setInterval(() => {
 
 // ---------- persistência ----------
 async function salvar() {
-  const { mensagens, ideias, agentes } = escritorio.estado;
   await mkdir(path.dirname(arquivoEstado), { recursive: true });
-  await writeFile(arquivoEstado, JSON.stringify({ mensagens, ideias, agentes }, null, 1));
+  await writeFile(arquivoEstado, JSON.stringify(escritorio.exportar(), null, 1));
 }
 setInterval(() => salvar().catch((e) => console.warn('Não salvou o estado:', e.message)), 15000);
 for (const sinal of ['SIGINT', 'SIGTERM']) {

@@ -1,7 +1,7 @@
 // Rodada com IA de verdade dentro da página publicada no Claude (capacidade "sample").
 // Uma chamada decide as próximas ações de vários agentes; cada ação entra no escritório assim que chega.
 
-import { descreverEmpresa, descreverEquipe, descreverCaixa, ESCRITORIO, REGRAS } from './prompts.js';
+import { descreverEmpresa, descreverEquipe, descreverCaixa, descreverDados, descreverEntregas, ESCRITORIO, REGRAS } from './prompts.js';
 
 export async function rodadaComIA(sample, escritorio, { signal, quantidade = 6, aoChegar }) {
   const prompt = montarPrompt(escritorio, quantidade);
@@ -68,13 +68,19 @@ function montarPrompt(escritorio, quantidade) {
 
 ${descreverEmpresa(estado.empresa)}
 
+${descreverDados(estado.dados)}
+
 ${ESCRITORIO}
+- "entrega": produzir um material pronto para o CEO usar de verdade (ex.: mensagens de WhatsApp, roteiro, checklist, plano). Título em "entrega_titulo" e o material completo em "texto", com quebras de linha (\\n) e listas com "- ". Use no máximo uma entrega por rodada, só quando a conversa pedir, e sem repetir uma entrega que já existe.
 
 ${descreverEquipe(estado.setores, agentes)}
 
 ${REGRAS}
 - Use agentes variados, de pelo menos 3 setores diferentes. Cada ação é de um agente só.
 - As ações podem reagir às anteriores desta mesma rodada.
+- O objetivo é ajudar o CEO a bater a meta: prefiram decisões, pedidos concretos e materiais usáveis a conversa genérica.
+
+${descreverEntregas(estado.entregas, nomeDe)}
 
 ${descreverCaixa({ mensagens: estado.mensagens.slice(-25), ideias: estado.ideias.filter((i) => i.status !== 'descartada').slice(-10), nomeDe })}
 
@@ -82,5 +88,5 @@ Esperando resposta (responda estas primeiro, as do CEO antes de todas):
 ${pendentes.join('\n') || '(ninguém esperando resposta)'}
 
 Formato da resposta: exatamente ${quantidade} linhas, cada linha um objeto JSON completo, sem nenhum outro texto e sem cercas de código. Campos:
-{"agente":"id do agente","status":"o que ele está fazendo na mesa agora, até 8 palavras","acao":"mensagem | ideia | votar","para":"id de agente, id de setor, todos ou ceo","texto":"a fala, a descrição da ideia ou o comentário do voto","ideia_titulo":"título curto se acao = ideia, senão vazio","ideia_id":"id da ideia se acao = votar, senão vazio","voto":"apoiar | questionar | nenhum","responde_a":"id [msg_...] da mensagem respondida, senão vazio"}`;
+{"agente":"id do agente","status":"o que ele está fazendo na mesa agora, até 8 palavras","acao":"mensagem | ideia | votar | entrega","para":"id de agente, id de setor, todos ou ceo","texto":"a fala, a descrição da ideia ou o comentário do voto","ideia_titulo":"título curto se acao = ideia, senão vazio","entrega_titulo":"título se acao = entrega, senão vazio","ideia_id":"id da ideia se acao = votar, senão vazio","voto":"apoiar | questionar | nenhum","responde_a":"id [msg_...] da mensagem respondida, senão vazio"}`;
 }

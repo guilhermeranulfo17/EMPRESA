@@ -49,3 +49,31 @@ ${linhas.join('\n') || '(vazia: o dia está começando)'}
 Mural de ideias:
 ${mural.join('\n') || '(nenhuma ideia ainda)'}`;
 }
+
+// Números que o CEO informou na aba Números. São os únicos dados reais que os agentes conhecem.
+export const CAMPOS_DADOS = [
+  { id: 'clientes', rotulo: 'Clientes ativos', tipo: 'numero' },
+  { id: 'mrr', rotulo: 'MRR atual (R$)', tipo: 'numero' },
+  { id: 'vendas_mes', rotulo: 'Vendas novas este mês', tipo: 'numero' },
+  { id: 'mensagens_semana', rotulo: 'Mensagens frias enviadas (últimos 7 dias)', tipo: 'numero' },
+  { id: 'respostas_semana', rotulo: 'Buffets que responderam (últimos 7 dias)', tipo: 'numero' },
+  { id: 'apresentacoes_mes', rotulo: 'Apresentações feitas este mês', tipo: 'numero' },
+  { id: 'notas', rotulo: 'O que está acontecendo', tipo: 'texto' },
+];
+
+export function descreverDados(dados) {
+  if (!dados) return 'Números reais: o CEO ainda não informou nenhum número. Não suponha resultados; quando precisar de um dado, peça ao CEO.';
+  const linhas = CAMPOS_DADOS.filter((c) => c.tipo === 'numero' && dados[c.id] !== '' && dados[c.id] != null).map((c) => `- ${c.rotulo}: ${dados[c.id]}`);
+  const quando = dados.atualizadoEm ? new Date(dados.atualizadoEm).toLocaleDateString('pt-BR') : 'data não informada';
+  let texto = `Números reais informados pelo CEO (atualizados em ${quando}):\n${linhas.join('\n') || '- (nenhum número preenchido)'}`;
+  if (dados.notas?.trim()) texto += `\nObservações do CEO (conversas, objeções, o que funcionou):\n${dados.notas.trim().slice(0, 4000)}`;
+  return texto;
+}
+
+export function descreverEntregas(entregas, nomeDe) {
+  if (!entregas?.length) return 'Entregas prontas: nenhuma ainda.';
+  return `Entregas prontas (materiais que a equipe já produziu):\n${entregas
+    .slice(-10)
+    .map((e) => `- "${e.titulo}" por ${nomeDe(e.autor)} (versão ${e.versao ?? 1}): ${e.conteudo.replace(/\s+/g, ' ').slice(0, 220)}…`)
+    .join('\n')}`;
+}

@@ -4,11 +4,28 @@ A Orkestra vende um software de orçamento interativo para buffets (principalmen
 
 Este é um escritório visual onde 11 agentes de IA trabalham em quatro setores (**Comercial**, **Marketing**, **Suporte & Sucesso** e **Financeiro**) e conversam entre si por uma **caixa de comunicação** compartilhada. Eles têm autonomia para pedir dados uns aos outros, propor ideias para a empresa e apoiar ou questionar as ideias dos colegas. Você entra como **CEO**: manda mensagens para todos, para um setor ou para um agente, e aprova ou descarta as ideias.
 
-## Três jeitos de usar
+## O que é real e o que não é
 
-1. **Pela página publicada no Claude (mais fácil).** Abra o link do escritório no Claude e clique em **Ligar IA**. Cada rodada é uma chamada ao Claude que decide as próximas 6 ações da equipe, usando o seu plano do Claude (a primeira vez pede permissão). Uma rodada nova começa quando você clica em **Próxima rodada**, manda uma mensagem como CEO ou aprova uma ideia. Não precisa de chave nem de instalar nada.
-2. **No seu computador, com chave da API:** os agentes trabalham sozinhos o tempo todo, um de cada vez (veja abaixo).
-3. **No seu computador, sem chave:** modo simulação, com falas prontas.
+- **Abrindo a página pelo Claude, tudo é IA de verdade.** Os agentes pensam com o Claude, usando o seu plano (a primeira vez pede permissão). Não existe mais simulação misturada.
+- **Tudo fica salvo:** conversa, ideias, entregas e números ficam no armazenamento da página, e a próxima visita continua de onde parou. Para começar de novo, use "Apagar conversa e ideias" na aba Números.
+- **Entregas são materiais de verdade:** mensagens de prospecção, roteiro da IA vendedora, respostas a objeções, roteiro de apresentação, plano da semana, posts, checklist de implantação e relatório da meta. Você copia e usa. Se não gostar, clique em "Pedir ajuste" e o agente refaz (versão 2, 3...).
+- **Números reais:** na aba Números você informa clientes, MRR, vendas, mensagens enviadas, respostas, apresentações e o que está acontecendo. Os agentes tratam isso como a verdade da empresa. Sem esses números, eles falam só em metas e estimativas, e dizem isso.
+- **O que os agentes não fazem:** não mandam mensagens no WhatsApp, não acessam seus sistemas e não agem fora da página. Eles pensam, discutem e escrevem; quem executa é você (ou sua IA vendedora).
+- **Modo simulação:** só aparece quando a página é aberta fora do Claude (por exemplo, `public/index.html` num navegador comum). Nesse caso um aviso diz que as falas são frases prontas, e nada é salvo.
+
+## Como usar pela página no Claude
+
+1. Abra o link do escritório no Claude.
+2. Preencha a aba **Números** com o que você sabe hoje e salve.
+3. Na aba **Entregas**, escolha o que precisa (por exemplo, "Mensagens de prospecção no WhatsApp") e clique em **Pedir entrega**. O texto aparece enquanto é escrito.
+4. Clique em **Rodada da equipe** para os agentes conversarem entre si, ou mande uma mensagem como CEO na aba **Caixa**. Nas rodadas, os agentes também podem produzir entregas por conta própria e propor ideias para você aprovar.
+
+A página só chama o Claude quando você clica em algo (rodada, mensagem, entrega, aprovação). Ela não fica gastando o seu plano sozinha.
+
+## Rodando no computador
+
+- **Com chave da API:** os agentes trabalham sozinhos o tempo todo, um de cada vez (veja abaixo). Entregas e Números ainda são exclusivos da página no Claude.
+- **Sem chave:** modo simulação, com frases prontas.
 
 ## Como rodar no computador
 
@@ -89,5 +106,7 @@ public/js/engine.js          motor: estado, escolha de quem fala, regras das ide
 public/js/cerebro-simulado.js falas simuladas por setor
 public/js/prompts.js         textos que descrevem empresa, equipe e caixa para o Claude
 public/js/rodada-ia.js       rodada com o Claude dentro da página publicada
+public/js/entregas.js        modelos de entrega e geração com o Claude
+public/js/memoria.js         salva e carrega tudo no armazenamento da página
 public/config/empresa.json   empresa, setores e agentes
 ```

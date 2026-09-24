@@ -19,10 +19,15 @@
         <p id="objetivo" class="objetivo"></p>
       </div>
     </div>
-    <div class="numeros" aria-label="Resumo">
-      <div><span id="n-mensagens">0</span><small>mensagens</small></div>
-      <div><span id="n-ideias">0</span><small>ideias</small></div>
-      <div><span id="n-aprovadas">0</span><small>aprovadas</small></div>
+    <div class="numeros" aria-label="Resumo da meta">
+      <div class="numero-meta">
+        <span id="n-mrr">—</span>
+        <small id="meta-mrr">MRR</small>
+        <span class="barra" aria-hidden="true"><span id="barra-mrr"></span></span>
+      </div>
+      <div><span id="n-vendas">—</span><small id="meta-vendas">vendas no mês</small></div>
+      <div><span id="n-entregas">0</span><small>entregas</small></div>
+      <div><span id="n-aprovadas">0</span><small>ideias aprovadas</small></div>
     </div>
     <div class="controles">
       <span id="modo" class="modo" title="Quem está pensando pelos agentes">—</span>
@@ -36,7 +41,8 @@
     </div>
   </header>
 
-  <p id="aviso-demo" class="aviso" hidden>Modo demonstração: os agentes estão simulados. Para ligar a IA de verdade, abra esta página pelo Claude ou rode o servidor com uma chave da API (veja o README).</p>
+  <p id="aviso-demo" class="aviso" hidden><b>Modo simulação:</b> estas falas são frases prontas, não é IA. Para os agentes pensarem de verdade, abra esta página pelo Claude (ou rode o servidor com uma chave da API, veja o README).</p>
+  <p id="aviso-memoria" class="aviso" hidden></p>
 
   <div id="painel-ia" class="painel-ia" hidden>
     <span class="ia-sinal" aria-hidden="true"></span>
@@ -45,7 +51,6 @@
       <span id="ia-detalhe"></span>
     </div>
     <div class="ia-acoes">
-      <button id="btn-sim" class="btn" type="button" hidden>Voltar à simulação</button>
       <button id="btn-parar-ia" class="btn" type="button" hidden>Parar</button>
       <button id="btn-ia" class="btn btn-forte" type="button">Ligar IA</button>
     </div>
@@ -55,8 +60,10 @@
 
     <aside class="painel">
       <div class="abas" role="tablist">
-        <button type="button" role="tab" id="aba-caixa" aria-selected="true" data-aba="caixa">Caixa de comunicação</button>
-        <button type="button" role="tab" id="aba-ideias" aria-selected="false" data-aba="ideias">Mural de ideias <span id="badge-ideias" class="badge" hidden></span></button>
+        <button type="button" role="tab" id="aba-caixa" aria-selected="true" data-aba="caixa">Caixa</button>
+        <button type="button" role="tab" id="aba-ideias" aria-selected="false" data-aba="ideias">Ideias <span id="badge-ideias" class="badge" hidden></span></button>
+        <button type="button" role="tab" id="aba-entregas" aria-selected="false" data-aba="entregas" hidden>Entregas</button>
+        <button type="button" role="tab" id="aba-numeros" aria-selected="false" data-aba="numeros" hidden>Números</button>
       </div>
 
       <div id="vista-caixa" class="vista">
@@ -75,6 +82,45 @@
       <div id="vista-ideias" class="vista" hidden>
         <p class="dica">Ideias com 4 apoios de pelo menos 2 setores sobem para a sua aprovação.</p>
         <div class="ideias" id="ideias"></div>
+      </div>
+
+      <div id="vista-entregas" class="vista" hidden>
+        <form id="form-entrega" class="pedido-entrega">
+          <div class="compositor-linha">
+            <label for="modelo-entrega">Pedir</label>
+            <select id="modelo-entrega"></select>
+          </div>
+          <div class="compositor-linha">
+            <label for="agente-entrega">Quem faz</label>
+            <select id="agente-entrega"></select>
+          </div>
+          <textarea id="obs-entrega" rows="2" maxlength="1500"></textarea>
+          <div class="acoes-ideia">
+            <button id="btn-parar-entrega" class="btn" type="button" hidden>Parar</button>
+            <button id="btn-entrega" class="btn btn-forte" type="submit">Pedir entrega</button>
+          </div>
+          <p id="status-entrega" class="dica-linha" aria-live="polite"></p>
+        </form>
+        <div class="ideias" id="entregas"></div>
+      </div>
+
+      <div id="vista-numeros" class="vista" hidden>
+        <form id="form-dados" class="form-dados">
+          <p class="dica-linha">Os agentes usam estes números como a verdade da empresa. Sem eles, falam só em metas e estimativas. Atualize sempre que mudar.</p>
+          <div id="campos-dados" class="campos"></div>
+          <div class="acoes-ideia">
+            <span id="status-dados" class="dica-linha"></span>
+            <button class="btn btn-forte" type="submit">Salvar números</button>
+          </div>
+        </form>
+        <div class="zona-limpeza">
+          <button id="btn-apagar" class="btn btn-descartar" type="button">Apagar conversa e ideias</button>
+          <div id="confirma-apagar" class="acoes-ideia" hidden>
+            <span class="dica-linha">Apaga a caixa e o mural. Entregas e números ficam.</span>
+            <button id="btn-cancelar-apagar" class="btn" type="button">Cancelar</button>
+            <button id="btn-confirmar-apagar" class="btn btn-descartar" type="button">Apagar</button>
+          </div>
+        </div>
       </div>
     </aside>
   </main>
