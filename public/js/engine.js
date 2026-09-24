@@ -26,6 +26,7 @@ export class Escritorio {
       mensagens: [],
       ideias: [],
       entregas: [],
+      pesquisas: [],
       dados: null,
       pausado: false,
       velocidade: 1,
@@ -51,8 +52,8 @@ export class Escritorio {
     return () => this.ouvintes.delete(fn);
   }
 
-  emitir(tipo, dados) {
-    for (const fn of this.ouvintes) fn(tipo, dados);
+  emitir(tipo, dados, extra) {
+    for (const fn of this.ouvintes) fn(tipo, dados, extra);
   }
 
   foto() {
@@ -222,6 +223,31 @@ export class Escritorio {
     this.estado.entregas = [...entregas].sort((a, b) => a.ts - b.ts);
   }
 
+  // Pesquisa na internet: o pedido fica na fila e a equipe de pesquisa (Claude Code com busca) devolve o resultado.
+  // `remoto`: veio do armazenamento (a equipe de pesquisa gravou), então não precisa salvar de novo.
+  registrarPesquisa(pesquisa, { remoto = false } = {}) {
+    const i = this.estado.pesquisas.findIndex((p) => p.id === pesquisa.id);
+    if (i >= 0) this.estado.pesquisas[i] = pesquisa;
+    else this.estado.pesquisas.push(pesquisa);
+    this.emitir('pesquisa', pesquisa, { remoto });
+    this.anunciarPesquisasProntas();
+    return pesquisa;
+  }
+
+  // Cada pesquisa pronta é anunciada na caixa uma vez só.
+  anunciarPesquisasProntas() {
+    for (const pesquisa of this.estado.pesquisas) {
+      if (pesquisa.status !== 'pronta') continue;
+      if (this.estado.mensagens.some((m) => m.tipo === 'pesquisa_pronta' && m.pesquisaId === pesquisa.id)) continue;
+      const autor = this.estado.agentes[pesquisa.responsavel] ? pesquisa.responsavel : Object.keys(this.estado.agentes)[0];
+      this.registrar({ de: autor, para: 'todos', tipo: 'pesquisa_pronta', pesquisaId: pesquisa.id, texto: `Pesquisa pronta, com fontes reais: "${pesquisa.titulo}". Está na aba Entregas.`, profundidade: PROFUNDIDADE_MAXIMA });
+    }
+  }
+
+  carregarPesquisas(pesquisas) {
+    this.estado.pesquisas = [...pesquisas].sort((a, b) => a.criadoEm - b.criadoEm);
+  }
+
   definirDados(dados) {
     this.estado.dados = dados;
     this.emitir('dados', dados);
@@ -267,6 +293,13 @@ export class Escritorio {
         { avisar: false },
       );
       mensagem = this.registrar({ de: agente.id, para: 'ceo', tipo: 'entrega', entregaId: entrega.id, texto: `Preparei "${entrega.titulo}". Está na aba Entregas.`, profundidade });
+    } else if (acao.acao === 'pesquisa' && acao.pesquisa_titulo?.trim()) {
+      const pesquisa = {
+        id: novoId('pesquisa'), titulo: acao.pesquisa_titulo.trim().slice(0, 90), pedido: acao.texto,
+        pedidoPor: agente.id, responsavel: agente.id, status: 'na fila', criadoEm: Date.now(),
+      };
+      this.registrarPesquisa(pesquisa);
+      mensagem = this.registrar({ de: agente.id, para: 'ceo', tipo: 'pedido_pesquisa', pesquisaId: pesquisa.id, texto: `Pedi uma pesquisa na internet: "${pesquisa.titulo}". ${acao.texto}`, profundidade });
     } else if (acao.acao === 'votar' && ideia && ideia.status === 'em discussão' && !ideia.apoios.includes(agente.id)) {
       const voto = acao.voto === 'questionar' ? 'questionar' : 'apoiar';
       if (voto === 'apoiar') ideia.apoios.push(agente.id);

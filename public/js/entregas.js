@@ -1,6 +1,6 @@
 // Entregas: materiais prontos para usar, escritos por um agente com o Claude.
 
-import { descreverEmpresa, descreverDados, descreverEntregas } from './prompts.js';
+import { descreverEmpresa, descreverDados, descreverAnalise, descreverEntregas, descreverPesquisas } from './prompts.js';
 
 export const MODELOS = [
   {
@@ -54,6 +54,32 @@ export const MODELOS = [
   { id: 'outra', titulo: 'Outra entrega', agente: 'rafael', pedido: '' },
 ];
 
+// Pedidos que precisam de internet: vão para a fila da equipe de pesquisa, que devolve com fontes.
+export const MODELOS_PESQUISA = [
+  {
+    id: 'buffets_cidade',
+    titulo: 'Lista de buffets de uma cidade',
+    agente: 'nina',
+    exemplo: 'Ex.: Uberaba, 20 buffets, priorizar buffet móvel e quem tem WhatsApp público.',
+    pedido: 'Encontre buffets reais da cidade indicada, priorizando buffets móveis (que atendem no local do cliente). Para cada um: nome, WhatsApp ou telefone público, Instagram ou site, bairro e o que a fonte diz sobre o serviço. Separe por prioridade e diga o que não foi encontrado.',
+  },
+  {
+    id: 'concorrentes',
+    titulo: 'Concorrentes da Orkestra',
+    agente: 'luna',
+    exemplo: 'Ex.: focar em softwares brasileiros; comparar preço.',
+    pedido: 'Encontre softwares e ferramentas que buffets no Brasil usam para fazer orçamento e gestão de eventos (concorrentes diretos e indiretos da Orkestra). Para cada um: nome, site, o que faz, preço público se houver e o que a Orkestra faz diferente com o orçamento interativo.',
+  },
+  {
+    id: 'mercado',
+    titulo: 'Preços e mercado de buffet de uma cidade',
+    agente: 'helena',
+    exemplo: 'Ex.: Uberlândia, buffet infantil e casamento.',
+    pedido: 'Levante preços públicos de buffet (por pessoa e por festa) na cidade indicada, os tipos de festa mais comuns e sinais do tamanho do mercado (quantos buffets aparecem nos diretórios). Diga como isso se compara ao plano de R$ 347 por mês da Orkestra.',
+  },
+  { id: 'pesquisa_livre', titulo: 'Pesquisa livre', agente: 'nina', exemplo: 'Descreva o que precisa pesquisar na internet e para quê.', pedido: '' },
+];
+
 function montarPrompt({ escritorio, agenteId, titulo, pedido, anterior, ajuste }) {
   const { estado } = escritorio;
   const agente = estado.agentes[agenteId];
@@ -75,6 +101,10 @@ ${descreverEmpresa(estado.empresa)}
 
 ${descreverDados(estado.dados)}
 
+${descreverAnalise(estado.dados, estado.empresa.meta)}
+
+${descreverPesquisas(estado.pesquisas)}
+
 Ideias aprovadas pelo CEO:
 ${aprovadas || '(nenhuma ainda)'}
 
@@ -89,7 +119,8 @@ Como escrever:
 - Em português do Brasil, pronto para o CEO copiar e usar hoje, sem introdução nem despedida.
 - Organize com títulos curtos iniciados por "## " e listas com "- ". Use **negrito** só para destacar o essencial.
 - Seja específico para buffets móveis e para a Orkestra.
-- Não invente resultados como se fossem reais. Use os números reais acima quando existirem; o resto é meta ou estimativa, e diga isso.`;
+- Não invente resultados como se fossem reais. Use os números reais, a análise e as pesquisas prontas acima quando existirem; o resto é meta ou estimativa, e diga isso.
+- Você não tem acesso à internet. Nunca invente nomes de empresas, telefones, perfis ou preços de mercado. Se a entrega depende disso e não há pesquisa pronta, escreva o que dá para fazer agora e, no fim, uma seção "## Pesquisa necessária" dizendo exatamente o que pedir na aba Entregas em "Pesquisa na internet".`;
 }
 
 // Gera (ou refaz) uma entrega. `onText` recebe o texto inteiro até agora, para mostrar enquanto é escrito.
@@ -102,23 +133,57 @@ export async function gerarEntrega(sample, escritorio, { agenteId, titulo, pedid
   return { conteudo: text.trim(), cortada: truncated };
 }
 
-// Markdown simples (## títulos, - listas, **negrito**) para nós do DOM, sem innerHTML.
+// Markdown simples (## títulos, - listas, **negrito**, tabelas e links) para nós do DOM, sem innerHTML.
 export function renderizarMarkdown(texto) {
   const frag = document.createDocumentFragment();
   let lista = null;
+  let tabela = null;
   const inline = (linha) => {
-    const p = [];
-    linha.split(/(\*\*[^*]+\*\*)/g).forEach((parte) => {
+    const nos = [];
+    for (const parte of linha.split(/(\*\*[^*]+\*\*|https?:\/\/[^\s)|]+)/g)) {
+      if (!parte) continue;
       if (/^\*\*[^*]+\*\*$/.test(parte)) {
         const b = document.createElement('strong');
         b.textContent = parte.slice(2, -2);
-        p.push(b);
-      } else if (parte) p.push(document.createTextNode(parte));
-    });
-    return p;
+        nos.push(b);
+      } else if (/^https?:\/\//.test(parte)) {
+        const a = document.createElement('a');
+        a.href = parte;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = parte.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+        nos.push(a);
+      } else nos.push(document.createTextNode(parte));
+    }
+    return nos;
   };
+  const celulas = (linha) => linha.trim().replace(/^\||\|$/g, '').split('|').map((c) => c.trim());
+
   for (const bruta of texto.split('\n')) {
     const linha = bruta.trimEnd();
+    if (/^\s*\|/.test(linha)) {
+      lista = null;
+      if (/^[\s|:-]+$/.test(linha)) continue; // linha separadora |---|---|
+      if (!tabela) {
+        const caixa = document.createElement('div');
+        caixa.className = 'tabela';
+        tabela = document.createElement('table');
+        const cab = tabela.createTHead().insertRow();
+        for (const c of celulas(linha)) {
+          const th = document.createElement('th');
+          th.append(...inline(c));
+          cab.append(th);
+        }
+        tabela.createTBody();
+        caixa.append(tabela);
+        frag.append(caixa);
+      } else {
+        const tr = tabela.tBodies[0].insertRow();
+        for (const c of celulas(linha)) tr.insertCell().append(...inline(c));
+      }
+      continue;
+    }
+    tabela = null;
     const item = linha.match(/^\s*(?:[-*•]|\d+[.)])\s+(.*)$/);
     if (item) {
       if (!lista) {

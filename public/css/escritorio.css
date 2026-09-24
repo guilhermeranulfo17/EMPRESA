@@ -173,7 +173,7 @@ h1 {
 /* ---------- layout ---------- */
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 400px;
+  grid-template-columns: minmax(0, 1fr) clamp(380px, 32vw, 480px);
   gap: 16px;
   flex: 1;
   min-height: 0;
@@ -572,7 +572,27 @@ details.entrega:not([open]) .entrega-cab h3::after { content: "  ›"; color: va
 .ajuste { display: grid; gap: 8px; }
 .ajuste .btn { justify-self: end; }
 
+/* tabelas e fontes dentro das entregas */
+.tabela { overflow-x: auto; margin: 0 0 10px; border: 1px solid var(--linha); border-radius: 8px; }
+.tabela table { border-collapse: collapse; width: 100%; font-size: 12.5px; line-height: 1.4; }
+.tabela th, .tabela td { text-align: left; vertical-align: top; padding: 6px 8px; border-bottom: 1px solid var(--linha); min-width: 110px; }
+.tabela th { background: var(--superficie-2); font-weight: 600; }
+.tabela tr:last-child td { border-bottom: 0; }
+.entrega-corpo a, .fontes a { color: var(--tela); overflow-wrap: anywhere; }
+.fontes { font-size: 12.5px; color: var(--tinta-2); }
+.fontes summary { cursor: pointer; font-weight: 600; }
+.fontes ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 3px; }
+
 /* ---------- números ---------- */
+.analise { padding: 12px; border-top: 1px solid var(--linha); display: grid; gap: 8px; }
+.analise h3 { margin: 0; font: 700 15px/1.2 var(--display); }
+.analise-itens { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.analise-itens > .dica-linha { grid-column: 1 / -1; }
+.analise-item { display: grid; gap: 2px; padding: 8px 10px; border-radius: 8px; background: var(--superficie-2); }
+.analise-item small { color: var(--tinta-2); font-size: 11.5px; }
+.analise-item b { font: 700 17px/1.2 var(--display); font-variant-numeric: tabular-nums; }
+.analise-item span { font-size: 12px; color: var(--tinta-2); }
+#vista-numeros { overflow-y: auto; }
 .form-dados { border-bottom: 0; overflow-y: auto; }
 .campos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .campo { display: grid; gap: 4px; font-size: 12.5px; color: var(--tinta-2); align-content: end; }
@@ -606,3 +626,8 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* tabelas largas rolam dentro do cartão, sem empurrar o painel */
+.ideias > *, .entrega > *, .entrega-corpo { min-width: 0; }
+.entrega { min-width: 0; max-width: 100%; }
+.ideias, .entrega { grid-template-columns: minmax(0, 1fr); }

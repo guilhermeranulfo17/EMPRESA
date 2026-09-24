@@ -10,6 +10,7 @@ export async function abrirMemoria({ aoErro } = {}) {
   const refEstado = db.doc('escritorio/estado');
   const refDados = db.doc('escritorio/dados');
   const colEntregas = db.collection('entregas');
+  const colPesquisas = db.collection('pesquisas');
   let fila = Promise.resolve();
   let timer = null;
 
@@ -21,12 +22,18 @@ export async function abrirMemoria({ aoErro } = {}) {
 
   return {
     async carregar() {
-      const [estado, dados, entregas] = await Promise.all([refEstado.get(), refDados.get(), colEntregas.orderBy('ts').limit(300).get()]);
+      const [estado, dados, entregas, pesquisas] = await Promise.all([
+        refEstado.get(),
+        refDados.get(),
+        colEntregas.orderBy('ts').limit(300).get(),
+        colPesquisas.orderBy('criadoEm').limit(300).get(),
+      ]);
       // O que vem do armazenamento é congelado: clona antes de o escritório mexer.
       return {
         estado: estado.exists ? structuredClone(estado.data()) : null,
         dados: dados.exists ? structuredClone(dados.data()) : null,
         entregas: entregas.docs.map((d) => structuredClone(d.data())),
+        pesquisas: pesquisas.docs.map((d) => structuredClone(d.data())),
       };
     },
 
@@ -38,6 +45,19 @@ export async function abrirMemoria({ aoErro } = {}) {
 
     salvarEntrega: (entrega) => escrever(() => colEntregas.doc(entrega.id).set(entrega)),
     salvarDados: (dados) => escrever(() => refDados.set(dados)),
+    salvarPesquisa: (pesquisa) => escrever(() => colPesquisas.doc(pesquisa.id).set(pesquisa)),
+
+    // A equipe de pesquisa grava os resultados direto no armazenamento; a página recebe na hora.
+    ouvirPesquisas(aoMudar) {
+      return colPesquisas.onSnapshot(
+        (snap) => {
+          for (const mudanca of snap.docChanges()) {
+            if (mudanca.type !== 'removed') aoMudar(structuredClone(mudanca.doc.data()));
+          }
+        },
+        () => {},
+      );
+    },
     apagarEntrega: (id) => escrever(() => colEntregas.doc(id).delete()),
   };
 }

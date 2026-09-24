@@ -6,18 +6,18 @@ Este é um escritório visual onde 11 agentes de IA trabalham em quatro setores 
 
 ## O que é real e o que não é
 
-- **Abrindo a página pelo Claude, tudo é IA de verdade.** Os agentes pensam com o Claude, usando o seu plano (a primeira vez pede permissão). Não existe mais simulação misturada.
-- **Tudo fica salvo:** conversa, ideias, entregas e números ficam no armazenamento da página, e a próxima visita continua de onde parou. Para começar de novo, use "Apagar conversa e ideias" na aba Números.
-- **Entregas são materiais de verdade:** mensagens de prospecção, roteiro da IA vendedora, respostas a objeções, roteiro de apresentação, plano da semana, posts, checklist de implantação e relatório da meta. Você copia e usa. Se não gostar, clique em "Pedir ajuste" e o agente refaz (versão 2, 3...).
-- **Números reais:** na aba Números você informa clientes, MRR, vendas, mensagens enviadas, respostas, apresentações e o que está acontecendo. Os agentes tratam isso como a verdade da empresa. Sem esses números, eles falam só em metas e estimativas, e dizem isso.
-- **O que os agentes não fazem:** não mandam mensagens no WhatsApp, não acessam seus sistemas e não agem fora da página. Eles pensam, discutem e escrevem; quem executa é você (ou sua IA vendedora).
-- **Modo simulação:** só aparece quando a página é aberta fora do Claude (por exemplo, `public/index.html` num navegador comum). Nesse caso um aviso diz que as falas são frases prontas, e nada é salvo.
+- **Os agentes da página pensam com o Claude de verdade, mas não têm internet.** Eles analisam os dados, fazem contas, decidem e escrevem. Não acessam WhatsApp, Instagram, Google ou sistemas, e as regras proíbem que finjam fazer isso ("já estou buscando", "te mando em instantes").
+- **Pesquisa na internet é feita pela equipe de pesquisa:** uma rotina do Claude Code com busca na web que roda de hora em hora, das 8h às 20h (seg. a sáb.). Ela pega os pedidos da fila, pesquisa e grava o resultado com fontes na página, que aparece sozinho. Os agentes também podem pedir pesquisas quando falta informação de fora.
+- **Análise do funil é conta, não IA:** a aba Números calcula quanto falta para a meta, taxa de resposta, conversão das apresentações e o volume de mensagens necessário. Os agentes recebem essa análise em toda rodada.
+- **Tudo fica salvo:** conversa, ideias, entregas, pesquisas e números continuam na próxima visita. Para recomeçar a conversa, use "Apagar conversa e ideias" na aba Números.
+- **Entregas são materiais prontos para usar:** mensagens de prospecção, roteiro da IA vendedora, objeções, apresentação, plano da semana, posts, checklist de implantação e relatório da meta. Elas usam os números reais e as pesquisas prontas. Se um material depende de dado de fora que ainda não foi pesquisado, ele diz qual pesquisa pedir, em vez de inventar.
+- **Modo simulação:** só aparece quando a página é aberta fora do Claude. Um aviso diz que as falas são frases prontas, e nada é salvo.
 
 ## Como usar pela página no Claude
 
 1. Abra o link do escritório no Claude.
 2. Preencha a aba **Números** com o que você sabe hoje e salve.
-3. Na aba **Entregas**, escolha o que precisa (por exemplo, "Mensagens de prospecção no WhatsApp") e clique em **Pedir entrega**. O texto aparece enquanto é escrito.
+3. Na aba **Entregas**, peça uma **pesquisa na internet** (por exemplo, "Lista de buffets de uma cidade") ou um **material** (por exemplo, "Mensagens de prospecção no WhatsApp"). Materiais aparecem na hora, enquanto são escritos; pesquisas chegam na próxima passada da equipe de pesquisa.
 4. Clique em **Rodada da equipe** para os agentes conversarem entre si, ou mande uma mensagem como CEO na aba **Caixa**. Nas rodadas, os agentes também podem produzir entregas por conta própria e propor ideias para você aprovar.
 
 A página só chama o Claude quando você clica em algo (rodada, mensagem, entrega, aprovação). Ela não fica gastando o seu plano sozinha.
@@ -108,5 +108,6 @@ public/js/prompts.js         textos que descrevem empresa, equipe e caixa para o
 public/js/rodada-ia.js       rodada com o Claude dentro da página publicada
 public/js/entregas.js        modelos de entrega e geração com o Claude
 public/js/memoria.js         salva e carrega tudo no armazenamento da página
+docs/equipe-de-pesquisa.md   instruções da rotina que faz as pesquisas na internet
 public/config/empresa.json   empresa, setores e agentes
 ```

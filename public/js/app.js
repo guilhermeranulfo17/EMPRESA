@@ -79,16 +79,25 @@ async function conectarLocal() {
         const salvo = await memoria.carregar();
         escritorio.restaurar(salvo.estado);
         escritorio.carregarEntregas(salvo.entregas);
+        escritorio.carregarPesquisas(salvo.pesquisas);
         escritorio.estado.dados = salvo.dados;
         receber('foto', escritorio.foto());
+        escritorio.anunciarPesquisasProntas();
       } catch {
         avisarMemoria('Não consegui carregar o histórico salvo. O que acontecer agora será salvo normalmente.');
       }
       ia.memoria = memoria;
-      escritorio.ouvir((tipo, dados) => {
+      escritorio.ouvir((tipo, dados, extra) => {
         if (['mensagem', 'ideia', 'foto'].includes(tipo)) memoria.salvarEstado(() => escritorio.exportar());
         if (tipo === 'entrega') memoria.salvarEntrega(dados);
         if (tipo === 'dados') memoria.salvarDados(dados);
+        if (tipo === 'pesquisa' && !extra?.remoto) memoria.salvarPesquisa(dados);
+      });
+      // Resultados da equipe de pesquisa chegam sozinhos, sem recarregar a página.
+      memoria.ouvirPesquisas((pesquisa) => {
+        const atual = escritorio.estado.pesquisas.find((p) => p.id === pesquisa.id);
+        if (JSON.stringify(atual) === JSON.stringify(pesquisa)) return;
+        escritorio.registrarPesquisa(pesquisa, { remoto: true });
       });
     } else {
       avisarMemoria('O histórico não está sendo salvo nesta visualização: ao recarregar, a conversa recomeça.');
@@ -119,6 +128,13 @@ async function conectarLocal() {
     },
     controle: (dados) => escritorio.definirControle(dados),
     salvarDados: (dados) => escritorio.definirDados(dados),
+    pedirPesquisa: ({ titulo, pedido, responsavel }) => {
+      const pesquisa = escritorio.registrarPesquisa({
+        id: `pesquisa_${Date.now().toString(36)}`, titulo, pedido, pedidoPor: 'ceo', responsavel, status: 'na fila', criadoEm: Date.now(),
+      });
+      escritorio.registrar({ de: 'ceo', para: responsavel, tipo: 'pedido_pesquisa', pesquisaId: pesquisa.id, profundidade: 3, texto: `Pedi uma pesquisa na internet: "${titulo}". ${pedido}` });
+      return pesquisa;
+    },
     apagarConversa: () => escritorio.limpar(),
   };
 }
@@ -286,9 +302,17 @@ function receber(tipo, dados) {
     else estado.entregas.push(dados);
     desenharEntregas();
     atualizarNumeros();
+  } else if (tipo === 'pesquisa') {
+    estado.pesquisas ??= [];
+    const i = estado.pesquisas.findIndex((x) => x.id === dados.id);
+    if (i >= 0) estado.pesquisas[i] = dados;
+    else estado.pesquisas.push(dados);
+    desenharEntregas();
+    atualizarNumeros();
   } else if (tipo === 'dados') {
     estado.dados = dados;
     atualizarNumeros();
+    desenharAnalise();
   } else if (tipo === 'controle') {
     Object.assign(estado, dados);
     desenharControles();
@@ -313,6 +337,7 @@ function montarTudo() {
   $('#nome-empresa').textContent = estado.empresa.nome;
   $('#objetivo').textContent = estado.empresa.objetivo_do_trimestre;
   estado.entregas ??= [];
+  estado.pesquisas ??= [];
   if (ia.escritorio) desenharIA();
   else {
     const modo = $('#modo');
@@ -539,6 +564,11 @@ function itemDoFeed(msg) {
     ref = el('button', { class: 'link', type: 'button', onclick: () => abrirEntrega(msg.entregaId) }, 'Abrir a entrega');
   } else if (msg.tipo === 'pedido') {
     etiqueta = el('span', { class: 'etiqueta discussao' }, 'Pedido');
+  } else if (msg.tipo === 'pedido_pesquisa') {
+    etiqueta = el('span', { class: 'etiqueta discussao' }, 'Pesquisa pedida');
+  } else if (msg.tipo === 'pesquisa_pronta') {
+    etiqueta = el('span', { class: 'etiqueta aprovada' }, 'Pesquisa pronta');
+    ref = el('button', { class: 'link', type: 'button', onclick: () => abrirEntrega(msg.pesquisaId) }, 'Abrir a pesquisa');
   }
   return el('article', { class: 'msg', 'data-tipo': msg.tipo },
     el('div', { class: 'msg-cab' },
@@ -549,9 +579,9 @@ function itemDoFeed(msg) {
       etiqueta,
       el('time', { datetime: new Date(msg.ts).toISOString() }, hora(msg.ts)),
     ),
-    msg.tipo === 'entrega' ? null : ref,
+    ['entrega', 'pesquisa_pronta'].includes(msg.tipo) ? null : ref,
     el('p', {}, msg.texto),
-    msg.tipo === 'entrega' ? el('div', { class: 'ref' }, ref) : null,
+    ['entrega', 'pesquisa_pronta'].includes(msg.tipo) ? el('div', { class: 'ref' }, ref) : null,
   );
 }
 
@@ -650,7 +680,7 @@ function atualizarNumeros() {
   $('#barra-mrr').style.width = mrr == null || !meta.mrr ? '0%' : `${Math.min(100, (mrr / meta.mrr) * 100)}%`;
   $('#n-vendas').textContent = temNumero(dados.vendas_mes) ? dados.vendas_mes : '—';
   $('#meta-vendas').textContent = meta.vendas_mes ? `de ${meta.vendas_mes} vendas no mês` : 'vendas no mês';
-  $('#n-entregas').textContent = estado.entregas?.length ?? 0;
+  $('#n-entregas').textContent = (estado.entregas?.length ?? 0) + (estado.pesquisas ?? []).filter((p) => p.status === 'pronta').length;
   $('#n-aprovadas').textContent = estado.ideias.filter((i) => i.status === 'aprovada').length;
     const total = $('#hub-total');
   if (total) total.textContent = estado.mensagens.length;
@@ -664,19 +694,29 @@ async function montarPedidoEntrega() {
   $('#aba-entregas').hidden = !disponivel;
   $('#aba-numeros').hidden = !disponivel;
   if (!disponivel) return;
-  const { MODELOS } = await import('./entregas.js');
+  const { MODELOS, MODELOS_PESQUISA } = await import('./entregas.js');
   const modelo = $('#modelo-entrega');
   if (!modelo.options.length) {
-    modelo.replaceChildren(...MODELOS.map((m) => el('option', { value: m.id }, m.titulo)));
+    modelo.replaceChildren(
+      el('optgroup', { label: 'Pesquisa na internet (com fontes reais)' }, MODELOS_PESQUISA.map((m) => el('option', { value: m.id }, m.titulo))),
+      el('optgroup', { label: 'Material escrito pela equipe' }, MODELOS.map((m) => el('option', { value: m.id }, m.titulo))),
+    );
     $('#agente-entrega').replaceChildren(
       ...estado.setores.map((s) => el('optgroup', { label: s.nome }, s.agentes.map((id) => el('option', { value: id }, `${estado.agentes[id].nome} · ${estado.agentes[id].cargo}`)))),
     );
     const sugerir = () => {
-      const m = MODELOS.find((x) => x.id === modelo.value);
+      const pesquisa = MODELOS_PESQUISA.find((x) => x.id === modelo.value);
+      const m = pesquisa ?? MODELOS.find((x) => x.id === modelo.value);
       $('#agente-entrega').value = m.agente;
-      $('#obs-entrega').placeholder = m.id === 'outra'
-        ? 'Descreva o que você precisa. Ex.: uma mensagem para reativar buffets que pararam de responder.'
-        : 'Detalhes (opcional). Ex.: foco em buffets de BH, tom mais informal.';
+      $('#obs-entrega').placeholder = pesquisa
+        ? pesquisa.exemplo
+        : m.id === 'outra'
+          ? 'Descreva o que você precisa. Ex.: uma mensagem para reativar buffets que pararam de responder.'
+          : 'Detalhes (opcional). Ex.: foco em buffets de BH, tom mais informal.';
+      $('#btn-entrega').textContent = pesquisa ? 'Pedir pesquisa' : 'Pedir entrega';
+      desenharPedidoEntrega(pesquisa
+        ? 'Pesquisas vão para a equipe de pesquisa, que tem internet. Ela trabalha de hora em hora, das 8h às 20h (seg. a sáb.), e o resultado aparece aqui sozinho, com as fontes.'
+        : '');
     };
     modelo.addEventListener('change', sugerir);
     sugerir();
@@ -689,22 +729,33 @@ function desenharPedidoEntrega(status) {
   const botao = $('#btn-entrega');
   if (!botao) return;
   const semIA = !ia.sample;
-  botao.disabled = semIA || entregaAtual.rodando;
-  botao.textContent = entregaAtual.rodando ? 'Escrevendo…' : 'Pedir entrega';
+  const ehPesquisa = $('#modelo-entrega').value && !$('#modelo-entrega').selectedOptions[0]?.parentElement?.label?.startsWith('Material');
+  botao.disabled = (!ehPesquisa && semIA) || entregaAtual.rodando;
+  botao.textContent = entregaAtual.rodando ? 'Escrevendo…' : ehPesquisa ? 'Pedir pesquisa' : 'Pedir entrega';
   $('#btn-parar-entrega').hidden = !entregaAtual.rodando;
-  $('#status-entrega').textContent = semIA ? 'As entregas são escritas pelo Claude e só funcionam com a IA ligada (abrindo esta página pelo Claude).' : statusEntrega;
+  $('#status-entrega').textContent = semIA && !ehPesquisa ? 'Os materiais são escritos pelo Claude e só funcionam com a IA ligada (abrindo esta página pelo Claude).' : statusEntrega;
 }
 
-$('#form-entrega').addEventListener('submit', (e) => {
+$('#form-entrega').addEventListener('submit', async (e) => {
   e.preventDefault();
+  const { MODELOS_PESQUISA } = await import('./entregas.js');
   const modeloId = $('#modelo-entrega').value;
   const obs = $('#obs-entrega').value.trim();
-  if (modeloId === 'outra' && !obs) {
-    desenharPedidoEntrega('Descreva o que você precisa na caixa de detalhes.');
+  const pesquisa = MODELOS_PESQUISA.find((m) => m.id === modeloId);
+  const precisaDetalhe = modeloId === 'outra' || modeloId === 'pesquisa_livre' || modeloId === 'buffets_cidade' || modeloId === 'mercado';
+  if (precisaDetalhe && !obs) {
+    desenharPedidoEntrega(modeloId === 'buffets_cidade' || modeloId === 'mercado' ? 'Diga a cidade na caixa de detalhes.' : 'Descreva o que você precisa na caixa de detalhes.');
     $('#obs-entrega').focus();
     return;
   }
   $('#obs-entrega').value = '';
+  if (pesquisa) {
+    if (!conexao?.pedirPesquisa) return;
+    const titulo = pesquisa.id === 'pesquisa_livre' ? obs.slice(0, 70) : `${pesquisa.titulo}${obs ? `: ${obs.slice(0, 50)}` : ''}`;
+    conexao.pedirPesquisa({ titulo, pedido: [pesquisa.pedido, obs && `Detalhes do CEO: ${obs}`].filter(Boolean).join('\n'), responsavel: $('#agente-entrega').value });
+    desenharPedidoEntrega('Pesquisa na fila. O resultado aparece aqui sozinho, com as fontes, na próxima passada da equipe de pesquisa (de hora em hora, das 8h às 20h, seg. a sáb.).');
+    return;
+  }
   pedirEntrega({ modeloId, agenteId: $('#agente-entrega').value, obs });
 });
 $('#btn-parar-entrega').addEventListener('click', () => entregaAtual.ctl?.abort());
@@ -733,12 +784,67 @@ async function desenharEntregas() {
   const box = $('#entregas');
   if (!box || !estado.entregas) return;
   const { renderizarMarkdown } = await import('./entregas.js');
-  const lista = [...estado.entregas].sort((a, b) => (b.atualizadoEm ?? b.ts) - (a.atualizadoEm ?? a.ts));
+  const quando = (x) => x.atualizadoEm ?? x.concluidaEm ?? x.ts ?? x.criadoEm;
+  const itens = [
+    ...estado.entregas.map((e) => ({ tipo: 'entrega', item: e })),
+    ...(estado.pesquisas ?? []).map((p) => ({ tipo: 'pesquisa', item: p })),
+  ].sort((a, b) => quando(b.item) - quando(a.item));
   const rascunho = box.querySelector('.rascunho');
-  box.replaceChildren(...(rascunho ? [rascunho] : []), ...lista.map((e, i) => cartaoDeEntrega(e, i === 0, renderizarMarkdown)));
-  if (!lista.length && !rascunho) {
-    box.append(el('p', { class: 'vazio' }, 'Nenhuma entrega ainda. Peça acima o primeiro material: por exemplo, as mensagens de prospecção no WhatsApp.'));
+  box.replaceChildren(
+    ...(rascunho ? [rascunho] : []),
+    ...itens.map(({ tipo, item }, i) => (tipo === 'pesquisa' ? cartaoDePesquisa(item, i === 0, renderizarMarkdown) : cartaoDeEntrega(item, i === 0, renderizarMarkdown))),
+  );
+  if (!itens.length && !rascunho) {
+    box.append(el('p', { class: 'vazio' }, 'Nada ainda. Peça acima uma pesquisa (por exemplo, a lista de buffets de uma cidade) ou um material pronto.'));
   }
+}
+
+const STATUS_PESQUISA = {
+  'na fila': ['discussao', 'Na fila da equipe de pesquisa'],
+  pesquisando: ['ideia', 'Pesquisando na internet'],
+  pronta: ['aprovada', 'Pesquisa pronta · com fontes'],
+  erro: ['descartada', 'Não foi possível'],
+};
+
+function cartaoDePesquisa(pesquisa, aberta, renderizarMarkdown) {
+  const [classe, rotulo] = STATUS_PESQUISA[pesquisa.status] ?? STATUS_PESQUISA['na fila'];
+  const quando = new Date(pesquisa.concluidaEm ?? pesquisa.criadoEm).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+  const pronta = pesquisa.status === 'pronta' || pesquisa.status === 'erro';
+  const corpo = pronta
+    ? el('div', { class: 'entrega-corpo' }, renderizarMarkdown(pesquisa.resultado ?? ''))
+    : el('div', { class: 'entrega-corpo' }, el('p', { class: 'pensando' }, `Pedido: ${pesquisa.pedido}`),
+        el('p', { class: 'pensando' }, 'A equipe de pesquisa trabalha de hora em hora, das 8h às 20h (seg. a sáb.). O resultado aparece aqui sozinho.'));
+  const copiar = el('button', { class: 'btn', type: 'button' }, 'Copiar texto');
+  copiar.addEventListener('click', () => copiarTexto(pesquisa.resultado ?? '', corpo, copiar));
+  return el('details', { class: 'entrega', id: `entrega-${pesquisa.id}`, open: aberta, 'data-tipo': 'pesquisa' },
+    el('summary', { class: 'entrega-cab' },
+      el('div', {}, el('span', { class: `etiqueta ${classe}` }, rotulo)),
+      el('h3', {}, pesquisa.titulo),
+      el('div', { class: 'autor' },
+        el('span', { class: 'ponto', style: `--cor:${corDe(pesquisa.responsavel)}` }),
+        `${nomeDe(pesquisa.responsavel)} · ${pesquisa.status === 'pronta' ? 'concluída' : 'pedida'} ${quando}`)),
+    corpo,
+    pesquisa.fontes?.length
+      ? el('details', { class: 'fontes' },
+          el('summary', {}, `Fontes (${pesquisa.fontes.length})`),
+          el('ul', {}, pesquisa.fontes.map((f) => el('li', {}, el('a', { href: f.url, target: '_blank', rel: 'noopener noreferrer' }, f.titulo || f.url)))))
+      : null,
+    pesquisa.status === 'pronta' ? el('div', { class: 'acoes-ideia' }, copiar) : null,
+  );
+}
+
+async function copiarTexto(texto, corpo, botao) {
+  try {
+    await navigator.clipboard.writeText(texto);
+    botao.textContent = 'Copiado';
+  } catch {
+    const faixa = document.createRange();
+    faixa.selectNodeContents(corpo);
+    getSelection().removeAllRanges();
+    getSelection().addRange(faixa);
+    botao.textContent = 'Texto selecionado: use Ctrl+C';
+  }
+  setTimeout(() => (botao.textContent = 'Copiar texto'), 2500);
 }
 
 function cartaoDeEntrega(entrega, aberta, renderizarMarkdown) {
@@ -751,19 +857,7 @@ function cartaoDeEntrega(entrega, aberta, renderizarMarkdown) {
       pedirEntrega({ agenteId: entrega.autor, obs, refazer: entrega });
     } }, 'Refazer com o ajuste'));
   const copiar = el('button', { class: 'btn', type: 'button' }, 'Copiar texto');
-  copiar.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(entrega.conteudo);
-      copiar.textContent = 'Copiado';
-    } catch {
-      const faixa = document.createRange();
-      faixa.selectNodeContents(corpo);
-      getSelection().removeAllRanges();
-      getSelection().addRange(faixa);
-      copiar.textContent = 'Texto selecionado: use Ctrl+C';
-    }
-    setTimeout(() => (copiar.textContent = 'Copiar texto'), 2500);
-  });
+  copiar.addEventListener('click', () => copiarTexto(entrega.conteudo, corpo, copiar));
   const corpo = el('div', { class: 'entrega-corpo' }, renderizarMarkdown(entrega.conteudo));
   const quando = new Date(entrega.atualizadoEm ?? entrega.ts).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
   return el('details', { class: 'entrega', id: `entrega-${entrega.id}`, open: aberta },
@@ -805,9 +899,19 @@ async function montarDados() {
         : el('input', { id: `dado-${c.id}`, type: 'number', min: 0, step: 'any', inputmode: 'decimal' }))));
   }
   for (const c of CAMPOS_DADOS) $(`#dado-${c.id}`).value = estado.dados?.[c.id] ?? '';
+  desenharAnalise();
   $('#status-dados').textContent = estado.dados?.atualizadoEm
     ? `Última atualização: ${new Date(estado.dados.atualizadoEm).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}`
     : 'Nenhum número salvo ainda.';
+}
+
+async function desenharAnalise() {
+  const box = $('#analise');
+  if (!box || !estado) return;
+  const { analisarFunil } = await import('./prompts.js');
+  const itens = analisarFunil(estado.dados, estado.empresa.meta);
+  box.replaceChildren(...itens.map((i) => el('div', { class: 'analise-item' }, el('small', {}, i.rotulo), el('b', {}, i.valor), el('span', {}, i.nota))));
+  if (!itens.length) box.append(el('p', { class: 'dica-linha' }, 'Preencha e salve os números acima para ver a análise: quanto falta para a meta, taxa de resposta, conversão das apresentações e o volume de mensagens necessário.'));
 }
 
 $('#form-dados').addEventListener('submit', async (e) => {
