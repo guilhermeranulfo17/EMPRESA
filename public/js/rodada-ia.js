@@ -1,7 +1,7 @@
 // Rodada com IA de verdade dentro da página publicada no Claude (capacidade "sample").
 // Uma chamada decide as próximas ações de vários agentes; cada ação entra no escritório assim que chega.
 
-import { descreverEmpresa, descreverEquipe, descreverCaixa, descreverDados, descreverAnalise, descreverEntregas, descreverPesquisas, ESCRITORIO, REGRAS } from './prompts.js';
+import { descreverEmpresa, descreverEquipe, descreverCaixa, descreverDados, descreverAnalise, descreverEntregas, descreverPesquisas, descreverBacklog, ESCRITORIO, REGRAS } from './prompts.js';
 
 export async function rodadaComIA(sample, escritorio, { signal, quantidade = 4, aoChegar }) {
   const prompt = montarPrompt(escritorio, quantidade);
@@ -74,14 +74,17 @@ ${descreverAnalise(estado.dados, estado.empresa.meta)}
 
 ${descreverPesquisas(estado.pesquisas)}
 
+${descreverBacklog(estado.backlog, nomeDe)}
+
 ${ESCRITORIO}
+- "tarefa": colocar uma tarefa no backlog do produto (funcionalidade, bug, melhoria, infraestrutura, segurança ou lançamento). Título em "tarefa_titulo", tipo em "tarefa_tipo", prioridade em "prioridade" (alta, média ou baixa) e, em "texto", o que fazer e o critério de pronto. Só para o que ainda não está no backlog.
 - "pesquisa": pedir à equipe de pesquisa (que tem internet) uma informação de fora da empresa. Título curto em "pesquisa_titulo" e, em "texto", exatamente o que pesquisar e para quê (ex.: "20 buffets móveis em Uberlândia com WhatsApp público, para a prospecção da Bianca"). Só peça o que ainda não está nas pesquisas prontas ou na fila.
 - "entrega": produzir um material pronto para o CEO usar de verdade (ex.: mensagens de WhatsApp, roteiro, checklist, plano). Título em "entrega_titulo" e o material completo em "texto", com quebras de linha (\\n) e listas com "- ". Use no máximo uma entrega por rodada, só quando a conversa pedir, e sem repetir uma entrega que já existe.
 
 ${descreverEquipe(estado.setores, agentes)}
 
 ${REGRAS}
-- Use agentes variados, de pelo menos 3 setores diferentes. Cada ação é de um agente só.
+- Use agentes variados, de pelo menos 3 setores diferentes. Enquanto o sistema não estiver lançado, a TI deve aparecer em quase toda rodada. Cada ação é de um agente só.
 - As ações podem reagir às anteriores desta mesma rodada.
 - Quando há pesquisas prontas, usem os dados delas (nomes, contatos, preços) nas análises e nos materiais, citando de qual pesquisa veio.
 
@@ -93,5 +96,5 @@ Esperando resposta (responda estas primeiro, as do CEO antes de todas):
 ${pendentes.join('\n') || '(ninguém esperando resposta)'}
 
 Formato da resposta: exatamente ${quantidade} linhas, cada linha um objeto JSON completo, sem nenhum outro texto e sem cercas de código. Campos:
-{"agente":"id do agente","status":"o que ele está fazendo na mesa agora, até 8 palavras","acao":"mensagem | ideia | votar | entrega | pesquisa","para":"id de agente, id de setor, todos ou ceo","texto":"a fala, a descrição da ideia ou o comentário do voto","ideia_titulo":"título curto se acao = ideia, senão vazio","entrega_titulo":"título se acao = entrega, senão vazio","pesquisa_titulo":"título se acao = pesquisa, senão vazio","ideia_id":"id da ideia se acao = votar, senão vazio","voto":"apoiar | questionar | nenhum","responde_a":"id [msg_...] da mensagem respondida, senão vazio"}`;
+{"agente":"id do agente","status":"o que ele está fazendo na mesa agora, até 8 palavras","acao":"mensagem | ideia | votar | entrega | pesquisa | tarefa","para":"id de agente, id de setor, todos ou ceo","texto":"a fala, a descrição da ideia ou o comentário do voto","ideia_titulo":"título curto se acao = ideia, senão vazio","entrega_titulo":"título se acao = entrega, senão vazio","pesquisa_titulo":"título se acao = pesquisa, senão vazio","tarefa_titulo":"título se acao = tarefa, senão vazio","tarefa_tipo":"tipo se acao = tarefa, senão vazio","prioridade":"alta | média | baixa se acao = tarefa, senão vazio","ideia_id":"id da ideia se acao = votar, senão vazio","voto":"apoiar | questionar | nenhum","responde_a":"id [msg_...] da mensagem respondida, senão vazio"}`;
 }

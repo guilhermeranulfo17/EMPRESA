@@ -6,6 +6,7 @@ export function descreverEmpresa(empresa) {
   if (empresa.descricao) linhas.push(`O que faz: ${empresa.descricao}`);
   if (empresa.publico) linhas.push(`Quem compra: ${empresa.publico}`);
   if (empresa.preco) linhas.push(`Preço: ${empresa.preco}`);
+  if (empresa.instagram) linhas.push(`Instagram da empresa: ${empresa.instagram}`);
   if (empresa.contexto?.length) linhas.push('Contexto:', ...empresa.contexto.map((c) => `- ${c}`));
   if (empresa.objetivo_do_trimestre) linhas.push(`Objetivo do trimestre: ${empresa.objetivo_do_trimestre}`);
   return linhas.join('\n');
@@ -29,6 +30,7 @@ Tipos de ação:
 export const REGRAS = `Regras:
 - Português do Brasil, direto, como numa conversa de trabalho: no máximo 3 frases por fala.
 - O QUE VOCÊS CONSEGUEM FAZER: pensar, analisar os dados abaixo, fazer contas, decidir e escrever (mensagens, roteiros, planos). O QUE NÃO CONSEGUEM: acessar internet, WhatsApp, Instagram, Google Maps ou qualquer sistema. Nunca digam que vão buscar, mandar, postar, ligar ou verificar algo, nem que algo sai "em instantes" ou "ainda hoje". Quem executa é o CEO.
+- A TI não programa nem publica código de verdade nesta página: especifica, desenha, planeja, revisa, estima e mantém o backlog. Quem implementa é o CEO ou o desenvolvedor. O status das tarefas no backlog é o real, informado pelo CEO: não digam que algo foi feito se lá não está "feito".
 - Quando faltar informação de fora da empresa (lista de buffets, concorrentes, preços de mercado, tendências), façam um pedido de pesquisa (ação "pesquisa"): a equipe de pesquisa tem internet e devolve o resultado com fontes. Não perguntem ao CEO o que dá para pesquisar.
 - Não inventem resultados como se fossem reais (vendas, taxas, clientes, conversas). Usem os números reais e as pesquisas prontas abaixo; o resto é meta ou estimativa, e digam isso.
 - Cada fala precisa trazer algo novo e útil: uma conta, uma conclusão sobre os dados, uma decisão, um rascunho pronto ou uma pergunta objetiva que só o CEO sabe responder. Nada de "apoio", "boa ideia", "combinado" sem conteúdo.
@@ -69,6 +71,10 @@ export function descreverDados(dados) {
   const quando = dados.atualizadoEm ? new Date(dados.atualizadoEm).toLocaleDateString('pt-BR') : 'data não informada';
   let texto = `Números reais informados pelo CEO (atualizados em ${quando}):\n${linhas.join('\n') || '- (nenhum número preenchido)'}`;
   if (dados.notas?.trim()) texto += `\nObservações do CEO (conversas, objeções, o que funcionou):\n${dados.notas.trim().slice(0, 4000)}`;
+  if (dados.funil?.total) {
+    const f = dados.funil;
+    texto += `\nPlanilha do funil (lida em ${new Date(f.lidoEm).toLocaleDateString('pt-BR')}): ${f.total} buffets na lista. Por status: ${Object.entries(f.porStatus).map(([k, v]) => `${k}: ${v}`).join(', ')}.`;
+  }
   return texto;
 }
 
@@ -144,4 +150,19 @@ export function descreverPesquisas(pesquisas) {
     : 'Pesquisas prontas: nenhuma ainda.';
   if (fila.length) texto += `\nPesquisas na fila (ainda sem resultado, não usem como fato): ${fila.map((p) => `"${p.titulo}"`).join(', ')}.`;
   return texto;
+}
+
+// Backlog do produto (status real, mantido pelo CEO na aba Produto).
+export function descreverBacklog(backlog, nomeDe) {
+  if (!backlog?.length) return 'Backlog do produto: vazio.';
+  const grupo = (status) => backlog.filter((t) => t.status === status);
+  const linha = (t) => `- ${t.titulo} [${t.tipo}, prioridade ${t.prioridade}${t.responsavel ? `, ${nomeDe(t.responsavel)}` : ''}${t.mvp ? ', MVP' : ''}]`;
+  const mvp = backlog.filter((t) => t.mvp);
+  return `Backlog do produto (status real informado pelo CEO; MVP: ${mvp.filter((t) => t.status === 'feito').length} de ${mvp.length} prontas):
+Fazendo:
+${grupo('fazendo').map(linha).join('\n') || '- (nada)'}
+A fazer:
+${grupo('a fazer').map(linha).join('\n') || '- (nada)'}
+Feito:
+${grupo('feito').map(linha).join('\n') || '- (nada)'}`;
 }

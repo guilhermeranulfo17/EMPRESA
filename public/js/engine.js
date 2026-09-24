@@ -27,6 +27,7 @@ export class Escritorio {
       ideias: [],
       entregas: [],
       pesquisas: [],
+      backlog: [],
       dados: null,
       pausado: false,
       velocidade: 1,
@@ -248,6 +249,25 @@ export class Escritorio {
     this.estado.pesquisas = [...pesquisas].sort((a, b) => a.criadoEm - b.criadoEm);
   }
 
+  // ---------- backlog do produto ----------
+  definirBacklog(itens, { remoto = false } = {}) {
+    this.estado.backlog = itens;
+    this.emitir('backlog', itens, { remoto });
+  }
+
+  salvarTarefa(tarefa) {
+    const lista = [...this.estado.backlog];
+    const i = lista.findIndex((t) => t.id === tarefa.id);
+    if (i >= 0) lista[i] = tarefa;
+    else lista.push(tarefa);
+    this.definirBacklog(lista);
+    return tarefa;
+  }
+
+  removerTarefa(id) {
+    this.definirBacklog(this.estado.backlog.filter((t) => t.id !== id));
+  }
+
   definirDados(dados) {
     this.estado.dados = dados;
     this.emitir('dados', dados);
@@ -300,6 +320,14 @@ export class Escritorio {
       };
       this.registrarPesquisa(pesquisa);
       mensagem = this.registrar({ de: agente.id, para: 'ceo', tipo: 'pedido_pesquisa', pesquisaId: pesquisa.id, texto: `Pedi uma pesquisa na internet: "${pesquisa.titulo}". ${acao.texto}`, profundidade });
+    } else if (acao.acao === 'tarefa' && acao.tarefa_titulo?.trim()) {
+      const ehTI = agente.setor === 'ti';
+      const tarefa = this.salvarTarefa({
+        id: novoId('tarefa'), titulo: acao.tarefa_titulo.trim().slice(0, 90), descricao: acao.texto,
+        tipo: acao.tarefa_tipo || 'funcionalidade', prioridade: ['alta', 'média', 'baixa'].includes(acao.prioridade) ? acao.prioridade : 'média',
+        responsavel: ehTI ? agente.id : null, status: 'a fazer', mvp: false, origem: `sugerida por ${agente.nome}`, sugeridaPor: agente.id, criadoEm: Date.now(),
+      });
+      mensagem = this.registrar({ de: agente.id, para: 'ceo', tipo: 'tarefa', tarefaId: tarefa.id, texto: `Coloquei no backlog: "${tarefa.titulo}" (prioridade ${tarefa.prioridade}). ${acao.texto}`, profundidade });
     } else if (acao.acao === 'votar' && ideia && ideia.status === 'em discussão' && !ideia.apoios.includes(agente.id)) {
       const voto = acao.voto === 'questionar' ? 'questionar' : 'apoiar';
       if (voto === 'apoiar') ideia.apoios.push(agente.id);

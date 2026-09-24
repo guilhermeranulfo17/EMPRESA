@@ -4,14 +4,24 @@
     "descricao": "Software para buffets focado em orçamento interativo.",
     "publico": "Buffets, principalmente buffets móveis.",
     "preco": "Plano principal de R$ 347 por mês.",
+    "instagram": "https://www.instagram.com/orkestraeventos/",
     "contexto": [
-      "A empresa está no início da operação: ainda não há reclamações nem dúvidas de clientes registradas.",
-      "Os clientes são conseguidos por prospecção fria pelo WhatsApp.",
-      "A venda é feita por uma IA que conversa com o buffet no WhatsApp. Se o buffet quiser, a equipe faz uma apresentação mostrando como o sistema funciona.",
-      "Meta: R$ 5.000 de receita recorrente mensal (MRR) em 3 meses. Isso dá cerca de 15 clientes a R$ 347, ou 5 vendas novas por mês."
+      "Estágio atual: o software (orçamento interativo) ainda está em desenvolvimento e não foi lançado. A prospecção ainda não começou e não há clientes.",
+      "Prioridade agora: terminar o MVP, testar com poucos buffets piloto e lançar. Os outros setores preparam o lançamento enquanto a TI termina o sistema.",
+      "Depois do lançamento, os clientes serão conseguidos por prospecção fria pelo WhatsApp.",
+      "A venda será feita por uma IA que conversa com o buffet no WhatsApp. Se o buffet quiser, a equipe faz uma apresentação mostrando como o sistema funciona.",
+      "Meta depois do lançamento: R$ 5.000 de receita recorrente mensal (MRR), cerca de 15 clientes a R$ 347, ou 5 vendas novas por mês."
     ],
-    "objetivo_do_trimestre": "Chegar a R$ 5.000 de MRR em 3 meses: 5 vendas novas por mês a R$ 347.",
-    "meta": { "mrr": 5000, "vendas_mes": 5, "ticket": 347 }
+    "objetivo_do_trimestre": "Terminar e lançar o sistema; depois chegar a R$ 5.000 de MRR com 5 vendas novas por mês a R$ 347.",
+    "meta": {
+      "mrr": 5000,
+      "vendas_mes": 5,
+      "ticket": 347
+    },
+    "planilha_funil": {
+      "id": "1E0gr_fhsb2oRr4NjKC74v74XJF3jlf5XRxQhOt8W1Y8",
+      "url": "https://docs.google.com/spreadsheets/d/1E0gr_fhsb2oRr4NjKC74v74XJF3jlf5XRxQhOt8W1Y8/edit"
+    }
   },
   "setores": [
     {
@@ -109,6 +119,56 @@
           "nome": "Bruno",
           "cargo": "Cobrança & Métricas",
           "perfil": "Cuida da cobrança mensal e da inadimplência e mantém o painel semanal de MRR, vendas e cancelamentos. Detalhista com números."
+        }
+      ]
+    },
+    {
+      "id": "ti",
+      "nome": "TI & Produto",
+      "cor": "#6B7A1F",
+      "missao": "Terminar e lançar o sistema de orçamento interativo: decidir o que entra no MVP, especificar, construir, testar, colocar no ar com segurança e manter funcionando.",
+      "agentes": [
+        {
+          "id": "marcos",
+          "nome": "Marcos",
+          "cargo": "CTO",
+          "perfil": "Líder de tecnologia. Decide a arquitetura e o que entra ou fica fora do MVP para lançar logo. Pensa em prazo, risco técnico e custo de infraestrutura."
+        },
+        {
+          "id": "paula",
+          "nome": "Paula",
+          "cargo": "Gerente de Produto",
+          "perfil": "Traduz o dia a dia do dono de buffet em requisitos claros, com critérios de aceite. Prioriza o backlog pelo que ajuda a vender e a reter clientes."
+        },
+        {
+          "id": "lara",
+          "nome": "Lara",
+          "cargo": "Designer UX/UI",
+          "perfil": "Desenha telas simples, pensadas primeiro para o celular. Quer que o cliente do buffet monte o orçamento sem ajuda e que o dono do buffet configure tudo sozinho."
+        },
+        {
+          "id": "leo",
+          "nome": "Léo",
+          "cargo": "Dev Front-end",
+          "perfil": "Constrói as telas do orçamento interativo e do painel do buffet. Preocupado com velocidade de carregamento no celular e com o preço atualizando na hora."
+        },
+        {
+          "id": "rita",
+          "nome": "Rita",
+          "cargo": "Dev Back-end",
+          "perfil": "Cuida da API, do banco de dados, do cálculo de preços e das integrações (pagamento, WhatsApp, e-mail). Pergunta sempre como os dados vão ser guardados e protegidos."
+        },
+        {
+          "id": "igor",
+          "nome": "Igor",
+          "cargo": "QA & Testes",
+          "perfil": "Escreve casos de teste, caça bugs e organiza os testes com buffets piloto. Não deixa nada ir para o ar sem passar pelo checklist."
+        },
+        {
+          "id": "sara",
+          "nome": "Sara",
+          "cargo": "DevOps & Segurança",
+          "perfil": "Hospedagem, domínio, deploy, backups, monitoramento e LGPD técnica. Estima o custo mensal de infraestrutura e cuida para o sistema não cair."
         }
       ]
     }

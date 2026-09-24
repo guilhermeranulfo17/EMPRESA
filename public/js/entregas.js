@@ -1,6 +1,6 @@
 // Entregas: materiais prontos para usar, escritos por um agente com o Claude.
 
-import { descreverEmpresa, descreverDados, descreverAnalise, descreverEntregas, descreverPesquisas } from './prompts.js';
+import { descreverEmpresa, descreverDados, descreverAnalise, descreverEntregas, descreverPesquisas, descreverBacklog } from './prompts.js';
 
 export const MODELOS = [
   {
@@ -51,6 +51,42 @@ export const MODELOS = [
     agente: 'helena',
     pedido: 'Faça o relatório da meta: onde estamos em MRR e clientes (usando os números reais informados), quanto falta para R$ 5.000, o ritmo necessário por semana e os 3 maiores riscos. Se faltar algum número, diga quais o CEO precisa informar.',
   },
+  {
+    id: 'plano_mvp',
+    titulo: 'Plano para terminar o MVP',
+    agente: 'marcos',
+    pedido: 'A partir do backlog real, monte o plano para terminar e lançar o MVP: o que entra e o que fica para depois (e por quê), a ordem de construção em etapas semanais, dependências, riscos e o que precisa estar pronto para o piloto com buffets.',
+  },
+  {
+    id: 'especificacao',
+    titulo: 'Especificação de uma funcionalidade',
+    agente: 'paula',
+    pedido: 'Escreva a especificação da funcionalidade indicada nos detalhes: objetivo, histórias de usuário (dono do buffet e cliente final), regras de negócio, campos e validações, casos de erro e critérios de aceite em formato de checklist.',
+  },
+  {
+    id: 'arquitetura',
+    titulo: 'Arquitetura e tecnologias do sistema',
+    agente: 'marcos',
+    pedido: 'Proponha uma arquitetura simples para o MVP: componentes (front, API, banco, integrações), modelo de dados principal (buffet, cardápio, pacote, item, orçamento, assinatura), tecnologias recomendadas para um time pequeno e custo mensal estimado (dito como estimativa).',
+  },
+  {
+    id: 'fluxo_telas',
+    titulo: 'Fluxo de telas do orçamento interativo',
+    agente: 'lara',
+    pedido: 'Descreva tela por tela o fluxo do cliente final montando o orçamento no celular e o fluxo do dono do buffet configurando cardápios e vendo orçamentos: o que aparece em cada tela, botões, textos e o que acontece em cada toque.',
+  },
+  {
+    id: 'plano_testes',
+    titulo: 'Plano de testes do MVP',
+    agente: 'igor',
+    pedido: 'Monte o plano de testes do MVP: casos de teste numerados para cada fluxo do backlog (passos e resultado esperado), testes no celular, testes de cálculo de preço, e o roteiro do piloto com buffets reais.',
+  },
+  {
+    id: 'checklist_lancamento',
+    titulo: 'Checklist de lançamento',
+    agente: 'sara',
+    pedido: 'Monte o checklist para colocar o sistema no ar com segurança: domínio e HTTPS, variáveis e senhas, backups e restauração, monitoramento, termos e LGPD, cobrança, suporte ao cliente e plano do que fazer se o sistema cair.',
+  },
   { id: 'outra', titulo: 'Outra entrega', agente: 'rafael', pedido: '' },
 ];
 
@@ -76,6 +112,13 @@ export const MODELOS_PESQUISA = [
     agente: 'helena',
     exemplo: 'Ex.: Uberlândia, buffet infantil e casamento.',
     pedido: 'Levante preços públicos de buffet (por pessoa e por festa) na cidade indicada, os tipos de festa mais comuns e sinais do tamanho do mercado (quantos buffets aparecem nos diretórios). Diga como isso se compara ao plano de R$ 347 por mês da Orkestra.',
+  },
+  {
+    id: 'ferramentas',
+    titulo: 'Ferramentas e custos para o sistema',
+    agente: 'sara',
+    exemplo: 'Ex.: comparar gateways de pagamento recorrente e parceiros da API oficial do WhatsApp.',
+    pedido: 'Levante opções e preços públicos, no Brasil, das ferramentas que o sistema da Orkestra vai precisar: hospedagem, banco de dados, gateway de pagamento com assinatura recorrente (taxas), envio de e-mail e parceiros da API oficial do WhatsApp Business (preço por conversa). Recomende uma combinação para começar barato.',
   },
   { id: 'pesquisa_livre', titulo: 'Pesquisa livre', agente: 'nina', exemplo: 'Descreva o que precisa pesquisar na internet e para quê.', pedido: '' },
 ];
@@ -104,6 +147,8 @@ ${descreverDados(estado.dados)}
 ${descreverAnalise(estado.dados, estado.empresa.meta)}
 
 ${descreverPesquisas(estado.pesquisas)}
+
+${descreverBacklog(estado.backlog, nomeDe)}
 
 Ideias aprovadas pelo CEO:
 ${aprovadas || '(nenhuma ainda)'}

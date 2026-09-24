@@ -631,3 +631,41 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
 .ideias > *, .entrega > *, .entrega-corpo { min-width: 0; }
 .entrega { min-width: 0; max-width: 100%; }
 .ideias, .entrega { grid-template-columns: minmax(0, 1fr); }
+
+/* ---------- TI em largura inteira (número ímpar de setores) ---------- */
+.sala-larga { grid-column: 1 / -1; }
+
+/* ---------- produto ---------- */
+.produto-topo { padding: 12px; border-bottom: 1px solid var(--linha); display: grid; gap: 6px; }
+.produto-topo b { font: 700 15px/1.2 var(--display); }
+.linha-selects { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.linha-selects select { min-width: 0; font-size: 12.5px; }
+.campo input:not([type]), #tarefa-titulo {
+  border: 1px solid var(--linha); border-radius: 8px; background: var(--superficie);
+  padding: 7px 8px; width: 100%; font: inherit; color: inherit;
+}
+.check { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--tinta-2); }
+.acoes-esquerda { justify-content: flex-start; flex-wrap: wrap; }
+a.btn { text-decoration: none; display: inline-flex; align-items: center; }
+.grupo-backlog { margin: 6px 0 0; font: 700 13px/1.2 var(--display); color: var(--tinta-2); text-transform: uppercase; letter-spacing: 0.06em; }
+.tarefa {
+  border: 1px solid var(--linha); border-radius: 10px; padding: 10px 12px;
+  display: grid; gap: 6px; background: var(--superficie); min-width: 0;
+}
+.tarefa[data-status="feito"] { opacity: 0.7; }
+.tarefa[data-status="feito"] .tarefa-cab b { text-decoration: line-through; text-decoration-color: var(--tinta-3); }
+.tarefa[data-status="fazendo"] { border-color: var(--alerta); }
+.tarefa-cab { display: flex; align-items: center; gap: 8px; }
+.tarefa-cab select { flex: none; font-size: 12px; padding: 3px 6px; }
+.tarefa-cab b { font-weight: 600; font-size: 13.5px; line-height: 1.3; }
+.tarefa-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; color: var(--tinta-2); }
+.tarefa-meta .resp { display: inline-flex; align-items: center; gap: 5px; }
+.tarefa-det summary { cursor: pointer; font-size: 12px; color: var(--tinta-2); }
+.tarefa-det p { margin: 6px 0 0; font-size: 13px; }
+
+/* ---------- funil da planilha ---------- */
+.funil { display: grid; gap: 6px; }
+.funil-linha { display: grid; grid-template-columns: 150px minmax(0, 1fr) 32px; align-items: center; gap: 8px; font-size: 12.5px; }
+.funil-linha b { text-align: right; font-variant-numeric: tabular-nums; }
+.funil-barra { height: 8px; border-radius: 999px; background: var(--superficie-2); overflow: hidden; }
+.funil-barra span { display: block; height: 100%; background: var(--ok); border-radius: inherit; }
