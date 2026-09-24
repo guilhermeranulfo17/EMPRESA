@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Escritório de Agentes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="css/escritorio.css">
+</head>
+<body>
+<div class="app">
+  <header class="topo">
+    <div class="marca">
+      <svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="3" width="11" height="11" rx="2"/><rect x="18" y="3" width="11" height="11" rx="2"/><rect x="3" y="18" width="11" height="11" rx="2"/><rect x="18" y="18" width="11" height="11" rx="2"/></svg>
+      <div>
+        <h1 id="nome-empresa">Escritório</h1>
+        <p id="objetivo" class="objetivo"></p>
+      </div>
+    </div>
+    <div class="numeros" aria-label="Resumo">
+      <div><span id="n-mensagens">0</span><small>mensagens</small></div>
+      <div><span id="n-ideias">0</span><small>ideias</small></div>
+      <div><span id="n-aprovadas">0</span><small>aprovadas</small></div>
+    </div>
+    <div class="controles">
+      <span id="modo" class="modo" title="Quem está pensando pelos agentes">—</span>
+      <button id="btn-pausa" class="btn" type="button">Pausar</button>
+      <div class="velocidades" role="group" aria-label="Velocidade">
+        <button type="button" data-vel="0.5">0,5×</button>
+        <button type="button" data-vel="1">1×</button>
+        <button type="button" data-vel="2">2×</button>
+        <button type="button" data-vel="4">4×</button>
+      </div>
+    </div>
+  </header>
+
+  <p id="aviso-demo" class="aviso" hidden>Modo demonstração: os agentes estão simulados no seu navegador. Rode <code>npm start</code> com uma <code>ANTHROPIC_API_KEY</code> para ligar agentes Claude de verdade.</p>
+
+  <main class="layout">
+    <section class="planta" id="planta" aria-label="Planta do escritório"></section>
+
+    <aside class="painel">
+      <div class="abas" role="tablist">
+        <button type="button" role="tab" id="aba-caixa" aria-selected="true" data-aba="caixa">Caixa de comunicação</button>
+        <button type="button" role="tab" id="aba-ideias" aria-selected="false" data-aba="ideias">Mural de ideias <span id="badge-ideias" class="badge" hidden></span></button>
+      </div>
+
+      <div id="vista-caixa" class="vista">
+        <div class="filtros" id="filtros"></div>
+        <div class="feed" id="feed" aria-live="polite"></div>
+        <form class="compositor" id="compositor">
+          <div class="compositor-linha">
+            <label for="para">Você (CEO) para</label>
+            <select id="para"></select>
+          </div>
+          <textarea id="texto" rows="2" placeholder="Ex.: Quero ideias para reduzir cancelamentos este mês." maxlength="1000"></textarea>
+          <button class="btn btn-forte" type="submit">Enviar</button>
+        </form>
+      </div>
+
+      <div id="vista-ideias" class="vista" hidden>
+        <p class="dica">Ideias com 4 apoios de pelo menos 2 setores sobem para a sua aprovação.</p>
+        <div class="ideias" id="ideias"></div>
+      </div>
+    </aside>
+  </main>
+</div>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
