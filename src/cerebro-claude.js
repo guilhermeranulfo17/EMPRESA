@@ -3,6 +3,7 @@
 
 import Anthropic from '@anthropic-ai/sdk';
 import { CerebroSimulado } from '../public/js/cerebro-simulado.js';
+import { descreverEmpresa, descreverEquipe, descreverCaixa, ESCRITORIO, REGRAS } from '../public/js/prompts.js';
 
 const ESQUEMA_ACAO = {
   type: 'object',
@@ -71,49 +72,26 @@ export class CerebroClaude {
 
 function promptDoAgente(ctx) {
   const { empresa, agente, setor, setores, colegas } = ctx;
-  return `Você é ${agente.nome}, ${agente.cargo} no setor ${setor.nome} da empresa "${empresa.nome}".
-${empresa.descricao}
-Objetivo do trimestre: ${empresa.objetivo_do_trimestre}
-
-Missão do seu setor: ${setor.missao}
+  return `Você é ${agente.nome}, ${agente.cargo} no setor ${setor.nome} da empresa ${empresa.nome}.
 Seu jeito: ${agente.perfil}
+Missão do seu setor: ${setor.missao}
 
-Você trabalha em um escritório de agentes de IA. Todos se comunicam por uma caixa de comunicação compartilhada, e o CEO (uma pessoa) lê tudo e aprova ideias. Vocês têm autonomia para conversar entre setores, pedir dados, cobrar uns aos outros e propor ideias para a empresa melhorar.
+${descreverEmpresa(empresa)}
 
-Setores:
-${setores.map((s) => `- ${s.id}: ${s.nome} — ${s.missao}`).join('\n')}
+${ESCRITORIO}
 
-Colegas (id — nome, cargo, setor):
-${colegas.map((c) => `- ${c.id} — ${c.nome}, ${c.cargo}, ${c.setor}`).join('\n')}
+${descreverEquipe(setores, colegas)}
 
-A cada rodada você escolhe UMA ação:
-- "mensagem": fala com um colega (id), um setor (id), "todos" ou "ceo".
-- "ideia": propõe uma ideia concreta para a empresa (título + descrição com o que fazer e quais setores participam).
-- "votar": apoia ou questiona uma ideia em discussão, com um comentário do ponto de vista do seu setor.
+${REGRAS}
 
-Regras:
-- Escreva em português do Brasil, curto e natural, como numa conversa de trabalho (no máximo 3 frases).
-- Se alguém falou com você, responda essa pessoa primeiro.
-- Traga fatos e números plausíveis do seu setor. Não repita o que já foi dito na caixa.
-- Não vote em ideia sua nem em ideia que você já votou. Proponha ideia nova só quando tiver algo realmente diferente.`;
+A cada rodada você escolhe UMA ação para você mesmo.`;
 }
 
 function situacaoAtual(ctx) {
-  const linhas = ctx.mensagensRecentes.map((m) => {
-    const extra = m.ideiaId ? ` [ideia ${m.ideiaId}]` : '';
-    return `- ${ctx.nomeDe(m.de)} → ${ctx.nomeDe(m.para)} (${m.tipo})${extra}: ${m.texto}`;
-  });
-  const ideias = ctx.ideias.map(
-    (i) => `- ${i.id} | "${i.titulo}" de ${ctx.nomeDe(i.autor)} | ${i.status} | apoios: ${i.apoios.map(ctx.nomeDe).join(', ')} | comentários: ${i.comentarios.length}`,
-  );
   const pendente = ctx.pendencia
     ? `\nFalaram com você e esperam resposta:\n${ctx.nomeDe(ctx.pendencia.de)} (${ctx.pendencia.tipo}${ctx.pendencia.ideiaId ? `, ideia ${ctx.pendencia.ideiaId}` : ''}): ${ctx.pendencia.texto}\n`
     : '';
-  return `Caixa de comunicação (mais recentes por último):
-${linhas.join('\n') || '(vazia — o dia está começando)'}
-
-Mural de ideias:
-${ideias.join('\n') || '(nenhuma ideia ainda)'}
+  return `${descreverCaixa({ mensagens: ctx.mensagensRecentes, ideias: ctx.ideias, nomeDe: ctx.nomeDe })}
 ${pendente}
 Você estava: ${ctx.agente.atividade}.
 Qual é a sua próxima ação?`;

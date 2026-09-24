@@ -1,8 +1,16 @@
-# Escritório de Agentes
+# Escritório de Agentes da Orkestra
 
-Um escritório visual onde agentes de IA trabalham em quatro setores (**Comercial**, **Marketing**, **Suporte** e **Financeiro**) e conversam entre si por uma **caixa de comunicação** compartilhada. Eles têm autonomia para pedir dados uns aos outros, propor ideias para a empresa e apoiar ou questionar as ideias dos colegas. Você entra como **CEO**: manda mensagens para todos, para um setor ou para um agente, e aprova ou descarta as ideias.
+A Orkestra vende um software de orçamento interativo para buffets (principalmente buffets móveis) por R$ 347/mês, com prospecção fria e venda por uma IA no WhatsApp. A meta é R$ 5.000 de MRR em 3 meses (5 vendas novas por mês).
 
-## Como rodar
+Este é um escritório visual onde 11 agentes de IA trabalham em quatro setores (**Comercial**, **Marketing**, **Suporte & Sucesso** e **Financeiro**) e conversam entre si por uma **caixa de comunicação** compartilhada. Eles têm autonomia para pedir dados uns aos outros, propor ideias para a empresa e apoiar ou questionar as ideias dos colegas. Você entra como **CEO**: manda mensagens para todos, para um setor ou para um agente, e aprova ou descarta as ideias.
+
+## Três jeitos de usar
+
+1. **Pela página publicada no Claude (mais fácil).** Abra o link do escritório no Claude e clique em **Ligar IA**. Cada rodada é uma chamada ao Claude que decide as próximas 6 ações da equipe, usando o seu plano do Claude (a primeira vez pede permissão). Uma rodada nova começa quando você clica em **Próxima rodada**, manda uma mensagem como CEO ou aprova uma ideia. Não precisa de chave nem de instalar nada.
+2. **No seu computador, com chave da API:** os agentes trabalham sozinhos o tempo todo, um de cada vez (veja abaixo).
+3. **No seu computador, sem chave:** modo simulação, com falas prontas.
+
+## Como rodar no computador
 
 Precisa de Node.js 20 ou mais novo.
 
@@ -52,7 +60,9 @@ A cada rodada o motor (`public/js/engine.js`) escolhe um agente, dando prioridad
 
 Uma conversa gera no máximo 3 respostas em cadeia sozinha, para os agentes não ficarem presos num pingue-pongue.
 
-No modo Claude (`src/cerebro-claude.js`), o agente recebe a descrição da empresa, a missão do setor, o próprio perfil, as últimas 20 mensagens da caixa e o mural de ideias, e responde em JSON validado por esquema. Se uma chamada falhar, o agente usa a simulação naquela rodada e o escritório segue funcionando.
+No servidor com Claude (`src/cerebro-claude.js`), o agente recebe a descrição da empresa, a missão do setor, o próprio perfil, as últimas 20 mensagens da caixa e o mural de ideias, e responde em JSON validado por esquema. Se uma chamada falhar, o agente usa a simulação naquela rodada e o escritório segue funcionando.
+
+Nos dois modos com IA, os agentes são orientados a não inventar resultados (vendas, taxas, reclamações) como se fossem reais: números são a meta, contas a partir dos dados da empresa ou estimativas ditas como estimativas.
 
 O histórico (mensagens e ideias) é salvo em `data/estado.json` e recarregado quando o servidor reinicia. Apague esse arquivo para começar do zero.
 
@@ -61,6 +71,7 @@ O histórico (mensagens e ideias) é salvo em `data/estado.json` e recarregado q
 Tudo fica em `public/config/empresa.json`:
 
 - `empresa`: nome, o que a empresa faz e o objetivo do trimestre. Os agentes Claude usam isso para dar ideias que façam sentido para o seu negócio, então vale descrever bem.
+- `empresa.publico`, `empresa.preco` e `empresa.contexto` (lista de fatos sobre como a empresa funciona hoje) também entram no que os agentes sabem.
 - `setores`: cada setor tem `id`, `nome`, `cor`, `missao` e a lista de `agentes`.
 - cada agente tem `id`, `nome`, `cargo` e `perfil` (personalidade e foco).
 
@@ -76,5 +87,7 @@ public/css/escritorio.css    visual (tema claro e escuro)
 public/js/app.js             interface: planta, caixa, mural, controles
 public/js/engine.js          motor: estado, escolha de quem fala, regras das ideias
 public/js/cerebro-simulado.js falas simuladas por setor
+public/js/prompts.js         textos que descrevem empresa, equipe e caixa para o Claude
+public/js/rodada-ia.js       rodada com o Claude dentro da página publicada
 public/config/empresa.json   empresa, setores e agentes
 ```

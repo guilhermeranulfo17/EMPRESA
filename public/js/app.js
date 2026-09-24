@@ -50,7 +50,6 @@ async function conectarLocal() {
     fetch('config/empresa.json').then((r) => r.json()),
   ]);
   const escritorio = new Escritorio(config, new CerebroSimulado(), { intervaloBase: 3500 });
-  $('#aviso-demo').hidden = false;
 
   // Aquece o escritório para a tela já abrir com conversa acontecendo.
   escritorio.estado.velocidade = 200;
@@ -61,12 +60,119 @@ async function conectarLocal() {
   receber('foto', escritorio.foto());
   escritorio.ouvir(receber);
   escritorio.iniciar();
+  prepararIA(escritorio);
   return {
-    postar: (dados) => escritorio.postarDoCEO(dados),
-    decidir: (id, decisao) => escritorio.decidirIdeia(id, decisao),
+    postar: (dados) => {
+      escritorio.postarDoCEO(dados);
+      if (ia.ativa) rodarIA();
+    },
+    decidir: (id, decisao) => {
+      escritorio.decidirIdeia(id, decisao);
+      if (ia.ativa && decisao === 'aprovada') rodarIA();
+    },
     controle: (dados) => escritorio.definirControle(dados),
   };
 }
+
+// ---------- IA de verdade na página (Claude da conta de quem está vendo) ----------
+const ia = { sample: null, escritorio: null, ativa: false, rodando: false, outra: false, ctl: null };
+
+async function prepararIA(escritorio) {
+  ia.escritorio = escritorio;
+  const sample = await window.claude?.use?.('sample').catch(() => null);
+  if (!sample) {
+    $('#aviso-demo').hidden = false;
+    return;
+  }
+  ia.sample = sample;
+  $('#painel-ia').hidden = false;
+  desenharIA();
+}
+
+function desenharIA(detalhe) {
+  const titulo = $('#ia-titulo');
+  const texto = $('#ia-detalhe');
+  $('#btn-ia').hidden = ia.rodando;
+  $('#btn-parar-ia').hidden = !ia.rodando;
+  $('#btn-sim').hidden = !ia.ativa || ia.rodando;
+  $('#painel-ia').dataset.estado = ia.rodando ? 'rodando' : ia.ativa ? 'ativa' : 'desligada';
+  $('#btn-pausa').hidden = ia.ativa;
+  const modo = $('#modo');
+  modo.dataset.modo = ia.ativa ? 'claude' : 'simulação';
+  modo.textContent = ia.ativa ? 'Agentes com IA (Claude)' : 'Agentes simulados';
+  if (ia.rodando) {
+    titulo.textContent = 'A equipe está pensando…';
+    texto.textContent = 'O Claude está decidindo as próximas ações. Cada fala aparece no escritório assim que fica pronta.';
+  } else if (ia.ativa) {
+    $('#btn-ia').textContent = 'Próxima rodada';
+    titulo.textContent = 'Agentes com IA ligados';
+    texto.textContent = detalhe ?? 'Mande uma mensagem como CEO, aprove uma ideia ou peça a próxima rodada.';
+  } else {
+    $('#btn-ia').textContent = 'Ligar IA';
+    titulo.textContent = 'Ligar os agentes com IA de verdade';
+    texto.textContent = detalhe ?? 'A cada rodada, o Claude decide o que 6 agentes fazem em seguida. Usa o seu plano do Claude, e a conversa recomeça do zero.';
+  }
+}
+
+function ativarIA() {
+  if (!ia.ativa) {
+    ia.ativa = true;
+    ia.escritorio.parar();
+    ia.escritorio.limpar();
+  }
+  rodarIA();
+}
+
+function voltarParaSimulacao(detalhe) {
+  ia.ctl?.abort();
+  ia.ativa = false;
+  ia.outra = false;
+  ia.escritorio.iniciar();
+  desenharIA(detalhe);
+}
+
+async function rodarIA() {
+  if (ia.rodando) {
+    ia.outra = true;
+    return;
+  }
+  const { rodadaComIA } = await import('./rodada-ia.js');
+  ia.rodando = true;
+  ia.ctl = new AbortController();
+  desenharIA();
+  let detalhe;
+  try {
+    await rodadaComIA(ia.sample, ia.escritorio, {
+      signal: ia.ctl.signal,
+      aoChegar: (acao) => ia.escritorio.executarAcao(acao),
+    });
+  } catch (e) {
+    const codigo = e?.code ?? 'upstream_error';
+    if (['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed'].includes(codigo)) {
+      ia.rodando = false;
+      voltarParaSimulacao('O Claude não foi liberado para esta página, então os agentes voltaram para a simulação.');
+      return;
+    }
+    detalhe = {
+      cancelled: 'Rodada interrompida. Peça a próxima quando quiser.',
+      rate_limited: 'O limite de uso do seu plano do Claude foi atingido. Tente de novo mais tarde.',
+      session_expired: 'Sua sessão no Claude expirou. Entre de novo e peça a próxima rodada.',
+      refused: 'O Claude recusou esta rodada. Tente mandar outra mensagem como CEO.',
+    }[codigo] ?? 'A rodada falhou no meio do caminho. Peça a próxima rodada para tentar de novo.';
+    ia.outra = false;
+  } finally {
+    ia.rodando = false;
+  }
+  desenharIA(detalhe);
+  if (ia.outra && ia.ativa) {
+    ia.outra = false;
+    rodarIA();
+  }
+}
+
+$('#btn-ia').addEventListener('click', ativarIA);
+$('#btn-parar-ia').addEventListener('click', () => ia.ctl?.abort());
+$('#btn-sim').addEventListener('click', () => voltarParaSimulacao());
 
 function receber(tipo, dados) {
   if (tipo === 'foto') {

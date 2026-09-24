@@ -148,12 +148,45 @@ export class Escritorio {
       setores: estado.setores.map(({ id, nome, missao }) => ({ id, nome, missao })),
       colegas: Object.values(estado.agentes)
         .filter((a) => a.id !== agente.id)
-        .map(({ id, nome, cargo, setor }) => ({ id, nome, cargo, setor })),
+        .map(({ id, nome, cargo, setor, perfil }) => ({ id, nome, cargo, setor, perfil })),
       mensagensRecentes: estado.mensagens.slice(-20),
       ideias: estado.ideias.filter((i) => i.status !== 'descartada').slice(-10),
       pendencia: pendencia ? estado.mensagens.find((m) => m.id === pendencia.mensagemId) ?? null : null,
       nomeDe: (id) => this.nomeDe(id),
     };
+  }
+
+  // ---------- rodadas com IA decididas fora do ciclo automático ----------
+  // Mensagens que alguém mandou para um agente e ainda esperam resposta.
+  pendenciasAbertas() {
+    return this.pendencias
+      .map((p) => ({ agente: p.agente, mensagem: this.estado.mensagens.find((m) => m.id === p.mensagemId) }))
+      .filter((p) => p.mensagem);
+  }
+
+  // Aplica uma ação que veio pronta (ex.: rodada do Claude na página), com a mesma animação do ciclo normal.
+  async executarAcao(acao) {
+    const agente = this.estado.agentes[acao?.agente];
+    if (!agente) return false;
+    const pendencia =
+      this.pendencias.find((p) => p.agente === agente.id && p.mensagemId === acao.responde_a) ??
+      this.pendencias.find((p) => p.agente === agente.id) ??
+      null;
+    this.atualizarAgente(agente.id, { status: 'pensando', balao: null });
+    await esperar(900 / this.estado.velocidade);
+    if (pendencia) this.pendencias = this.pendencias.filter((p) => p !== pendencia);
+    this.aplicar(agente, acao, pendencia);
+    await esperar(1800 / this.estado.velocidade);
+    return true;
+  }
+
+  // Zera conversas e ideias (os agentes continuam nas mesas).
+  limpar() {
+    this.estado.mensagens = [];
+    this.estado.ideias = [];
+    this.pendencias = [];
+    for (const agente of Object.values(this.estado.agentes)) Object.assign(agente, { status: 'trabalhando', balao: null, ultimaAcao: 0 });
+    this.emitir('foto', this.foto());
   }
 
   // ---------- aplicar ações ----------

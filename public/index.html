@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Escritório de Agentes</title>
+<title>Escritório Orkestra</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -36,8 +36,20 @@
     </div>
   </header>
 
-  <p id="aviso-demo" class="aviso" hidden>Modo demonstração: os agentes estão simulados no seu navegador. Rode <code>npm start</code> com uma <code>ANTHROPIC_API_KEY</code> para ligar agentes Claude de verdade.</p>
+  <p id="aviso-demo" class="aviso" hidden>Modo demonstração: os agentes estão simulados. Para ligar a IA de verdade, abra esta página pelo Claude ou rode o servidor com uma chave da API (veja o README).</p>
 
+  <div id="painel-ia" class="painel-ia" hidden>
+    <span class="ia-sinal" aria-hidden="true"></span>
+    <div class="ia-texto">
+      <b id="ia-titulo">Ligar os agentes com IA de verdade</b>
+      <span id="ia-detalhe"></span>
+    </div>
+    <div class="ia-acoes">
+      <button id="btn-sim" class="btn" type="button" hidden>Voltar à simulação</button>
+      <button id="btn-parar-ia" class="btn" type="button" hidden>Parar</button>
+      <button id="btn-ia" class="btn btn-forte" type="button">Ligar IA</button>
+    </div>
+  </div>
   <main class="layout">
     <section class="planta" id="planta" aria-label="Planta do escritório"></section>
 
@@ -55,7 +67,7 @@
             <label for="para">Você (CEO) para</label>
             <select id="para"></select>
           </div>
-          <textarea id="texto" rows="2" placeholder="Ex.: Quero ideias para reduzir cancelamentos este mês." maxlength="1000"></textarea>
+          <textarea id="texto" rows="2" placeholder="Ex.: Quero um plano para fechar 5 buffets este mês." maxlength="1000"></textarea>
           <button class="btn btn-forte" type="submit">Enviar</button>
         </form>
       </div>
