@@ -1,7 +1,7 @@
 // Backlog do produto: o que falta para o sistema da Orkestra ficar pronto.
 // O CEO mantém o status real; os agentes leem e sugerem tarefas novas.
 
-export const STATUS_TAREFA = ['a fazer', 'fazendo', 'feito'];
+export const STATUS_TAREFA = ['a fazer', 'fazendo', 'feito', 'congelado'];
 export const TIPOS_TAREFA = ['funcionalidade', 'bug', 'melhoria', 'infraestrutura', 'segurança', 'lançamento'];
 export const PRIORIDADES = ['alta', 'média', 'baixa'];
 

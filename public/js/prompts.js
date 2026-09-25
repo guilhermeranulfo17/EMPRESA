@@ -29,13 +29,18 @@ Tipos de ação:
 
 export const REGRAS = `Regras:
 - Português do Brasil, direto, como numa conversa de trabalho: no máximo 3 frases por fala.
-- O QUE VOCÊS CONSEGUEM FAZER: pensar, analisar os dados abaixo, fazer contas, decidir e escrever (mensagens, roteiros, planos). O QUE NÃO CONSEGUEM: acessar internet, WhatsApp, Instagram, Google Maps ou qualquer sistema. Nunca digam que vão buscar, mandar, postar, ligar ou verificar algo, nem que algo sai "em instantes" ou "ainda hoje". Quem executa é o CEO.
-- A TI não programa nem publica código de verdade nesta página: especifica, desenha, planeja, revisa, estima e mantém o backlog. Quem implementa é o CEO ou o desenvolvedor. O status das tarefas no backlog é o real, informado pelo CEO: não digam que algo foi feito se lá não está "feito".
-- Quando faltar informação de fora da empresa (lista de buffets, concorrentes, preços de mercado, tendências), façam um pedido de pesquisa (ação "pesquisa"): a equipe de pesquisa tem internet e devolve o resultado com fontes. Não perguntem ao CEO o que dá para pesquisar.
-- Não inventem resultados como se fossem reais (vendas, taxas, clientes, conversas). Usem os números reais e as pesquisas prontas abaixo; o resto é meta ou estimativa, e digam isso.
+- VOCÊS SÃO ASSESSORES DO CEO E NÃO EXECUTAM NADA NO MUNDO: não mandam mensagem, não ligam, não postam, não programam, não configuram o sistema e não atualizam planilhas. É proibido escrever que algo foi feito, está sendo feito ou será feito por vocês (ex.: "mandei", "já mandamos", "vou mandar", "começo hoje", "estou corrigindo", "atualizo lá", "te passo em instantes"). Quando algo precisa ser executado, criem uma tarefa para o CEO (ação "para_ceo") dizendo exatamente o que fazer, ou preparem o material pronto (ação "entrega").
+- Prazos e estimativas de trabalho são sugestões para o CEO decidir, nunca promessas de vocês.
+- O status das tarefas (do CEO e do backlog do produto) é o real, marcado pelo CEO. Não digam que algo foi feito se lá não está feito.
+- Quando faltar informação de fora da empresa (buffets, concorrentes, preços, ferramentas), façam um pedido de pesquisa (ação "pesquisa"): a equipe de pesquisa tem internet e devolve com fontes.
+- Não inventem resultados (conversas, buffets interessados, orçamentos, pagamentos). Usem os números reais, a planilha e as pesquisas prontas; o resto é meta ou estimativa, e digam isso.
+- Respeitem a regra da empresa: nenhuma funcionalidade nova antes de 3 buffets pagando, a não ser que um cliente real peça e isso bloqueie o uso dele.
 - Cada fala precisa trazer algo novo e útil: uma conta, uma conclusão sobre os dados, uma decisão, um rascunho pronto ou uma pergunta objetiva que só o CEO sabe responder. Nada de "apoio", "boa ideia", "combinado" sem conteúdo.
 - Quem recebeu mensagem responde primeiro. Mensagens do CEO têm prioridade. Não repitam o que já foi dito.
 - Ninguém vota na própria ideia nem vota duas vezes na mesma. Ideia nova só quando for realmente diferente das que já estão no mural.`;
+
+// Frases em que um agente diz que executou algo. A página marca essas falas, porque agentes não executam.
+export const PADRAO_EXECUCAO = /\b(j[aá] )?(mandei|enviei|mandamos|enviamos|postei|publiquei|liguei|atualizei|cadastrei|configurei|corrigi|subi|mando)\b|\b(vou|vamos|irei) (mandar|enviar|postar|publicar|ligar|atualizar|cadastrar|configurar|programar|corrigir|subir|montar)\b|\bcome[cç]o (hoje|agora|amanh[aã])\b|\bem instantes\b|\batualizo l[aá]\b|\bte (mando|passo|envio)\b|\bestou (corrigindo|programando|mandando|enviando|montando)\b/i;
 
 export function descreverCaixa({ mensagens, ideias, nomeDe }) {
   const linhas = mensagens.map((m) => {
@@ -54,27 +59,38 @@ Mural de ideias:
 ${mural.join('\n') || '(nenhuma ideia ainda)'}`;
 }
 
-// Números que o CEO informou na aba Números. São os únicos dados reais que os agentes conhecem.
+// Números de validação. Vêm da planilha do funil (Google Drive) ou, se ela não foi lida, do que o CEO digitou.
 export const CAMPOS_DADOS = [
-  { id: 'clientes', rotulo: 'Clientes ativos', tipo: 'numero' },
-  { id: 'mrr', rotulo: 'MRR atual (R$)', tipo: 'numero' },
-  { id: 'vendas_mes', rotulo: 'Vendas novas este mês', tipo: 'numero' },
-  { id: 'mensagens_semana', rotulo: 'Mensagens frias enviadas (últimos 7 dias)', tipo: 'numero' },
-  { id: 'respostas_semana', rotulo: 'Buffets que responderam (últimos 7 dias)', tipo: 'numero' },
-  { id: 'apresentacoes_mes', rotulo: 'Apresentações feitas este mês', tipo: 'numero' },
+  { id: 'abordados', rotulo: 'Buffets abordados', tipo: 'numero' },
+  { id: 'aceitaram', rotulo: 'Aceitaram colocar o link (teste de 14 dias)', tipo: 'numero' },
+  { id: 'com5', rotulo: 'Buffets com 5 ou mais orçamentos reais em 14 dias', tipo: 'numero' },
+  { id: 'pagando', rotulo: 'Buffets pagando (Pix ou cartão)', tipo: 'numero' },
   { id: 'notas', rotulo: 'O que está acontecendo', tipo: 'texto' },
 ];
 
+const numero = (v) => (v === '' || v == null || Number.isNaN(Number(v)) ? null : Number(v));
+
+// Os números que valem: a planilha, quando lida, tem prioridade sobre o que foi digitado.
+export function numerosValidacao(dados) {
+  const planilha = dados?.funil?.validacao;
+  const pega = (campo) => (planilha && planilha[campo] != null ? planilha[campo] : numero(dados?.[campo]));
+  return { abordados: pega('abordados'), aceitaram: pega('aceitaram'), com5: pega('com5'), pagando: pega('pagando'), fonte: planilha ? 'planilha' : 'digitado' };
+}
+
 export function descreverDados(dados) {
-  if (!dados) return 'Números reais: o CEO ainda não informou nenhum número. Não suponha resultados; quando precisar de um dado, peça ao CEO.';
-  const linhas = CAMPOS_DADOS.filter((c) => c.tipo === 'numero' && dados[c.id] !== '' && dados[c.id] != null).map((c) => `- ${c.rotulo}: ${dados[c.id]}`);
-  const quando = dados.atualizadoEm ? new Date(dados.atualizadoEm).toLocaleDateString('pt-BR') : 'data não informada';
-  let texto = `Números reais informados pelo CEO (atualizados em ${quando}):\n${linhas.join('\n') || '- (nenhum número preenchido)'}`;
-  if (dados.notas?.trim()) texto += `\nObservações do CEO (conversas, objeções, o que funcionou):\n${dados.notas.trim().slice(0, 4000)}`;
-  if (dados.funil?.total) {
-    const f = dados.funil;
-    texto += `\nPlanilha do funil (lida em ${new Date(f.lidoEm).toLocaleDateString('pt-BR')}): ${f.total} buffets na lista. Por status: ${Object.entries(f.porStatus).map(([k, v]) => `${k}: ${v}`).join(', ')}.`;
+  if (!dados) return 'Números reais: nenhum ainda. Não suponham resultados; quando precisarem de um dado, peçam ao CEO.';
+  const v = numerosValidacao(dados);
+  const linhas = [['Buffets abordados', v.abordados], ['Aceitaram colocar o link', v.aceitaram], ['Com 5+ orçamentos reais em 14 dias', v.com5], ['Pagando', v.pagando]]
+    .filter(([, n]) => n != null)
+    .map(([r, n]) => `- ${r}: ${n}`);
+  let texto = `Números reais de validação (fonte: ${v.fonte === 'planilha' ? 'planilha do funil' : 'digitados pelo CEO'}):\n${linhas.join('\n') || '- (nenhum número ainda)'}`;
+  const f = dados.funil;
+  if (f?.total) {
+    texto += `\nPlanilha do funil (lida em ${new Date(f.lidoEm).toLocaleString('pt-BR')}): ${f.total} buffets na lista. Por status: ${Object.entries(f.porStatus).map(([k, n]) => `${k}: ${n}`).join(', ')}.`;
+    if (f.objecoes?.length) texto += `\nObjeções registradas na planilha: ${f.objecoes.map((o) => `"${o}"`).join('; ')}.`;
+    if (f.precificacao?.length) texto += `\nComo os buffets dizem que precificam hoje: ${f.precificacao.map((o) => `"${o}"`).join('; ')}.`;
   }
+  if (dados.notas?.trim()) texto += `\nObservações do CEO:\n${dados.notas.trim().slice(0, 4000)}`;
   return texto;
 }
 
@@ -86,59 +102,63 @@ export function descreverEntregas(entregas, nomeDe) {
     .join('\n')}`;
 }
 
-const ritmo = (diasPorVenda) => {
-  if (diasPorVenda < 1) return 'mais de uma venda por dia';
-  const dias = Math.round(diasPorVenda);
-  return dias === 1 ? 'uma venda por dia' : `uma venda a cada ${dias} dias`;
-};
+const diasAte = (data) => Math.ceil((new Date(`${data}T23:59:59-03:00`) - Date.now()) / 86400000);
+const dataBR = (data) => new Date(`${data}T12:00:00-03:00`).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+const pct = (a, b) => `${Math.round((a / b) * 100)}%`;
 
-// Análise calculada a partir dos números reais: não depende de IA, é conta.
-export function analisarFunil(dados, meta = {}) {
-  if (!dados) return [];
-  const n = (v) => (v === '' || v == null || Number.isNaN(Number(v)) ? null : Number(v));
-  const pct = (a, b) => `${Math.round((a / b) * 100)}%`;
-  const reais = (v) => `R$ ${Math.round(v).toLocaleString('pt-BR')}`;
+// Análise calculada, sem IA: onde a validação está contra as metas mínimas do plano de 21 dias.
+export function analisarValidacao(dados, validacao) {
+  if (!validacao?.metas) return [];
+  const v = numerosValidacao(dados);
+  const { metas, prazo, marcos = [] } = validacao;
   const itens = [];
-  const clientes = n(dados.clientes);
-  const mrr = n(dados.mrr) ?? (clientes != null && meta.ticket ? clientes * meta.ticket : null);
-  const vendas = n(dados.vendas_mes);
-  const msgs = n(dados.mensagens_semana);
-  const resp = n(dados.respostas_semana);
-  const apres = n(dados.apresentacoes_mes);
-
-  if (mrr != null && meta.mrr) {
-    const falta = Math.max(0, meta.mrr - mrr);
-    const clientesFaltando = meta.ticket ? Math.ceil(falta / meta.ticket) : null;
-    itens.push({ rotulo: 'Meta de MRR', valor: `${pct(mrr, meta.mrr)} atingido`, nota: falta ? `Faltam ${reais(falta)}${clientesFaltando != null ? `, cerca de ${clientesFaltando} clientes a ${reais(meta.ticket)}` : ''}.` : 'Meta batida.' });
+  const dias = diasAte(prazo);
+  const proximo = marcos.find((m) => diasAte(m.ate) >= 0);
+  itens.push({
+    rotulo: 'Prazo da validação',
+    valor: dias >= 0 ? `${dias} ${dias === 1 ? 'dia' : 'dias'}` : 'encerrado',
+    nota: proximo ? `Próximo marco até ${dataBR(proximo.ate)}: ${proximo.entrega}.` : `Prazo final: ${dataBR(prazo)}.`,
+  });
+  const metricas = [
+    ['abordados', 'Buffets abordados'],
+    ['aceitaram', 'Aceitaram o link'],
+    ['com5', 'Com 5+ orçamentos em 14 dias'],
+    ['pagando', 'Buffets pagando'],
+  ];
+  for (const [campo, rotulo] of metricas) {
+    const atual = v[campo];
+    const meta = metas[campo];
+    if (!meta) continue;
+    itens.push({
+      rotulo,
+      valor: atual == null ? `? de ${meta}` : `${atual} de ${meta}`,
+      nota: atual == null ? 'Sem dado ainda: atualize pela planilha.' : atual >= meta ? 'Meta mínima batida.' : `Faltam ${meta - atual}.`,
+    });
   }
-  if (vendas != null && meta.vendas_mes) {
-    const hoje = new Date();
-    const fimDoMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).getDate();
-    const diasRestantes = fimDoMes - hoje.getDate() + 1;
-    const faltam = Math.max(0, meta.vendas_mes - vendas);
-    itens.push({ rotulo: 'Vendas do mês', valor: `${vendas} de ${meta.vendas_mes}`, nota: faltam ? `Faltam ${faltam} em ${diasRestantes} dias: ${ritmo(diasRestantes / faltam)}.` : 'Meta do mês batida.' });
+  if (v.abordados && v.aceitaram != null) {
+    itens.push({ rotulo: 'Aceite da oferta', valor: pct(v.aceitaram, v.abordados), nota: `${v.aceitaram} de ${v.abordados} abordados. A meta mínima pede ${pct(metas.aceitaram, metas.abordados)}.` });
   }
-  if (msgs && resp != null) {
-    itens.push({ rotulo: 'Taxa de resposta (7 dias)', valor: pct(resp, msgs), nota: `${resp} respostas para ${msgs} mensagens frias.` });
+  if (v.aceitaram && v.pagando != null) {
+    itens.push({ rotulo: 'Teste → pagamento', valor: pct(v.pagando, v.aceitaram), nota: `${v.pagando} de ${v.aceitaram} que testaram. A meta mínima pede ${pct(metas.pagando, metas.aceitaram)}.` });
   }
-  if (apres && vendas != null) {
-    itens.push({ rotulo: 'Apresentação → venda (mês)', valor: pct(vendas, apres), nota: `${vendas} ${vendas === 1 ? 'venda' : 'vendas'} em ${apres} ${apres === 1 ? 'apresentação' : 'apresentações'}.` });
-  }
-  if (msgs && resp && vendas && meta.vendas_mes) {
-    // Estimativa grosseira: respostas por semana viram vendas na mesma proporção do mês.
-    const respostasMes = resp * 4.3;
-    const vendaPorResposta = vendas / respostasMes;
-    const respostasNecessarias = Math.ceil(meta.vendas_mes / vendaPorResposta);
-    const mensagensNecessarias = Math.ceil(respostasNecessarias / (resp / msgs));
-    itens.push({ rotulo: 'Volume para 5 vendas/mês (estimativa)', valor: `~${Math.ceil(mensagensNecessarias / 4.3)} mensagens/semana`, nota: `Mantendo as taxas atuais: cerca de ${respostasNecessarias} respostas no mês. É estimativa, melhora com mais semanas de dados.` });
+  if (dias < 0 && (v.pagando ?? 0) < metas.pagando) {
+    itens.push({ rotulo: 'Regra do plano', valor: 'rever a tese', nota: 'Prazo encerrado sem a meta de buffets pagando: voltar a conversar com donos de buffet antes de escrever mais código.' });
   }
   return itens;
 }
 
-export function descreverAnalise(dados, meta) {
-  const itens = analisarFunil(dados, meta);
+export function descreverAnalise(dados, validacao) {
+  const itens = analisarValidacao(dados, validacao);
   if (!itens.length) return '';
-  return `Análise calculada a partir dos números reais:\n${itens.map((i) => `- ${i.rotulo}: ${i.valor}. ${i.nota}`).join('\n')}`;
+  return `Análise da validação (calculada, não é IA):\n${itens.map((i) => `- ${i.rotulo}: ${i.valor}. ${i.nota}`).join('\n')}`;
+}
+
+export function descreverValidacao(validacao) {
+  if (!validacao?.metas) return '';
+  const m = validacao.metas;
+  return `Plano de validação (até ${dataBR(validacao.prazo)}): metas mínimas de ${m.abordados} buffets abordados, ${m.aceitaram} aceitando colocar o link, ${m.com5} com 5 ou mais orçamentos reais em 14 dias e ${m.pagando} pagando.
+Marcos:
+${(validacao.marcos ?? []).map((x) => `- até ${dataBR(x.ate)}: ${x.entrega} (${x.areas})`).join('\n')}`;
 }
 
 // Pesquisas feitas na internet pela equipe de pesquisa: informação real, com fontes.
@@ -152,17 +172,32 @@ export function descreverPesquisas(pesquisas) {
   return texto;
 }
 
+// Tarefas do CEO: o que precisa ser executado por uma pessoa. O CEO marca como feitas.
+export function descreverTarefasCeo(tarefas) {
+  if (!tarefas?.length) return 'Tarefas do CEO: nenhuma.';
+  const pendentes = tarefas.filter((t) => !t.feita);
+  const feitas = tarefas.filter((t) => t.feita).slice(-8);
+  const linha = (t) => `- ${t.texto}${t.prazo ? ` (até ${dataBR(t.prazo)})` : ''}`;
+  return `Tarefas do CEO (marcadas por ele):
+Pendentes:
+${pendentes.map(linha).join('\n') || '- (nenhuma)'}
+Feitas:
+${feitas.map(linha).join('\n') || '- (nenhuma)'}`;
+}
+
 // Backlog do produto (status real, mantido pelo CEO na aba Produto).
 export function descreverBacklog(backlog, nomeDe) {
   if (!backlog?.length) return 'Backlog do produto: vazio.';
   const grupo = (status) => backlog.filter((t) => t.status === status);
-  const linha = (t) => `- ${t.titulo} [${t.tipo}, prioridade ${t.prioridade}${t.responsavel ? `, ${nomeDe(t.responsavel)}` : ''}${t.mvp ? ', MVP' : ''}]`;
-  const mvp = backlog.filter((t) => t.mvp);
-  return `Backlog do produto (status real informado pelo CEO; MVP: ${mvp.filter((t) => t.status === 'feito').length} de ${mvp.length} prontas):
+  const linha = (t) => `- ${t.titulo} [${t.tipo}, prioridade ${t.prioridade}${t.responsavel ? `, ${nomeDe(t.responsavel)}` : ''}${t.mvp ? ', antes do teste real' : ''}]`;
+  const bloqueiam = backlog.filter((t) => t.mvp);
+  return `Backlog do produto (status real informado pelo CEO; itens que precisam estar prontos antes do primeiro teste com buffet real: ${bloqueiam.filter((t) => t.status === 'feito').length} de ${bloqueiam.length}):
 Fazendo:
 ${grupo('fazendo').map(linha).join('\n') || '- (nada)'}
 A fazer:
 ${grupo('a fazer').map(linha).join('\n') || '- (nada)'}
+Congelado até a validação:
+${grupo('congelado').map(linha).join('\n') || '- (nada)'}
 Feito:
 ${grupo('feito').map(linha).join('\n') || '- (nada)'}`;
 }

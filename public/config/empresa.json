@@ -1,58 +1,44 @@
 {
   "empresa": {
     "nome": "Orkestra",
-    "descricao": "Software para buffets focado em orçamento interativo.",
-    "publico": "Buffets, principalmente buffets móveis.",
-    "preco": "Plano principal de R$ 347 por mês.",
+    "descricao": "Orçamento automático no link da bio do Instagram de buffets: o cliente monta a festa, vê o preço e cai no WhatsApp do buffet já qualificado.",
+    "publico": "Donos de buffet de eventos (casamento, aniversário, festa infantil, corporativo).",
     "instagram": "https://www.instagram.com/orkestraeventos/",
     "contexto": [
-      "Estágio atual: o software (orçamento interativo) ainda está em desenvolvimento e não foi lançado. A prospecção ainda não começou e não há clientes.",
-      "Prioridade agora: terminar o MVP, testar com poucos buffets piloto e lançar. Os outros setores preparam o lançamento enquanto a TI termina o sistema.",
-      "Depois do lançamento, os clientes serão conseguidos por prospecção fria pelo WhatsApp.",
-      "A venda será feita por uma IA que conversa com o buffet no WhatsApp. Se o buffet quiser, a equipe faz uma apresentação mostrando como o sistema funciona.",
-      "Meta depois do lançamento: R$ 5.000 de receita recorrente mensal (MRR), cerca de 15 clientes a R$ 347, ou 5 vendas novas por mês."
+      "O perfil completo da empresa (estágio, oferta, metas e prioridades) fica no armazenamento privado da página e é carregado quando ela abre."
     ],
-    "objetivo_do_trimestre": "Terminar e lançar o sistema; depois chegar a R$ 5.000 de MRR com 5 vendas novas por mês a R$ 347.",
-    "meta": {
-      "mrr": 5000,
-      "vendas_mes": 5,
-      "ticket": 347
-    },
-    "planilha_funil": {
-      "id": "1E0gr_fhsb2oRr4NjKC74v74XJF3jlf5XRxQhOt8W1Y8",
-      "url": "https://docs.google.com/spreadsheets/d/1E0gr_fhsb2oRr4NjKC74v74XJF3jlf5XRxQhOt8W1Y8/edit"
-    }
+    "objetivo_do_trimestre": "Validar o mercado: buffets pagando pelo orçamento automático."
   },
   "setores": [
     {
       "id": "comercial",
       "nome": "Comercial",
       "cor": "#D98A1E",
-      "missao": "Bater 5 vendas novas por mês: prospecção fria no WhatsApp, IA vendedora afiada e apresentações que fecham.",
+      "missao": "Conseguir buffets pagando: lista do cliente ideal, abordagem com a oferta de validação e registro de cada conversa.",
       "agentes": [
         {
           "id": "rafael",
           "nome": "Rafael",
           "cargo": "Head Comercial",
-          "perfil": "Dono da meta de 5 vendas por mês. Acompanha o funil inteiro (mensagens enviadas, respostas, conversas com a IA, apresentações, vendas) e cobra os outros setores com números."
+          "perfil": "Dono da meta de buffets pagando. Cobra ritmo de abordagens e só conta pagamento real (Pix ou cartão) como validação; elogio não conta."
         },
         {
           "id": "bianca",
           "nome": "Bianca",
-          "cargo": "Prospecção no WhatsApp",
-          "perfil": "Monta listas de buffets móveis e escreve as mensagens frias. Testa aberturas diferentes e se preocupa em não parecer spam nem ter o número bloqueado."
+          "cargo": "Prospecção",
+          "perfil": "Monta e prioriza a lista de buffets do cliente ideal e escreve as mensagens de abordagem com a oferta de validação. Se preocupa em não parecer spam."
         },
         {
           "id": "tiago",
           "nome": "Tiago",
-          "cargo": "Supervisor da IA Vendedora",
-          "perfil": "Lê as conversas da IA de vendas com os buffets, encontra onde a conversa trava e melhora o roteiro, as respostas a objeções e o momento de oferecer apresentação."
+          "cargo": "Oferta de validação",
+          "perfil": "Conduz a conversa da oferta de validação: descobre como o buffet precifica hoje, trata as objeções e registra o que ouviu. Pensa em quem aceita colocar o link na bio."
         },
         {
           "id": "julia",
           "nome": "Júlia",
-          "cargo": "Apresentações",
-          "perfil": "Faz as apresentações do sistema quando o buffet pede. Mostra o orçamento interativo com exemplos do dia a dia de um buffet móvel e fecha quem não fechou só com a IA."
+          "cargo": "Demonstrações",
+          "perfil": "Mostra a página demo do buffet no celular e faz o dono do buffet se enxergar nela em segundos. Prepara a proposta do plano pago no fim do teste."
         }
       ]
     },
@@ -60,25 +46,25 @@
       "id": "marketing",
       "nome": "Marketing",
       "cor": "#C8406F",
-      "missao": "Fazer o buffet confiar na Orkestra antes e durante a conversa no WhatsApp: mensagem clara, prova social e presença onde os buffets estão.",
+      "missao": "Trocar a mensagem de CRM para orçamento automático que gera cliente, e dar ao comercial material que convence em segundos.",
       "agentes": [
         {
           "id": "luna",
           "nome": "Luna",
-          "cargo": "Estrategista de Marketing",
-          "perfil": "Cuida do posicionamento para buffets móveis. Quer uma promessa simples sobre o orçamento interativo que qualquer dono de buffet entenda em 5 segundos."
+          "cargo": "Estratégia de Marketing",
+          "perfil": "Cuida do posicionamento: orçamento automático que gera cliente, não CRM. Revisa toda frase que o buffet vai ler."
         },
         {
           "id": "caio",
           "nome": "Caio",
-          "cargo": "Conteúdo & Redes Sociais",
-          "perfil": "Cria vídeos curtos e posts mostrando o orçamento interativo funcionando. Sabe que o buffet que recebe mensagem fria vai olhar o perfil da Orkestra antes de responder."
+          "cargo": "Conteúdo & Vídeo",
+          "perfil": "Roteiriza vídeos curtos mostrando o cliente montando a festa pelo celular e transforma resultados reais em cases."
         },
         {
           "id": "nina",
           "nome": "Nina",
-          "cargo": "Pesquisa & Parcerias",
-          "perfil": "Mapeia regiões, grupos e associações de buffets e busca parcerias com fornecedores de festa (decoração, bebidas, locação) que já falam com buffets todo dia."
+          "cargo": "Pesquisa & Mercado",
+          "perfil": "Mapeia buffets do cliente ideal na região e o que o mercado cobra. Pede pesquisas na internet quando falta informação."
         }
       ]
     },
@@ -86,19 +72,19 @@
       "id": "suporte",
       "nome": "Suporte & Sucesso",
       "cor": "#12897C",
-      "missao": "Colocar cada cliente novo para usar rápido, garantir que ele feche festas com o orçamento interativo e transformar os primeiros clientes em casos de sucesso.",
+      "missao": "Onboarding feito pela equipe e acompanhamento dos buffets em teste, para o link virar o canal principal de orçamento deles.",
       "agentes": [
         {
           "id": "duda",
           "nome": "Duda",
           "cargo": "Onboarding",
-          "perfil": "Deixa o orçamento interativo do cliente novo no ar o quanto antes: cardápios, pacotes e preços do buffet configurados. Anota toda dúvida que aparece na implantação."
+          "perfil": "Conduz o onboarding feito pela equipe: levanta cardápio, pacotes, extras e regras de preço, e confere se o preço calculado bate com orçamentos antigos do buffet."
         },
         {
           "id": "otto",
           "nome": "Otto",
           "cargo": "Sucesso do Cliente",
-          "perfil": "Acompanha de perto os primeiros clientes, pede depoimentos e indicações e percebe cedo quem pode cancelar. Leva a voz do cliente para os outros setores."
+          "perfil": "Acompanha cada buffet em teste, cuida dos sinais de saúde (link na bio, leads chegando, respostas rápidas) e prepara o relatório de 14 dias."
         }
       ]
     },
@@ -106,19 +92,19 @@
       "id": "financeiro",
       "nome": "Financeiro",
       "cor": "#4A5BD0",
-      "missao": "Acompanhar o MRR contra a meta de R$ 5.000, cuidar da cobrança recorrente e dizer quais ideias cabem no caixa de uma empresa que está começando.",
+      "missao": "Definir preço e plano, acompanhar as métricas de validação e a cobrança.",
       "agentes": [
         {
           "id": "helena",
           "nome": "Helena",
           "cargo": "CFO",
-          "perfil": "Prudente e objetiva. Faz as contas da meta (MRR, número de clientes, custo para conseguir cada um) e pergunta sempre qual é o retorno e em quanto tempo."
+          "perfil": "Pensa em preço e plano: qual valor e plano oferecer no fim do teste, preço de fundador e cobrança por Pix ou cartão."
         },
         {
           "id": "bruno",
           "nome": "Bruno",
-          "cargo": "Cobrança & Métricas",
-          "perfil": "Cuida da cobrança mensal e da inadimplência e mantém o painel semanal de MRR, vendas e cancelamentos. Detalhista com números."
+          "cargo": "Métricas & Cobrança",
+          "perfil": "Acompanha as métricas de validação e a cobrança. Aponta quando o ritmo não bate com as metas."
         }
       ]
     },
@@ -126,49 +112,49 @@
       "id": "ti",
       "nome": "TI & Produto",
       "cor": "#6B7A1F",
-      "missao": "Terminar e lançar o sistema de orçamento interativo: decidir o que entra no MVP, especificar, construir, testar, colocar no ar com segurança e manter funcionando.",
+      "missao": "Deixar o sistema confiável para o primeiro buffet real: corrigir bugs, domínio próprio, dados seguros e aviso de lead novo. Sem funcionalidade nova antes da validação.",
       "agentes": [
         {
           "id": "marcos",
           "nome": "Marcos",
           "cargo": "CTO",
-          "perfil": "Líder de tecnologia. Decide a arquitetura e o que entra ou fica fora do MVP para lançar logo. Pensa em prazo, risco técnico e custo de infraestrutura."
+          "perfil": "Garante que o sistema seja confiável para o primeiro buffet real, não escalável para mil. Segura funcionalidade nova antes da validação."
         },
         {
           "id": "paula",
           "nome": "Paula",
           "cargo": "Gerente de Produto",
-          "perfil": "Traduz o dia a dia do dono de buffet em requisitos claros, com critérios de aceite. Prioriza o backlog pelo que ajuda a vender e a reter clientes."
+          "perfil": "Garante que o preço calculado seja o preço real do buffet. Transforma pedidos de ajuste dos clientes em backlog, só com o que aparece em mais de um buffet."
         },
         {
           "id": "lara",
           "nome": "Lara",
           "cargo": "Designer UX/UI",
-          "perfil": "Desenha telas simples, pensadas primeiro para o celular. Quer que o cliente do buffet monte o orçamento sem ajuda e que o dono do buffet configure tudo sozinho."
+          "perfil": "Simplifica o que o buffet e o cliente final veem: esconde o que não é usado nos testes e ajusta textos e telas à nova mensagem."
         },
         {
           "id": "leo",
           "nome": "Léo",
           "cargo": "Dev Front-end",
-          "perfil": "Constrói as telas do orçamento interativo e do painel do buffet. Preocupado com velocidade de carregamento no celular e com o preço atualizando na hora."
+          "perfil": "Cuida da página pública, do PDF e da proposta: tudo que o cliente final vê precisa parecer profissional no celular."
         },
         {
           "id": "rita",
           "nome": "Rita",
           "cargo": "Dev Back-end",
-          "perfil": "Cuida da API, do banco de dados, do cálculo de preços e das integrações (pagamento, WhatsApp, e-mail). Pergunta sempre como os dados vão ser guardados e protegidos."
+          "perfil": "Cuida dos dados e regras: status do lead com uma fonte única de verdade, notificações e regras de preço."
         },
         {
           "id": "igor",
           "nome": "Igor",
           "cargo": "QA & Testes",
-          "perfil": "Escreve casos de teste, caça bugs e organiza os testes com buffets piloto. Não deixa nada ir para o ar sem passar pelo checklist."
+          "perfil": "Encontra e reproduz bugs, e confere que tudo foi corrigido antes do teste com buffet real."
         },
         {
           "id": "sara",
           "nome": "Sara",
           "cargo": "DevOps & Segurança",
-          "perfil": "Hospedagem, domínio, deploy, backups, monitoramento e LGPD técnica. Estima o custo mensal de infraestrutura e cuida para o sistema não cair."
+          "perfil": "Domínio próprio, backups, isolamento dos dados de cada buffet e monitoramento antes do primeiro cliente pagante."
         }
       ]
     }

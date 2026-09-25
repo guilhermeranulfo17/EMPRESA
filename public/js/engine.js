@@ -1,6 +1,8 @@
 // Motor do escritório: guarda o estado, escolhe quem fala e aplica as ações dos agentes.
 // Roda igual no navegador (modo demonstração) e no Node (server.js).
 
+import { PADRAO_EXECUCAO } from './prompts.js';
+
 const LIMITE_MENSAGENS = 400;
 const PROFUNDIDADE_MAXIMA = 3; // quantas respostas em cadeia uma conversa pode gerar sozinha
 const APOIOS_PARA_CEO = 4;
@@ -28,6 +30,7 @@ export class Escritorio {
       entregas: [],
       pesquisas: [],
       backlog: [],
+      tarefasCeo: [],
       dados: null,
       pausado: false,
       velocidade: 1,
@@ -249,6 +252,25 @@ export class Escritorio {
     this.estado.pesquisas = [...pesquisas].sort((a, b) => a.criadoEm - b.criadoEm);
   }
 
+  // ---------- tarefas do CEO (o que uma pessoa precisa executar) ----------
+  definirTarefasCeo(itens, { remoto = false } = {}) {
+    this.estado.tarefasCeo = itens;
+    this.emitir('tarefasCeo', itens, { remoto });
+  }
+
+  salvarTarefaCeo(tarefa) {
+    const lista = [...this.estado.tarefasCeo];
+    const i = lista.findIndex((t) => t.id === tarefa.id);
+    if (i >= 0) lista[i] = tarefa;
+    else lista.push(tarefa);
+    this.definirTarefasCeo(lista);
+    return tarefa;
+  }
+
+  removerTarefaCeo(id) {
+    this.definirTarefasCeo(this.estado.tarefasCeo.filter((t) => t.id !== id));
+  }
+
   // ---------- backlog do produto ----------
   definirBacklog(itens, { remoto = false } = {}) {
     this.estado.backlog = itens;
@@ -320,6 +342,12 @@ export class Escritorio {
       };
       this.registrarPesquisa(pesquisa);
       mensagem = this.registrar({ de: agente.id, para: 'ceo', tipo: 'pedido_pesquisa', pesquisaId: pesquisa.id, texto: `Pedi uma pesquisa na internet: "${pesquisa.titulo}". ${acao.texto}`, profundidade });
+    } else if (acao.acao === 'para_ceo') {
+      const prazo = /^\d{4}-\d{2}-\d{2}$/.test(acao.prazo ?? '') ? acao.prazo : null;
+      const tarefa = this.salvarTarefaCeo({
+        id: novoId('ceo'), texto: acao.texto.slice(0, 400), prazo, autor: agente.id, origem: agente.nome, feita: false, criadoEm: Date.now(),
+      });
+      mensagem = this.registrar({ de: agente.id, para: 'ceo', tipo: 'para_ceo', tarefaCeoId: tarefa.id, texto: `Tarefa para você${prazo ? ` (até ${prazo.split('-').reverse().slice(0, 2).join('/')})` : ''}: ${tarefa.texto}`, profundidade });
     } else if (acao.acao === 'tarefa' && acao.tarefa_titulo?.trim()) {
       const ehTI = agente.setor === 'ti';
       const tarefa = this.salvarTarefa({
@@ -385,6 +413,8 @@ export class Escritorio {
 
   registrar(dados) {
     const mensagem = { id: novoId('msg'), ts: Date.now(), ...dados };
+    // Agentes não executam nada: uma fala dizendo que executou vem marcada para o CEO não se enganar.
+    if (this.estado.agentes[mensagem.de] && ['mensagem', 'voto', 'ideia'].includes(mensagem.tipo) && PADRAO_EXECUCAO.test(mensagem.texto)) mensagem.alerta = true;
     this.estado.mensagens.push(mensagem);
     if (this.estado.mensagens.length > LIMITE_MENSAGENS) this.estado.mensagens.shift();
     this.emitir('mensagem', mensagem);

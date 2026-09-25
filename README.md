@@ -1,6 +1,8 @@
 # Escritório de Agentes da Orkestra
 
-A Orkestra está construindo um software de orçamento interativo para buffets (principalmente buffets móveis), que vai custar R$ 347/mês, com prospecção fria e venda por uma IA no WhatsApp. O sistema ainda não foi lançado: a prioridade é terminar o MVP. Depois, a meta é R$ 5.000 de MRR (5 vendas novas por mês).
+A Orkestra faz orçamento automático no link da bio do Instagram de buffets: o cliente monta a festa, vê o preço e cai no WhatsApp do buffet já qualificado.
+
+A estratégia interna (oferta, metas de validação, preços em teste, backlog) **não fica neste repositório**: ela está no armazenamento privado da página publicada no Claude, carregada quando a página abre.
 
 Este é um escritório visual onde 18 agentes de IA trabalham em cinco setores (**Comercial**, **Marketing**, **Suporte & Sucesso**, **Financeiro** e **TI & Produto**) e conversam entre si por uma **caixa de comunicação** compartilhada. Eles têm autonomia para pedir dados uns aos outros, propor ideias para a empresa e apoiar ou questionar as ideias dos colegas. Você entra como **CEO**: manda mensagens para todos, para um setor ou para um agente, e aprova ou descarta as ideias.
 
@@ -11,6 +13,9 @@ Este é um escritório visual onde 18 agentes de IA trabalham em cinco setores (
 - **Análise do funil é conta, não IA:** a aba Números calcula quanto falta para a meta, taxa de resposta, conversão das apresentações e o volume de mensagens necessário. Os agentes recebem essa análise em toda rodada.
 - **Tudo fica salvo:** conversa, ideias, entregas, pesquisas e números continuam na próxima visita. Para recomeçar a conversa, use "Apagar conversa e ideias" na aba Números.
 - **Entregas são materiais prontos para usar:** mensagens de prospecção, roteiro da IA vendedora, objeções, apresentação, plano da semana, posts, checklist de implantação e relatório da meta. Elas usam os números reais e as pesquisas prontas. Se um material depende de dado de fora que ainda não foi pesquisado, ele diz qual pesquisa pedir, em vez de inventar.
+- **Tarefas do CEO:** agentes não executam nada. Quando algo precisa ser feito por uma pessoa, eles criam uma tarefa na aba **Tarefas**, que você marca quando fizer. Uma fala em que um agente diga que executou algo aparece com um aviso.
+- **Validação:** o topo mostra buffets pagando, que aceitaram o link e abordados contra as metas mínimas, e os dias até o prazo. A aba Números calcula onde a validação está.
+- **Salvar no Drive:** cada entrega e pesquisa pode virar um documento na pasta da empresa no Google Drive.
 - **TI & Produto:** 7 agentes (CTO, Gerente de Produto, Designer, Front-end, Back-end, QA e DevOps) que especificam, desenham, planejam e testam o sistema. Eles não escrevem nem publicam código dentro da página. A aba **Produto** tem o backlog do MVP: você marca o que está feito, fazendo ou a fazer, e os agentes usam isso como a verdade (e sugerem tarefas novas).
 - **Planilha do funil:** a lista de prospecção fica no Google Drive ("Funil de Prospecção - Orkestra"). Na aba Números, "Atualizar pela planilha" lê a planilha pelo seu Google Drive conectado ao Claude e conta os buffets por status.
 - **Modo simulação:** só aparece quando a página é aberta fora do Claude. Um aviso diz que as falas são frases prontas, e nada é salvo.

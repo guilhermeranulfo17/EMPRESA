@@ -10,11 +10,14 @@ export async function abrirMemoria({ aoErro } = {}) {
   const refEstado = db.doc('escritorio/estado');
   const refDados = db.doc('escritorio/dados');
   const refBacklog = db.doc('produto/backlog');
+  const refPerfil = db.doc('escritorio/empresa');
+  const refTarefasCeo = db.doc('escritorio/ceo');
   const colEntregas = db.collection('entregas');
   const colPesquisas = db.collection('pesquisas');
   let fila = Promise.resolve();
   let timer = null;
   let timerBacklog = null;
+  let timerCeo = null;
 
   // Uma escrita por vez; falhas avisam a página, mas não travam as próximas.
   const escrever = (fn) => {
@@ -24,12 +27,14 @@ export async function abrirMemoria({ aoErro } = {}) {
 
   return {
     async carregar() {
-      const [estado, dados, entregas, pesquisas, backlog] = await Promise.all([
+      const [estado, dados, entregas, pesquisas, backlog, perfil, tarefasCeo] = await Promise.all([
         refEstado.get(),
         refDados.get(),
         colEntregas.orderBy('ts').limit(300).get(),
         colPesquisas.orderBy('criadoEm').limit(300).get(),
         refBacklog.get(),
+        refPerfil.get(),
+        refTarefasCeo.get(),
       ]);
       // O que vem do armazenamento é congelado: clona antes de o escritório mexer.
       return {
@@ -38,6 +43,9 @@ export async function abrirMemoria({ aoErro } = {}) {
         entregas: entregas.docs.map((d) => structuredClone(d.data())),
         pesquisas: pesquisas.docs.map((d) => structuredClone(d.data())),
         backlog: backlog.exists ? structuredClone(backlog.data()).itens ?? [] : null,
+        // Perfil privado da empresa (estratégia, metas): fica só aqui, fora do código publicado.
+        perfil: perfil.exists ? structuredClone(perfil.data()) : null,
+        tarefasCeo: tarefasCeo.exists ? structuredClone(tarefasCeo.data()).itens ?? [] : [],
       };
     },
 
@@ -52,6 +60,10 @@ export async function abrirMemoria({ aoErro } = {}) {
     salvarBacklog(itens) {
       clearTimeout(timerBacklog);
       timerBacklog = setTimeout(() => escrever(() => refBacklog.set({ itens, atualizadoEm: Date.now() })), 800);
+    },
+    salvarTarefasCeo(itens) {
+      clearTimeout(timerCeo);
+      timerCeo = setTimeout(() => escrever(() => refTarefasCeo.set({ itens, atualizadoEm: Date.now() })), 800);
     },
     salvarPesquisa: (pesquisa) => escrever(() => colPesquisas.doc(pesquisa.id).set(pesquisa)),
 

@@ -1,7 +1,7 @@
 // Rodada com IA de verdade dentro da página publicada no Claude (capacidade "sample").
 // Uma chamada decide as próximas ações de vários agentes; cada ação entra no escritório assim que chega.
 
-import { descreverEmpresa, descreverEquipe, descreverCaixa, descreverDados, descreverAnalise, descreverEntregas, descreverPesquisas, descreverBacklog, ESCRITORIO, REGRAS } from './prompts.js';
+import { descreverEmpresa, descreverEquipe, descreverCaixa, descreverDados, descreverAnalise, descreverValidacao, descreverEntregas, descreverPesquisas, descreverBacklog, descreverTarefasCeo, ESCRITORIO, REGRAS } from './prompts.js';
 
 export async function rodadaComIA(sample, escritorio, { signal, quantidade = 4, aoChegar }) {
   const prompt = montarPrompt(escritorio, quantidade);
@@ -64,29 +64,34 @@ function montarPrompt(escritorio, quantidade) {
     .slice(0, 8)
     .map(({ agente, mensagem }) => `- [${mensagem.id}] ${nomeDe(mensagem.de)} → ${nomeDe(agente)} (${mensagem.tipo}): ${mensagem.texto}`);
 
-  return `Você coordena a equipe de agentes de IA da empresa abaixo. Cada agente tem cargo e perfil próprios. Escreva as próximas ${quantidade} ações da equipe, uma depois da outra. O CEO vai ler tudo e agir: cada ação precisa ajudar de verdade a bater a meta, com análise dos dados reais, decisões, pedidos de pesquisa quando faltar informação, ou materiais prontos para usar.
+  return `Você coordena a equipe de agentes de IA da empresa abaixo. Cada agente tem cargo e perfil próprios e trabalha como assessor do CEO. Escreva as próximas ${quantidade} ações da equipe, uma depois da outra. O CEO vai ler tudo e executar: cada ação precisa ajudar de verdade a bater as metas de validação, com análise dos dados reais, decisões, tarefas claras para o CEO, pedidos de pesquisa quando faltar informação, ou materiais prontos para usar.
 
 ${descreverEmpresa(estado.empresa)}
 
+${descreverValidacao(estado.empresa.validacao)}
+
 ${descreverDados(estado.dados)}
 
-${descreverAnalise(estado.dados, estado.empresa.meta)}
+${descreverAnalise(estado.dados, estado.empresa.validacao)}
+
+${descreverTarefasCeo(estado.tarefasCeo)}
 
 ${descreverPesquisas(estado.pesquisas)}
 
 ${descreverBacklog(estado.backlog, nomeDe)}
 
 ${ESCRITORIO}
-- "tarefa": colocar uma tarefa no backlog do produto (funcionalidade, bug, melhoria, infraestrutura, segurança ou lançamento). Título em "tarefa_titulo", tipo em "tarefa_tipo", prioridade em "prioridade" (alta, média ou baixa) e, em "texto", o que fazer e o critério de pronto. Só para o que ainda não está no backlog.
-- "pesquisa": pedir à equipe de pesquisa (que tem internet) uma informação de fora da empresa. Título curto em "pesquisa_titulo" e, em "texto", exatamente o que pesquisar e para quê (ex.: "20 buffets móveis em Uberlândia com WhatsApp público, para a prospecção da Bianca"). Só peça o que ainda não está nas pesquisas prontas ou na fila.
-- "entrega": produzir um material pronto para o CEO usar de verdade (ex.: mensagens de WhatsApp, roteiro, checklist, plano). Título em "entrega_titulo" e o material completo em "texto", com quebras de linha (\\n) e listas com "- ". Use no máximo uma entrega por rodada, só quando a conversa pedir, e sem repetir uma entrega que já existe.
+- "para_ceo": criar uma tarefa para o CEO executar (ex.: "Mandar a mensagem de abordagem para os 5 buffets de prioridade 1 da planilha"). Em "texto", a ação exata, com o material ou o lugar onde ele está; em "prazo", a data AAAA-MM-DD se houver. Só para o que ainda não está nas tarefas do CEO.
+- "tarefa": colocar uma tarefa no backlog do produto (bug, melhoria, infraestrutura, segurança). Título em "tarefa_titulo", tipo em "tarefa_tipo", prioridade em "prioridade" (alta, média ou baixa) e, em "texto", o que fazer e o critério de pronto. Respeitem o congelamento de funcionalidades novas.
+- "pesquisa": pedir à equipe de pesquisa (que tem internet) uma informação de fora da empresa. Título curto em "pesquisa_titulo" e, em "texto", exatamente o que pesquisar e para quê. Só o que ainda não está nas pesquisas prontas ou na fila.
+- "entrega": produzir um material pronto para o CEO usar (ex.: mensagem de abordagem, roteiro, checklist, relatório). Título em "entrega_titulo" e o material completo em "texto", com quebras de linha (\\n) e listas com "- ". No máximo uma entrega por rodada, sem repetir uma que já existe.
 
 ${descreverEquipe(estado.setores, agentes)}
 
 ${REGRAS}
-- Use agentes variados, de pelo menos 3 setores diferentes. Enquanto o sistema não estiver lançado, a TI deve aparecer em quase toda rodada. Cada ação é de um agente só.
+- Foquem no gargalo do momento, que é mercado e oferta (comercial, sucesso do cliente, preço), e nos itens da TI que bloqueiam o primeiro teste real. Use agentes de pelo menos 3 setores. Cada ação é de um agente só.
 - As ações podem reagir às anteriores desta mesma rodada.
-- Quando há pesquisas prontas, usem os dados delas (nomes, contatos, preços) nas análises e nos materiais, citando de qual pesquisa veio.
+- Quando há pesquisas prontas ou dados da planilha, usem esses dados (nomes, contatos, objeções) citando de onde vieram.
 
 ${descreverEntregas(estado.entregas, nomeDe)}
 
@@ -96,5 +101,5 @@ Esperando resposta (responda estas primeiro, as do CEO antes de todas):
 ${pendentes.join('\n') || '(ninguém esperando resposta)'}
 
 Formato da resposta: exatamente ${quantidade} linhas, cada linha um objeto JSON completo, sem nenhum outro texto e sem cercas de código. Campos:
-{"agente":"id do agente","status":"o que ele está fazendo na mesa agora, até 8 palavras","acao":"mensagem | ideia | votar | entrega | pesquisa | tarefa","para":"id de agente, id de setor, todos ou ceo","texto":"a fala, a descrição da ideia ou o comentário do voto","ideia_titulo":"título curto se acao = ideia, senão vazio","entrega_titulo":"título se acao = entrega, senão vazio","pesquisa_titulo":"título se acao = pesquisa, senão vazio","tarefa_titulo":"título se acao = tarefa, senão vazio","tarefa_tipo":"tipo se acao = tarefa, senão vazio","prioridade":"alta | média | baixa se acao = tarefa, senão vazio","ideia_id":"id da ideia se acao = votar, senão vazio","voto":"apoiar | questionar | nenhum","responde_a":"id [msg_...] da mensagem respondida, senão vazio"}`;
+{"agente":"id do agente","status":"o que ele está fazendo na mesa agora, até 8 palavras","acao":"mensagem | ideia | votar | entrega | pesquisa | tarefa | para_ceo","para":"id de agente, id de setor, todos ou ceo","texto":"a fala, a descrição, o comentário ou a tarefa","ideia_titulo":"título se acao = ideia, senão vazio","entrega_titulo":"título se acao = entrega, senão vazio","pesquisa_titulo":"título se acao = pesquisa, senão vazio","tarefa_titulo":"título se acao = tarefa, senão vazio","tarefa_tipo":"tipo se acao = tarefa, senão vazio","prioridade":"alta | média | baixa se acao = tarefa, senão vazio","prazo":"AAAA-MM-DD se acao = para_ceo e houver prazo, senão vazio","ideia_id":"id da ideia se acao = votar, senão vazio","voto":"apoiar | questionar | nenhum","responde_a":"id [msg_...] da mensagem respondida, senão vazio"}`;
 }

@@ -82,6 +82,8 @@ async function conectarLocal() {
         escritorio.carregarEntregas(salvo.entregas);
         escritorio.carregarPesquisas(salvo.pesquisas);
         escritorio.estado.dados = salvo.dados;
+        if (salvo.perfil) escritorio.estado.empresa = { ...escritorio.estado.empresa, ...salvo.perfil };
+        escritorio.estado.tarefasCeo = salvo.tarefasCeo;
         escritorio.estado.backlog = salvo.backlog ?? (await import('./produto.js')).backlogInicial();
         if (!salvo.backlog) memoria.salvarBacklog(escritorio.estado.backlog);
         receber('foto', escritorio.foto());
@@ -96,6 +98,7 @@ async function conectarLocal() {
         if (tipo === 'dados') memoria.salvarDados(dados);
         if (tipo === 'pesquisa' && !extra?.remoto) memoria.salvarPesquisa(dados);
         if (tipo === 'backlog' && !extra?.remoto) memoria.salvarBacklog(dados);
+        if (tipo === 'tarefasCeo' && !extra?.remoto) memoria.salvarTarefasCeo(dados);
       });
       // Resultados da equipe de pesquisa chegam sozinhos, sem recarregar a página.
       memoria.ouvirPesquisas((pesquisa) => {
@@ -133,6 +136,10 @@ async function conectarLocal() {
     controle: (dados) => escritorio.definirControle(dados),
     salvarDados: (dados) => escritorio.definirDados(dados),
     salvarTarefa: (tarefa) => escritorio.salvarTarefa(tarefa),
+    salvarTarefaCeo: (tarefa) => escritorio.salvarTarefaCeo(tarefa),
+    atualizarEntrega: (entrega) => escritorio.registrarEntrega(entrega, { avisar: false }),
+    atualizarPesquisa: (pesquisa) => escritorio.registrarPesquisa(pesquisa),
+    removerTarefaCeo: (id) => escritorio.removerTarefaCeo(id),
     removerTarefa: (id) => escritorio.removerTarefa(id),
     pedirPesquisa: ({ titulo, pedido, responsavel }) => {
       const pesquisa = escritorio.registrarPesquisa({
@@ -311,11 +318,15 @@ function receber(tipo, dados) {
   } else if (tipo === 'pesquisa') {
     estado.pesquisas ??= [];
   estado.backlog ??= [];
+  estado.tarefasCeo ??= [];
     const i = estado.pesquisas.findIndex((x) => x.id === dados.id);
     if (i >= 0) estado.pesquisas[i] = dados;
     else estado.pesquisas.push(dados);
     desenharEntregas();
     atualizarNumeros();
+  } else if (tipo === 'tarefasCeo') {
+    estado.tarefasCeo = dados;
+    desenharTarefasCeo();
   } else if (tipo === 'backlog') {
     estado.backlog = dados;
     desenharBacklog();
@@ -364,6 +375,7 @@ function montarTudo() {
   desenharEntregas();
   montarDados();
   montarProduto();
+  desenharTarefasCeo();
   desenharControles();
   atualizarNumeros();
 }
@@ -576,6 +588,9 @@ function itemDoFeed(msg) {
     ref = el('button', { class: 'link', type: 'button', onclick: () => abrirEntrega(msg.entregaId) }, 'Abrir a entrega');
   } else if (msg.tipo === 'pedido') {
     etiqueta = el('span', { class: 'etiqueta discussao' }, 'Pedido');
+  } else if (msg.tipo === 'para_ceo') {
+    etiqueta = el('span', { class: 'etiqueta ideia' }, 'Tarefa para você');
+    ref = el('button', { class: 'link', type: 'button', onclick: () => trocarAba('tarefas') }, 'Ver tarefas');
   } else if (msg.tipo === 'tarefa') {
     etiqueta = el('span', { class: 'etiqueta discussao' }, 'Backlog');
   } else if (msg.tipo === 'pedido_pesquisa') {
@@ -593,9 +608,10 @@ function itemDoFeed(msg) {
       etiqueta,
       el('time', { datetime: new Date(msg.ts).toISOString() }, hora(msg.ts)),
     ),
-    ['entrega', 'pesquisa_pronta'].includes(msg.tipo) ? null : ref,
+    ['entrega', 'pesquisa_pronta', 'para_ceo'].includes(msg.tipo) ? null : ref,
     el('p', {}, msg.texto),
-    ['entrega', 'pesquisa_pronta'].includes(msg.tipo) ? el('div', { class: 'ref' }, ref) : null,
+    msg.alerta ? el('p', { class: 'alerta-execucao' }, 'Atenção: agentes não executam nada. Se isto precisa acontecer, é você quem faz.') : null,
+    ['entrega', 'pesquisa_pronta', 'para_ceo'].includes(msg.tipo) ? el('div', { class: 'ref' }, ref) : null,
   );
 }
 
@@ -685,22 +701,71 @@ for (const b of document.querySelectorAll('.velocidades button')) {
 const reais = (n) => `R$ ${Number(n).toLocaleString('pt-BR', { maximumFractionDigits: 0 })}`;
 const temNumero = (v) => v !== '' && v != null && !Number.isNaN(Number(v));
 
-function atualizarNumeros() {
-  const meta = estado.empresa.meta ?? {};
-  const dados = estado.dados ?? {};
-  const mrr = temNumero(dados.mrr) ? Number(dados.mrr) : temNumero(dados.clientes) && meta.ticket ? Number(dados.clientes) * meta.ticket : null;
-  $('#n-mrr').textContent = mrr == null ? '—' : reais(mrr);
-  $('#meta-mrr').textContent = meta.mrr ? `de ${reais(meta.mrr)} de MRR` : 'MRR';
-  $('#barra-mrr').style.width = mrr == null || !meta.mrr ? '0%' : `${Math.min(100, (mrr / meta.mrr) * 100)}%`;
-  const mvp = (estado.backlog ?? []).filter((t) => t.mvp);
-  const feitas = mvp.filter((t) => t.status === 'feito').length;
-  $('#n-mvp').textContent = mvp.length ? `${feitas} de ${mvp.length}` : '—';
-  $('#barra-mvp').style.width = mvp.length ? `${(feitas / mvp.length) * 100}%` : '0%';
-  $('#n-entregas').textContent = (estado.entregas?.length ?? 0) + (estado.pesquisas ?? []).filter((p) => p.status === 'pronta').length;
-  $('#n-aprovadas').textContent = estado.ideias.filter((i) => i.status === 'aprovada').length;
-    const total = $('#hub-total');
+async function atualizarNumeros() {
+  const { numerosValidacao } = await import('./prompts.js');
+  const validacao = estado.empresa.validacao;
+  const metas = validacao?.metas ?? {};
+  const v = numerosValidacao(estado.dados);
+  const mostra = (id, valor, meta) => ($(id).textContent = valor == null ? (meta ? `— de ${meta}` : '—') : meta ? `${valor} de ${meta}` : String(valor));
+  mostra('#n-pagando', v.pagando, metas.pagando);
+  mostra('#n-aceitaram', v.aceitaram, metas.aceitaram);
+  mostra('#n-abordados', v.abordados, metas.abordados);
+  $('#barra-pagando').style.width = metas.pagando && v.pagando ? `${Math.min(100, (v.pagando / metas.pagando) * 100)}%` : '0%';
+  if (validacao?.prazo) {
+    const dias = Math.ceil((new Date(`${validacao.prazo}T23:59:59-03:00`) - Date.now()) / 86400000);
+    const data = new Date(`${validacao.prazo}T12:00:00-03:00`).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+    $('#n-dias').textContent = dias >= 0 ? String(dias) : 'fim';
+    $('#rotulo-dias').textContent = dias >= 0 ? `dias até ${data}` : `prazo encerrado em ${data}`;
+  }
+  const total = $('#hub-total');
   if (total) total.textContent = estado.mensagens.length;
 }
+
+// ---------- tarefas do CEO (aba) ----------
+function desenharTarefasCeo() {
+  const box = $('#tarefas-ceo');
+  if (!box || !estado) return;
+  const tarefas = estado.tarefasCeo ?? [];
+  const pendentes = tarefas.filter((t) => !t.feita).sort((a, b) => (a.prazo ?? '9999').localeCompare(b.prazo ?? '9999') || a.criadoEm - b.criadoEm);
+  const feitas = tarefas.filter((t) => t.feita).sort((a, b) => (b.feitaEm ?? 0) - (a.feitaEm ?? 0));
+  const badge = $('#badge-tarefas');
+  badge.hidden = !pendentes.length;
+  badge.textContent = pendentes.length;
+  box.replaceChildren(
+    ...(pendentes.length ? [el('h3', { class: 'grupo-backlog' }, `A fazer (${pendentes.length})`), ...pendentes.map(cartaoTarefaCeo)] : []),
+    ...(feitas.length ? [el('details', { class: 'feitas' }, el('summary', {}, `Feitas (${feitas.length})`), ...feitas.map(cartaoTarefaCeo))] : []),
+  );
+  if (!tarefas.length) box.append(el('p', { class: 'vazio' }, 'Nenhuma tarefa. Quando os agentes precisarem que algo seja executado, a tarefa aparece aqui.'));
+}
+
+function cartaoTarefaCeo(tarefa) {
+  const hoje = new Date().toISOString().slice(0, 10);
+  const atrasada = !tarefa.feita && tarefa.prazo && tarefa.prazo < hoje;
+  const marcar = el('input', { type: 'checkbox', 'aria-label': `Marcar como feita: ${tarefa.texto}` });
+  marcar.checked = Boolean(tarefa.feita);
+  marcar.addEventListener('change', () => conexao?.salvarTarefaCeo?.({ ...tarefa, feita: marcar.checked, feitaEm: marcar.checked ? Date.now() : null }));
+  const confirmar = el('button', { class: 'link', type: 'button', hidden: true, onclick: () => conexao?.removerTarefaCeo?.(tarefa.id) }, 'confirmar remoção');
+  const remover = el('button', { class: 'link link-discreto', type: 'button', onclick: () => { confirmar.hidden = false; remover.hidden = true; } }, 'remover');
+  const prazo = tarefa.prazo ? new Date(`${tarefa.prazo}T12:00:00-03:00`).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) : null;
+  return el('article', { class: `tarefa tarefa-ceo${atrasada ? ' atrasada' : ''}`, 'data-status': tarefa.feita ? 'feito' : 'a fazer' },
+    el('label', { class: 'tarefa-cab' }, marcar, el('b', {}, tarefa.texto)),
+    el('div', { class: 'tarefa-meta' },
+      prazo ? el('span', { class: `etiqueta ${atrasada ? 'questionar' : 'discussao'}` }, atrasada ? `atrasada · ${prazo}` : `até ${prazo}`) : null,
+      tarefa.area ? el('span', {}, tarefa.area) : null,
+      el('span', {}, tarefa.autor && estado.agentes[tarefa.autor] ? `pedida por ${nomeDe(tarefa.autor)}` : `origem: ${tarefa.origem ?? 'você'}`),
+      remover, confirmar,
+    ),
+  );
+}
+
+$('#form-ceo').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const texto = $('#ceo-texto').value.trim();
+  if (!texto) return $('#ceo-texto').focus();
+  conexao?.salvarTarefaCeo?.({ id: `ceo_${Date.now().toString(36)}`, texto, prazo: $('#ceo-prazo').value || null, origem: 'você', feita: false, criadoEm: Date.now() });
+  $('#ceo-texto').value = '';
+  $('#ceo-prazo').value = '';
+});
 
 // ---------- entregas (aba) ----------
 let statusEntrega = '';
@@ -710,6 +775,7 @@ async function montarPedidoEntrega() {
   $('#aba-entregas').hidden = !disponivel;
   $('#aba-numeros').hidden = !disponivel;
   $('#aba-produto').hidden = !disponivel;
+  $('#aba-tarefas').hidden = !disponivel;
   if (!disponivel) return;
   const { MODELOS, MODELOS_PESQUISA } = await import('./entregas.js');
   const modelo = $('#modelo-entrega');
@@ -759,12 +825,11 @@ $('#form-entrega').addEventListener('submit', async (e) => {
   const modeloId = $('#modelo-entrega').value;
   const obs = $('#obs-entrega').value.trim();
   const pesquisa = MODELOS_PESQUISA.find((m) => m.id === modeloId);
-  const precisaDetalhe = ['outra', 'pesquisa_livre', 'buffets_cidade', 'mercado', 'especificacao'].includes(modeloId);
+  const { MODELOS } = await import('./entregas.js');
+  const precisaDetalhe = ['pesquisa_livre', 'buffets_cidade', 'mercado'].includes(modeloId) || MODELOS.find((m) => m.id === modeloId)?.precisaDetalhe;
   if (precisaDetalhe && !obs) {
     desenharPedidoEntrega(
-      modeloId === 'buffets_cidade' || modeloId === 'mercado' ? 'Diga a cidade na caixa de detalhes.'
-        : modeloId === 'especificacao' ? 'Diga qual funcionalidade especificar. Ex.: Orçamento interativo do cliente final.'
-          : 'Descreva o que você precisa na caixa de detalhes.');
+      modeloId === 'buffets_cidade' || modeloId === 'mercado' ? 'Diga a cidade na caixa de detalhes.' : 'Descreva o que você precisa na caixa de detalhes.');
     $('#obs-entrega').focus();
     return;
   }
@@ -849,8 +914,57 @@ function cartaoDePesquisa(pesquisa, aberta, renderizarMarkdown) {
           el('summary', {}, `Fontes (${pesquisa.fontes.length})`),
           el('ul', {}, pesquisa.fontes.map((f) => el('li', {}, el('a', { href: f.url, target: '_blank', rel: 'noopener noreferrer' }, f.titulo || f.url)))))
       : null,
-    pesquisa.status === 'pronta' ? el('div', { class: 'acoes-ideia' }, copiar) : null,
+    pesquisa.status === 'pronta' ? el('div', { class: 'acoes-ideia' }, botaoDrive(pesquisa, 'pesquisa', renderizarMarkdown), copiar) : null,
   );
+}
+
+// Salva a entrega ou pesquisa como documento na pasta da empresa no Google Drive.
+function botaoDrive(item, tipo, renderizarMarkdown) {
+  const versao = item.versao ?? 1;
+  if (item.driveUrl && (item.driveVersao ?? 1) === versao) {
+    return el('a', { class: 'btn', href: item.driveUrl, target: '_blank', rel: 'noopener noreferrer' }, 'Abrir no Drive');
+  }
+  const botao = el('button', { class: 'btn', type: 'button' }, item.driveUrl ? 'Salvar nova versão no Drive' : 'Salvar no Drive');
+  botao.addEventListener('click', () => salvarNoDrive(item, tipo, renderizarMarkdown, botao));
+  return botao;
+}
+
+async function salvarNoDrive(item, tipo, renderizarMarkdown, botao) {
+  const mcp = await usar('mcp');
+  if (!mcp) {
+    botao.textContent = 'Drive indisponível aqui';
+    return;
+  }
+  const texto = tipo === 'pesquisa' ? item.resultado ?? '' : item.conteudo ?? '';
+  const corpo = el('div', {},
+    el('h1', {}, item.titulo),
+    el('p', {}, `${tipo === 'pesquisa' ? 'Pesquisa' : 'Entrega'} de ${nomeDe(tipo === 'pesquisa' ? item.responsavel : item.autor)} · Escritório de Agentes da Orkestra · ${new Date().toLocaleDateString('pt-BR')}`),
+    renderizarMarkdown(texto),
+    item.fontes?.length ? el('div', {}, el('h2', {}, 'Fontes'), el('ul', {}, item.fontes.map((f) => el('li', {}, el('a', { href: f.url }, f.titulo || f.url))))) : null,
+  );
+  botao.disabled = true;
+  botao.textContent = 'Salvando…';
+  try {
+    const pasta = estado.empresa.pasta_drive?.id;
+    const entrada = { title: `${item.titulo}${(item.versao ?? 1) > 1 ? ` (versão ${item.versao})` : ''}`, textContent: `<html><body>${corpo.innerHTML}</body></html>`, contentMimeType: 'text/html' };
+    if (pasta) entrada.parentId = pasta;
+    const resultado = await mcp.callTool('Google Drive', 'create_file', entrada);
+    let payload = resultado.payload;
+    if (typeof payload === 'string') {
+      try { payload = JSON.parse(payload); } catch { payload = {}; }
+    }
+    const atualizado = { ...item, driveUrl: payload?.viewUrl ?? null, driveVersao: item.versao ?? 1 };
+    if (tipo === 'pesquisa') conexao?.atualizarPesquisa?.(atualizado);
+    else conexao?.atualizarEntrega?.(atualizado);
+    if (!atualizado.driveUrl) botao.textContent = 'Salvo no Drive';
+  } catch (e) {
+    botao.disabled = false;
+    botao.textContent = {
+      server_not_connected: 'Conecte o Google Drive nas configurações do Claude',
+      needs_reauth: 'Reconecte o Google Drive nas configurações do Claude',
+      not_in_manifest: 'Acesso ao Drive recusado: recarregue e permita',
+    }[e?.code] ?? 'Não salvou: tentar de novo';
+  }
 }
 
 async function copiarTexto(texto, corpo, botao) {
@@ -890,9 +1004,10 @@ function cartaoDeEntrega(entrega, aberta, renderizarMarkdown) {
     entrega.cortada ? el('p', { class: 'dica-linha' }, 'O texto foi cortado no fim. Peça um ajuste para completar.') : null,
     ia.sample
       ? el('div', { class: 'acoes-ideia' },
+          botaoDrive(entrega, 'entrega', renderizarMarkdown),
           copiar,
           el('button', { class: 'btn', type: 'button', onclick: () => { areaAjuste.hidden = !areaAjuste.hidden; if (!areaAjuste.hidden) ajuste.focus(); } }, 'Pedir ajuste'))
-      : el('div', { class: 'acoes-ideia' }, copiar),
+      : el('div', { class: 'acoes-ideia' }, botaoDrive(entrega, 'entrega', renderizarMarkdown), copiar),
     areaAjuste,
   );
 }
@@ -929,10 +1044,10 @@ async function montarDados() {
 async function desenharAnalise() {
   const box = $('#analise');
   if (!box || !estado) return;
-  const { analisarFunil } = await import('./prompts.js');
-  const itens = analisarFunil(estado.dados, estado.empresa.meta);
+  const { analisarValidacao } = await import('./prompts.js');
+  const itens = analisarValidacao(estado.dados, estado.empresa.validacao);
   box.replaceChildren(...itens.map((i) => el('div', { class: 'analise-item' }, el('small', {}, i.rotulo), el('b', {}, i.valor), el('span', {}, i.nota))));
-  if (!itens.length) box.append(el('p', { class: 'dica-linha' }, 'Preencha e salve os números acima para ver a análise: quanto falta para a meta, taxa de resposta, conversão das apresentações e o volume de mensagens necessário.'));
+  if (!itens.length) box.append(el('p', { class: 'dica-linha' }, 'A análise aparece quando o plano de validação estiver carregado.'));
 }
 
 $('#form-dados').addEventListener('submit', async (e) => {
@@ -987,9 +1102,9 @@ async function desenharBacklog() {
   if (!box) return;
   const { STATUS_TAREFA, progressoMvp } = await import('./produto.js');
   const { feitas, total, fazendo } = progressoMvp(estado.backlog);
-  $('#mvp-texto').textContent = total ? `MVP: ${feitas} de ${total} prontas${fazendo ? `, ${fazendo} em andamento` : ''}` : 'MVP: nenhuma tarefa marcada como MVP';
+  $('#mvp-texto').textContent = total ? `Pronto para o teste com buffet real: ${feitas} de ${total}${fazendo ? `, ${fazendo} em andamento` : ''}` : 'Nenhum item marcado como necessário antes do teste real';
   $('#mvp-barra').style.width = total ? `${(feitas / total) * 100}%` : '0%';
-  const grupos = [['fazendo', 'Fazendo'], ['a fazer', 'A fazer'], ['feito', 'Feito']];
+  const grupos = [['fazendo', 'Fazendo'], ['a fazer', 'A fazer'], ['congelado', 'Congelado até a validação'], ['feito', 'Feito']];
   box.replaceChildren(
     ...grupos.flatMap(([status, rotulo]) => {
       const itens = estado.backlog
@@ -1013,7 +1128,7 @@ function cartaoDeTarefa(tarefa, STATUS_TAREFA) {
     el('div', { class: 'tarefa-meta' },
       el('span', { class: `etiqueta ${tarefa.prioridade === 'alta' ? 'questionar' : 'discussao'}` }, tarefa.prioridade),
       el('span', {}, tarefa.tipo),
-      tarefa.mvp ? el('span', { class: 'etiqueta aprovada' }, 'MVP') : null,
+      tarefa.mvp ? el('span', { class: 'etiqueta aprovada' }, 'antes do teste real') : null,
       tarefa.responsavel ? el('span', { class: 'resp' }, el('span', { class: 'ponto', style: `--cor:${corDe(tarefa.responsavel)}` }), nomeDe(tarefa.responsavel)) : null,
     ),
     tarefa.descricao || tarefa.origem
@@ -1039,7 +1154,8 @@ $('#form-tarefa').addEventListener('submit', (e) => {
 });
 
 // ---------- planilha do funil (Google Drive) ----------
-const STATUS_FUNIL = ['A contatar', 'Mensagem enviada', 'Respondeu', 'Apresentação marcada', 'Apresentação feita', 'Cliente', 'Perdido'];
+const STATUS_FUNIL = ['A abordar', 'Abordado', 'Conversou', 'Aceitou o teste', 'Catálogo montado', 'Link na bio', 'Proposta enviada', 'Pagando', 'Recusou'];
+const ACEITARAM = ['Aceitou o teste', 'Catálogo montado', 'Link na bio', 'Proposta enviada', 'Pagando'];
 
 function lerTabela(texto) {
   const linhas = texto.split('\n').filter((l) => l.trim().startsWith('|'));
@@ -1080,12 +1196,28 @@ async function sincronizarPlanilha() {
     const linhas = lerTabela(payload?.fileContent ?? '');
     if (!linhas) throw { code: 'formato', message: 'Não encontrei as colunas Buffet e Status na planilha.' };
     const porStatus = {};
+    const coluna = (linha, inicio) => {
+      const chave = Object.keys(linha).find((k) => k.toLowerCase().startsWith(inicio));
+      return chave ? linha[chave].trim() : '';
+    };
+    const sim = (valor) => /^(sim|s|yes|x|ok)\b/i.test(valor);
+    const validacao = { abordados: 0, aceitaram: 0, com5: 0, pagando: 0 };
+    const objecoes = [];
+    const precificacao = [];
     for (const l of linhas) {
       const s = normalizarStatus(l.Status);
       porStatus[s] = (porStatus[s] ?? 0) + 1;
+      if (s !== 'A abordar' && s !== 'Sem status') validacao.abordados++;
+      if (ACEITARAM.includes(s) || sim(coluna(l, 'aceitou'))) validacao.aceitaram++;
+      if (Number(coluna(l, 'orçamentos em 14').replace(',', '.')) >= 5) validacao.com5++;
+      if (s === 'Pagando' || sim(coluna(l, 'pagou'))) validacao.pagando++;
+      const objecao = coluna(l, 'objeção');
+      if (objecao) objecoes.push(`${l.Buffet}: ${objecao}`);
+      const preco = coluna(l, 'como precifica');
+      if (preco) precificacao.push(`${l.Buffet}: ${preco}`);
     }
-    const funil = { lidoEm: Date.now(), total: linhas.length, porStatus };
-    conexao?.salvarDados?.({ ...(estado.dados ?? {}), funil, clientes: porStatus.Cliente ?? 0, atualizadoEm: Date.now() });
+    const funil = { lidoEm: Date.now(), total: linhas.length, porStatus, validacao, objecoes: objecoes.slice(0, 30), precificacao: precificacao.slice(0, 30) };
+    conexao?.salvarDados?.({ ...(estado.dados ?? {}), funil, atualizadoEm: Date.now() });
     status.textContent = `Planilha lida: ${linhas.length} buffets. Se a sua planilha tiver mais linhas do que isso, me avise: o Google Drive pode ter mandado só uma parte.`;
   } catch (e) {
     status.textContent = {
@@ -1111,7 +1243,7 @@ function desenharFunil() {
   const f = estado.dados?.funil;
   if (!f?.total) {
     box.replaceChildren();
-    if (!$('#status-planilha').textContent) $('#status-planilha').textContent = 'Ainda não lida. A planilha começa com os 16 buffets de Uberlândia como "A contatar".';
+    if (!$('#status-planilha').textContent) $('#status-planilha').textContent = 'Ainda não lida. A planilha começa com 16 buffets de Uberlândia como "A abordar".';
     return;
   }
   const maior = Math.max(...Object.values(f.porStatus));

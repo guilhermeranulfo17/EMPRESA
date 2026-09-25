@@ -669,3 +669,28 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; }
 .funil-linha b { text-align: right; font-variant-numeric: tabular-nums; }
 .funil-barra { height: 8px; border-radius: 999px; background: var(--superficie-2); overflow: hidden; }
 .funil-barra span { display: block; height: 100%; background: var(--ok); border-radius: inherit; }
+
+/* ---------- tarefas do CEO e avisos ---------- */
+.abas button { font-size: 13px; padding-inline: 4px; }
+.alerta-execucao {
+  margin: 6px 0 0 14px !important;
+  padding: 5px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--alerta);
+  color: var(--tinta);
+  background: color-mix(in srgb, var(--alerta) 12%, transparent);
+  font-size: 12px;
+}
+.linha-2 { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
+.campo input[type="date"] {
+  border: 1px solid var(--linha); border-radius: 8px; background: var(--superficie);
+  padding: 6px 8px; font: inherit; color: inherit; width: 100%;
+}
+.tarefa-ceo .tarefa-cab { cursor: pointer; align-items: flex-start; }
+.tarefa-ceo .tarefa-cab input { margin-top: 3px; flex: none; width: 16px; height: 16px; }
+.tarefa-ceo.atrasada { border-color: var(--ruim); }
+.link-discreto { color: var(--tinta-3); font-weight: 400; }
+.feitas { display: grid; gap: 8px; }
+.feitas summary { cursor: pointer; font: 700 13px/1.2 var(--display); color: var(--tinta-2); text-transform: uppercase; letter-spacing: 0.06em; }
+.abas button { white-space: nowrap; }
+.abas .badge { margin-left: 2px; padding: 1px 4px; font-size: 10px; }

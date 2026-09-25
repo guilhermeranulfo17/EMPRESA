@@ -1,124 +1,68 @@
 // Entregas: materiais prontos para usar, escritos por um agente com o Claude.
 
-import { descreverEmpresa, descreverDados, descreverAnalise, descreverEntregas, descreverPesquisas, descreverBacklog } from './prompts.js';
+import { descreverEmpresa, descreverDados, descreverAnalise, descreverValidacao, descreverEntregas, descreverPesquisas, descreverBacklog, descreverTarefasCeo } from './prompts.js';
 
+// Materiais escritos por um agente com o Claude, na hora.
+const M = (id, titulo, agente, pedido, precisaDetalhe = false) => ({ id, titulo, agente, pedido, precisaDetalhe });
 export const MODELOS = [
-  {
-    id: 'prospeccao',
-    titulo: 'Mensagens de prospecção no WhatsApp',
-    agente: 'bianca',
-    pedido: 'Escreva 3 variações de mensagem fria de abertura para donos de buffet móvel no WhatsApp, e para cada uma um follow-up para o 2º dia e um último contato para o 5º dia. Mensagens curtas, naturais, sem parecer spam, que levem o buffet a responder. Explique em uma linha quando usar cada variação.',
-  },
-  {
-    id: 'roteiro_ia',
-    titulo: 'Roteiro da IA vendedora',
-    agente: 'tiago',
-    pedido: 'Monte o roteiro de conversa da IA que vende no WhatsApp: abertura depois que o buffet responde, perguntas para entender o buffet, como explicar o orçamento interativo em linguagem simples, quando e como oferecer a apresentação, como apresentar o preço de R$ 347 e como pedir o fechamento. Inclua exemplos de frases prontas.',
-  },
-  {
-    id: 'objecoes',
-    titulo: 'Respostas para objeções',
-    agente: 'tiago',
-    pedido: 'Liste as objeções mais prováveis de um dono de buffet móvel (ex.: preço, "já faço orçamento no WhatsApp", "não tenho tempo de configurar", "meus clientes preferem falar comigo") e escreva para cada uma uma resposta curta que a IA vendedora ou a equipe possa usar.',
-  },
-  {
-    id: 'apresentacao',
-    titulo: 'Roteiro de apresentação de 15 minutos',
-    agente: 'julia',
-    pedido: 'Escreva o roteiro de uma apresentação de 15 minutos para um buffet que pediu para ver o sistema: abertura, perguntas iniciais, demonstração do orçamento interativo com um exemplo de festa, perguntas de fechamento e próximo passo. Indique o tempo de cada parte.',
-  },
-  {
-    id: 'plano_semana',
-    titulo: 'Plano da semana para a meta',
-    agente: 'rafael',
-    pedido: 'Monte o plano desta semana para a meta de 5 vendas no mês: quantas mensagens frias, respostas, apresentações e vendas precisamos (mostre a conta, usando os números reais quando existirem e dizendo quando é estimativa) e as tarefas de cada setor, com responsável.',
-  },
-  {
-    id: 'conteudo',
-    titulo: 'Posts e vídeos da semana',
-    agente: 'caio',
-    pedido: 'Sugira 5 posts ou vídeos curtos para o Instagram da Orkestra que deixem um dono de buffet confiante depois de receber a mensagem no WhatsApp. Para cada um: formato, gancho dos primeiros 3 segundos, roteiro curto e legenda.',
-  },
-  {
-    id: 'onboarding',
-    titulo: 'Checklist de implantação do cliente',
-    agente: 'duda',
-    pedido: 'Monte o checklist de implantação de um buffet que acabou de assinar: o que pedir ao cliente, em que ordem configurar o orçamento interativo, mensagens prontas para mandar no WhatsApp em cada etapa e como confirmar que ele está usando.',
-  },
-  {
-    id: 'relatorio_meta',
-    titulo: 'Relatório da meta de MRR',
-    agente: 'helena',
-    pedido: 'Faça o relatório da meta: onde estamos em MRR e clientes (usando os números reais informados), quanto falta para R$ 5.000, o ritmo necessário por semana e os 3 maiores riscos. Se faltar algum número, diga quais o CEO precisa informar.',
-  },
-  {
-    id: 'plano_mvp',
-    titulo: 'Plano para terminar o MVP',
-    agente: 'marcos',
-    pedido: 'A partir do backlog real, monte o plano para terminar e lançar o MVP: o que entra e o que fica para depois (e por quê), a ordem de construção em etapas semanais, dependências, riscos e o que precisa estar pronto para o piloto com buffets.',
-  },
-  {
-    id: 'especificacao',
-    titulo: 'Especificação de uma funcionalidade',
-    agente: 'paula',
-    pedido: 'Escreva a especificação da funcionalidade indicada nos detalhes: objetivo, histórias de usuário (dono do buffet e cliente final), regras de negócio, campos e validações, casos de erro e critérios de aceite em formato de checklist.',
-  },
-  {
-    id: 'arquitetura',
-    titulo: 'Arquitetura e tecnologias do sistema',
-    agente: 'marcos',
-    pedido: 'Proponha uma arquitetura simples para o MVP: componentes (front, API, banco, integrações), modelo de dados principal (buffet, cardápio, pacote, item, orçamento, assinatura), tecnologias recomendadas para um time pequeno e custo mensal estimado (dito como estimativa).',
-  },
-  {
-    id: 'fluxo_telas',
-    titulo: 'Fluxo de telas do orçamento interativo',
-    agente: 'lara',
-    pedido: 'Descreva tela por tela o fluxo do cliente final montando o orçamento no celular e o fluxo do dono do buffet configurando cardápios e vendo orçamentos: o que aparece em cada tela, botões, textos e o que acontece em cada toque.',
-  },
-  {
-    id: 'plano_testes',
-    titulo: 'Plano de testes do MVP',
-    agente: 'igor',
-    pedido: 'Monte o plano de testes do MVP: casos de teste numerados para cada fluxo do backlog (passos e resultado esperado), testes no celular, testes de cálculo de preço, e o roteiro do piloto com buffets reais.',
-  },
-  {
-    id: 'checklist_lancamento',
-    titulo: 'Checklist de lançamento',
-    agente: 'sara',
-    pedido: 'Monte o checklist para colocar o sistema no ar com segurança: domínio e HTTPS, variáveis e senhas, backups e restauração, monitoramento, termos e LGPD, cobrança, suporte ao cliente e plano do que fazer se o sistema cair.',
-  },
-  { id: 'outra', titulo: 'Outra entrega', agente: 'rafael', pedido: '' },
+  M('abordagem', 'Mensagem de abordagem da oferta de validação', 'bianca',
+    'Escreva a primeira mensagem para abordar um dono de buffet do cliente ideal pelo WhatsApp ou direct, apresentando a oferta de validação (catálogo montado de graça, link na bio por 14 dias, resultado no dia 14). Use o discurso central da empresa. Dê 3 variações curtas e naturais, um follow-up para quem não respondeu em 2 dias, e diga como personalizar com o nome e o tipo de festa do buffet.'),
+  M('roteiro_conversa', 'Roteiro da conversa de validação', 'tiago',
+    'Monte o roteiro da conversa com o dono do buffet: perguntas para descobrir se é do cliente ideal e como ele precifica hoje, como mostrar a página demo, como apresentar a oferta de 14 dias, respostas para as objeções esperadas e o que registrar na planilha no fim (aceitou ou não, objeção principal, como precifica hoje).'),
+  M('proposta_dia14', 'Proposta do dia 14 com preço de fundador', 'rafael',
+    'Escreva a proposta do plano pago para apresentar no dia 14: como abrir com o resultado do teste, a oferta com preço de fundador para quem fechar na hora, formas de pagamento (Pix ou cartão) e o que dizer se o buffet hesitar. Deixe o preço como variável se ainda não foi decidido.'),
+  M('relatorio14', 'Modelo do relatório de 14 dias para o buffet', 'otto',
+    'Monte o modelo do relatório de 14 dias que o buffet recebe: orçamentos gerados, valor total em propostas, quantos viraram conversa no WhatsApp, destaques e próximos passos. Em formato para mandar pelo WhatsApp e para mostrar numa conversa.'),
+  M('onboarding', 'Checklist do onboarding feito pela equipe', 'duda',
+    'Monte o checklist do onboarding feito pela equipe: roteiro da reunião de 30 minutos para levantar cardápio, pacotes, extras e regras de preço; cadastro de identidade; teste com 3 orçamentos reais antigos (como conferir se o valor bate); link na bio e nos destaques; mensagens de acompanhamento dos dias 3, 7 e 14.'),
+  M('regras_preco', 'Planilha de regras de preço do buffet', 'paula',
+    'Monte o formulário para registrar, no onboarding, cada regra de preço do buffet que o sistema não cobre hoje (dia da semana, temporada, mínimo de convidados por pacote, datas bloqueadas, negociação). Diga como decidir quando uma regra entra no produto: só se aparecer em mais de um buffet.'),
+  M('nova_mensagem', 'Nova mensagem para o site, bio e painel', 'luna',
+    'Escreva os textos para trocar "CRM para buffets & eventos" pela nova mensagem de orçamento automático que gera cliente: subtítulo do logo, bio do Instagram da Orkestra, título e subtítulo da página demo e da futura página de venda, e 3 frases curtas para o comercial usar.'),
+  M('video60', 'Roteiro do vídeo de 60 segundos', 'caio',
+    'Escreva o roteiro de um vídeo de 60 segundos mostrando um cliente montando uma festa pelo celular na página do buffet: cenas, falas ou legendas, o momento em que o preço aparece e o fechamento no WhatsApp do buffet.'),
+  M('preco_plano', 'Análise de preço e plano para o dia 14', 'helena',
+    'Analise qual preço e plano oferecer no dia 14 dentro da faixa em teste, com preço de fundador: o que cada faixa significa para o buffet (use a tese de um evento a mais por ano), prós e contras, e a recomendação. Deixe claro o que é conta e o que é estimativa.'),
+  M('plano_bugs', 'Plano de correção antes do teste real', 'marcos',
+    'A partir do backlog real, monte o plano para deixar o sistema pronto para o primeiro teste com buffet real: ordem das correções, o que cada uma precisa, como testar que foi resolvida e o que fica para depois. Nada de funcionalidade nova.'),
+  M('spec_notificacao', 'Especificação: aviso de lead novo', 'paula',
+    'Escreva a especificação do aviso ao buffet quando entra um lead novo pelo link (WhatsApp ou e-mail): quando dispara, o que a mensagem diz, dados do lead incluídos, o que acontece se falhar e critérios de aceite.'),
+  M('spec_funil', 'Especificação: medir o funil da página pública', 'paula',
+    'Escreva a especificação para medir o funil da página pública: visitas, início do orçamento, dados deixados e clique no WhatsApp. Eventos a registrar, onde o buffet vê os números e critérios de aceite.'),
+  M('dominio', 'Plano de domínio próprio, backup e isolamento', 'sara',
+    'Monte o plano para sair do endereço de preview: domínio próprio no formato orkestra.com.br/b/nome-do-buffet, HTTPS, backup e teste de restauração, isolamento dos dados de cada buffet e o que conferir antes do primeiro cliente pagante.'),
+  M('outra', 'Outra entrega', 'rafael', '', true),
 ];
 
 // Pedidos que precisam de internet: vão para a fila da equipe de pesquisa, que devolve com fontes.
 export const MODELOS_PESQUISA = [
   {
     id: 'buffets_cidade',
-    titulo: 'Lista de buffets de uma cidade',
+    titulo: 'Lista de buffets do cliente ideal numa cidade',
     agente: 'nina',
-    exemplo: 'Ex.: Uberaba, 20 buffets, priorizar buffet móvel e quem tem WhatsApp público.',
-    pedido: 'Encontre buffets reais da cidade indicada, priorizando buffets móveis (que atendem no local do cliente). Para cada um: nome, WhatsApp ou telefone público, Instagram ou site, bairro e o que a fonte diz sobre o serviço. Separe por prioridade e diga o que não foi encontrado.',
+    exemplo: 'Ex.: Uberaba e Araguari, 15 buffets, médio porte, que recebem orçamento pelo Instagram.',
+    pedido: 'Encontre buffets reais da cidade indicada que se encaixem no cliente ideal: médio porte, recebendo pedidos de orçamento pelo Instagram ou WhatsApp e com cardápio ou pacotes com preço por convidado. Evite buffets de luxo e muito pequenos. Para cada um: nome, WhatsApp ou telefone público, Instagram ou site, bairro e o que a fonte diz. Separe por prioridade e diga o que não foi encontrado.',
   },
   {
     id: 'concorrentes',
     titulo: 'Concorrentes da Orkestra',
     agente: 'luna',
-    exemplo: 'Ex.: focar em softwares brasileiros; comparar preço.',
-    pedido: 'Encontre softwares e ferramentas que buffets no Brasil usam para fazer orçamento e gestão de eventos (concorrentes diretos e indiretos da Orkestra). Para cada um: nome, site, o que faz, preço público se houver e o que a Orkestra faz diferente com o orçamento interativo.',
+    exemplo: 'Ex.: focar em quem faz orçamento automático ou link na bio.',
+    pedido: 'Encontre ferramentas que buffets no Brasil usam para orçamento e captação de clientes, principalmente as que fazem orçamento automático, link na bio ou captação pelo Instagram. Para cada uma: nome, site, o que faz, preço público e o que a Orkestra faz diferente.',
   },
   {
     id: 'mercado',
     titulo: 'Preços e mercado de buffet de uma cidade',
     agente: 'helena',
-    exemplo: 'Ex.: Uberlândia, buffet infantil e casamento.',
-    pedido: 'Levante preços públicos de buffet (por pessoa e por festa) na cidade indicada, os tipos de festa mais comuns e sinais do tamanho do mercado (quantos buffets aparecem nos diretórios). Diga como isso se compara ao plano de R$ 347 por mês da Orkestra.',
+    exemplo: 'Ex.: Uberlândia, preço por convidado de casamento e festa infantil.',
+    pedido: 'Levante preços públicos de buffet (por convidado e por festa) na cidade indicada, os tipos de festa mais comuns e sinais do tamanho do mercado. Relacione com a faixa de preço em teste da Orkestra e com a tese de um evento a mais por ano.',
   },
   {
     id: 'ferramentas',
     titulo: 'Ferramentas e custos para o sistema',
     agente: 'sara',
-    exemplo: 'Ex.: comparar gateways de pagamento recorrente e parceiros da API oficial do WhatsApp.',
-    pedido: 'Levante opções e preços públicos, no Brasil, das ferramentas que o sistema da Orkestra vai precisar: hospedagem, banco de dados, gateway de pagamento com assinatura recorrente (taxas), envio de e-mail e parceiros da API oficial do WhatsApp Business (preço por conversa). Recomende uma combinação para começar barato.',
+    exemplo: 'Ex.: registro de domínio .com.br, envio de aviso por WhatsApp, cobrança recorrente por Pix.',
+    pedido: 'Levante opções e preços públicos, no Brasil, do que o sistema precisa agora: registro e configuração de domínio .com.br, envio de aviso de lead por e-mail e por WhatsApp (API oficial), cobrança por Pix e cartão (inclusive recorrente) e backup. Recomende uma combinação barata para os primeiros clientes.',
   },
   { id: 'pesquisa_livre', titulo: 'Pesquisa livre', agente: 'nina', exemplo: 'Descreva o que precisa pesquisar na internet e para quê.', pedido: '' },
 ];
@@ -144,7 +88,11 @@ ${descreverEmpresa(estado.empresa)}
 
 ${descreverDados(estado.dados)}
 
-${descreverAnalise(estado.dados, estado.empresa.meta)}
+${descreverValidacao(estado.empresa.validacao)}
+
+${descreverAnalise(estado.dados, estado.empresa.validacao)}
+
+${descreverTarefasCeo(estado.tarefasCeo)}
 
 ${descreverPesquisas(estado.pesquisas)}
 

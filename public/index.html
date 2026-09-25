@@ -19,19 +19,15 @@
         <p id="objetivo" class="objetivo"></p>
       </div>
     </div>
-    <div class="numeros" aria-label="Resumo da meta">
+    <div class="numeros" aria-label="Metas de validação">
       <div class="numero-meta">
-        <span id="n-mrr">—</span>
-        <small id="meta-mrr">MRR</small>
-        <span class="barra" aria-hidden="true"><span id="barra-mrr"></span></span>
+        <span id="n-pagando">—</span>
+        <small>buffets pagando</small>
+        <span class="barra" aria-hidden="true"><span id="barra-pagando"></span></span>
       </div>
-      <div class="numero-meta">
-        <span id="n-mvp">—</span>
-        <small>do MVP pronto</small>
-        <span class="barra" aria-hidden="true"><span id="barra-mvp"></span></span>
-      </div>
-      <div><span id="n-entregas">0</span><small>entregas</small></div>
-      <div><span id="n-aprovadas">0</span><small>ideias aprovadas</small></div>
+      <div><span id="n-aceitaram">—</span><small>aceitaram o link</small></div>
+      <div><span id="n-abordados">—</span><small>abordados</small></div>
+      <div><span id="n-dias">—</span><small id="rotulo-dias">dias de validação</small></div>
     </div>
     <div class="controles">
       <span id="modo" class="modo" title="Quem está pensando pelos agentes">—</span>
@@ -66,6 +62,7 @@
       <div class="abas" role="tablist">
         <button type="button" role="tab" id="aba-caixa" aria-selected="true" data-aba="caixa">Caixa</button>
         <button type="button" role="tab" id="aba-ideias" aria-selected="false" data-aba="ideias">Ideias <span id="badge-ideias" class="badge" hidden></span></button>
+        <button type="button" role="tab" id="aba-tarefas" aria-selected="false" data-aba="tarefas" hidden>Tarefas <span id="badge-tarefas" class="badge" hidden></span></button>
         <button type="button" role="tab" id="aba-entregas" aria-selected="false" data-aba="entregas" hidden>Entregas</button>
         <button type="button" role="tab" id="aba-produto" aria-selected="false" data-aba="produto" hidden>Produto</button>
         <button type="button" role="tab" id="aba-numeros" aria-selected="false" data-aba="numeros" hidden>Números</button>
@@ -87,6 +84,20 @@
       <div id="vista-ideias" class="vista" hidden>
         <p class="dica">Ideias com 4 apoios de pelo menos 2 setores sobem para a sua aprovação.</p>
         <div class="ideias" id="ideias"></div>
+      </div>
+
+      <div id="vista-tarefas" class="vista" hidden>
+        <p class="dica">O que precisa ser executado por uma pessoa. Os agentes criam tarefas aqui em vez de dizer que fizeram; marque quando fizer.</p>
+        <form id="form-ceo" class="pedido-entrega">
+          <label class="campo" for="ceo-texto"><span>Nova tarefa</span>
+            <input id="ceo-texto" maxlength="300" placeholder="Ex.: Ligar para o Bendito Buffet">
+          </label>
+          <div class="linha-selects linha-2">
+            <label class="campo" for="ceo-prazo"><span>Prazo</span><input id="ceo-prazo" type="date"></label>
+            <div class="acoes-ideia"><button class="btn btn-forte" type="submit">Adicionar</button></div>
+          </div>
+        </form>
+        <div id="tarefas-ceo" class="ideias"></div>
       </div>
 
       <div id="vista-entregas" class="vista" hidden>
@@ -115,7 +126,7 @@
             <b id="mvp-texto">MVP</b>
             <span class="barra" aria-hidden="true"><span id="mvp-barra"></span></span>
           </div>
-          <p class="dica-linha">Backlog do sistema. A lista começou com uma proposta de MVP: marque o que já existe no seu sistema e remova o que não fizer sentido. Os agentes usam este status como a verdade.</p>
+          <p class="dica-linha">Backlog do sistema, com os bugs e dívidas do guia da equipe. Funcionalidade nova fica congelada até 3 buffets pagando. Marque o status real: os agentes usam isto como a verdade.</p>
         </div>
         <form id="form-tarefa" class="pedido-entrega">
           <label class="campo" for="tarefa-titulo"><span>Nova tarefa</span>
@@ -126,24 +137,16 @@
             <select id="tarefa-prioridade" aria-label="Prioridade"></select>
             <select id="tarefa-resp" aria-label="Responsável"></select>
           </div>
-          <label class="check"><input id="tarefa-mvp" type="checkbox" checked> Faz parte do MVP</label>
+          <label class="check"><input id="tarefa-mvp" type="checkbox"> Precisa estar pronto antes do teste com buffet real</label>
           <div class="acoes-ideia"><button class="btn btn-forte" type="submit">Adicionar ao backlog</button></div>
         </form>
         <div id="backlog" class="ideias"></div>
       </div>
 
       <div id="vista-numeros" class="vista" hidden>
-        <form id="form-dados" class="form-dados">
-          <p class="dica-linha">Os agentes usam estes números como a verdade da empresa. Sem eles, falam só em metas e estimativas. Atualize sempre que mudar.</p>
-          <div id="campos-dados" class="campos"></div>
-          <div class="acoes-ideia">
-            <span id="status-dados" class="dica-linha"></span>
-            <button class="btn btn-forte" type="submit">Salvar números</button>
-          </div>
-        </form>
         <section class="analise" aria-labelledby="titulo-planilha">
           <h3 id="titulo-planilha">Planilha do funil</h3>
-          <p class="dica-linha">A lista de prospecção fica no seu Google Drive. Mude a coluna Status lá (A contatar, Mensagem enviada, Respondeu, Apresentação marcada, Apresentação feita, Cliente, Perdido) e depois traga os números para cá.</p>
+          <p class="dica-linha">A lista de buffets fica no seu Google Drive, na pasta "Orkestra - Escritório de Agentes". Registre cada conversa lá (status, se aceitou o link, como precifica hoje, objeção, orçamentos em 14 dias, se pagou) e depois traga os números para cá.</p>
           <div class="acoes-ideia acoes-esquerda">
             <a id="link-planilha" class="btn" target="_blank" rel="noopener noreferrer">Abrir planilha</a>
             <button id="btn-planilha" class="btn btn-forte" type="button">Atualizar pela planilha</button>
@@ -151,9 +154,17 @@
           <p id="status-planilha" class="dica-linha" aria-live="polite"></p>
           <div id="funil" class="funil"></div>
         </section>
+        <form id="form-dados" class="form-dados">
+          <p class="dica-linha">Use estes campos só se não estiver usando a planilha. Quando a planilha é lida, os números dela valem.</p>
+          <div id="campos-dados" class="campos"></div>
+          <div class="acoes-ideia">
+            <span id="status-dados" class="dica-linha"></span>
+            <button class="btn btn-forte" type="submit">Salvar números</button>
+          </div>
+        </form>
         <section class="analise" aria-labelledby="titulo-analise">
-          <h3 id="titulo-analise">Análise do funil</h3>
-          <p class="dica-linha">Contas feitas a partir dos números acima. Os agentes recebem esta análise em toda rodada.</p>
+          <h3 id="titulo-analise">Validação: onde estamos</h3>
+          <p class="dica-linha">Contas contra as metas mínimas do plano de 21 dias. Os agentes recebem esta análise em toda rodada.</p>
           <div id="analise" class="analise-itens"></div>
         </section>
         <div class="zona-limpeza">
