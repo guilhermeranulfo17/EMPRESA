@@ -1157,17 +1157,86 @@ $('#form-tarefa').addEventListener('submit', (e) => {
 const STATUS_FUNIL = ['A abordar', 'Abordado', 'Conversou', 'Aceitou o teste', 'Catálogo montado', 'Link na bio', 'Proposta enviada', 'Pagando', 'Recusou'];
 const ACEITARAM = ['Aceitou o teste', 'Catálogo montado', 'Link na bio', 'Proposta enviada', 'Pagando'];
 
-function lerTabela(texto) {
-  const linhas = texto.split('\n').filter((l) => l.trim().startsWith('|'));
-  const celulas = (l) => l.trim().replace(/^\||\|$/g, '').split('|').map((c) => c.trim());
-  const iCab = linhas.findIndex((l) => { const c = celulas(l); return c.includes('Buffet') && c.includes('Status'); });
+// Linhas da planilha como objetos { coluna: valor }, a partir do cabeçalho que tem "Buffet" e "Status".
+function comoLinhas(tabela) {
+  const iCab = tabela.findIndex((c) => c.includes('Buffet') && c.includes('Status'));
   if (iCab < 0) return null;
-  const cab = celulas(linhas[iCab]);
-  return linhas
+  const cab = tabela[iCab];
+  return tabela
     .slice(iCab + 1)
-    .map(celulas)
-    .filter((c) => c.some((x) => x) && !c.every((x) => /^:?-*:?$/.test(x)))
+    .filter((c) => c.some((x) => x))
     .map((c) => Object.fromEntries(cab.map((nome, i) => [nome, c[i] ?? ''])));
+}
+
+// CSV exportado pelo Google Drive (só a primeira aba): campos entre aspas podem ter vírgula e quebra de linha.
+function lerCsv(texto) {
+  const tabela = [];
+  let linha = [];
+  let campo = '';
+  let aspas = false;
+  for (let i = 0; i < texto.length; i++) {
+    const ch = texto[i];
+    if (aspas) {
+      if (ch === '"' && texto[i + 1] === '"') { campo += '"'; i++; }
+      else if (ch === '"') aspas = false;
+      else campo += ch;
+    } else if (ch === '"') aspas = true;
+    else if (ch === ',') { linha.push(campo.trim()); campo = ''; }
+    else if (ch === '\n' || ch === '\r') {
+      if (ch === '\r' && texto[i + 1] === '\n') i++;
+      linha.push(campo.trim()); tabela.push(linha); linha = []; campo = '';
+    } else campo += ch;
+  }
+  if (campo || linha.length) { linha.push(campo.trim()); tabela.push(linha); }
+  return comoLinhas(tabela);
+}
+
+// Texto do read_file_content: tabela em markdown, possivelmente só uma amostra e com várias abas.
+// Lê só o bloco contínuo que começa no cabeçalho, com "\\|" dentro das células.
+function lerTabela(texto) {
+  const linhas = texto.split('\n');
+  const celulas = (l) => l.trim().replace(/^\||\|$/g, '').split(/(?<!\\)\|/).map((c) => c.replace(/\\\|/g, '|').trim());
+  const iCab = linhas.findIndex((l) => l.trim().startsWith('|') && celulas(l).includes('Buffet') && celulas(l).includes('Status'));
+  if (iCab < 0) return null;
+  const bloco = [];
+  for (const l of linhas.slice(iCab)) {
+    if (!l.trim().startsWith('|')) break;
+    const c = celulas(l);
+    if (!c.every((x) => /^:?-*:?$/.test(x))) bloco.push(c);
+  }
+  return comoLinhas(bloco);
+}
+
+function base64ParaTexto(b64) {
+  const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+  return new TextDecoder('utf-8').decode(bytes).replace(/^\uFEFF/, '');
+}
+
+const lerPayload = (resultado) => {
+  let payload = resultado?.payload;
+  if (typeof payload === 'string') {
+    try { payload = JSON.parse(payload); } catch { payload = { fileContent: payload }; }
+  }
+  return payload ?? {};
+};
+
+// Tenta a planilha inteira em CSV; se não der, cai para a leitura em texto (que pode vir incompleta).
+async function lerPlanilha(mcp, id) {
+  try {
+    const r = await mcp.callTool('Google Drive', 'download_file_content', { fileId: id, exportMimeType: 'text/csv' }, { cache: false });
+    const conteudo = lerPayload(r).content;
+    const linhas = conteudo ? lerCsv(base64ParaTexto(conteudo)) : null;
+    if (linhas) return { linhas, completa: true };
+  } catch (e) {
+    if (['server_not_connected', 'needs_reauth', 'selection_required', 'blocked_by_policy'].includes(e?.code)) throw e;
+  }
+  const r = await mcp.callTool('Google Drive', 'read_file_content', { fileId: id }, { cache: false });
+  const texto = lerPayload(r).fileContent ?? '';
+  const linhas = lerTabela(texto);
+  if (!linhas) throw { code: 'formato', message: 'Não encontrei as colunas Buffet e Status na planilha.' };
+  const faixa = texto.match(/Table Range:\s*[A-Z]+(\d+):[A-Z]+(\d+)/);
+  const esperado = faixa ? Number(faixa[2]) - Number(faixa[1]) : null;
+  return { linhas, completa: !esperado || linhas.length >= esperado, esperado };
 }
 
 function normalizarStatus(valor) {
@@ -1188,13 +1257,7 @@ async function sincronizarPlanilha() {
   botao.disabled = true;
   status.textContent = 'Lendo a planilha…';
   try {
-    const resultado = await mcp.callTool('Google Drive', 'read_file_content', { fileId: planilha.id }, { cache: false });
-    let payload = resultado.payload;
-    if (typeof payload === 'string') {
-      try { payload = JSON.parse(payload); } catch { payload = { fileContent: payload }; }
-    }
-    const linhas = lerTabela(payload?.fileContent ?? '');
-    if (!linhas) throw { code: 'formato', message: 'Não encontrei as colunas Buffet e Status na planilha.' };
+    const { linhas, completa, esperado } = await lerPlanilha(mcp, planilha.id);
     const porStatus = {};
     const coluna = (linha, inicio) => {
       const chave = Object.keys(linha).find((k) => k.toLowerCase().startsWith(inicio));
@@ -1204,6 +1267,7 @@ async function sincronizarPlanilha() {
     const validacao = { abordados: 0, aceitaram: 0, com5: 0, pagando: 0 };
     const objecoes = [];
     const precificacao = [];
+    const fila = [];
     for (const l of linhas) {
       const s = normalizarStatus(l.Status);
       porStatus[s] = (porStatus[s] ?? 0) + 1;
@@ -1215,10 +1279,16 @@ async function sincronizarPlanilha() {
       if (objecao) objecoes.push(`${l.Buffet}: ${objecao}`);
       const preco = coluna(l, 'como precifica');
       if (preco) precificacao.push(`${l.Buffet}: ${preco}`);
+      if (s !== 'Pagando' && s !== 'Recusou' && fila.length < 30) {
+        const passo = coluna(l, 'próximo passo');
+        fila.push([l.Buffet, coluna(l, 'cidade'), coluna(l, 'prioridade'), s, passo].filter(Boolean).join(' · '));
+      }
     }
-    const funil = { lidoEm: Date.now(), total: linhas.length, porStatus, validacao, objecoes: objecoes.slice(0, 30), precificacao: precificacao.slice(0, 30) };
+    const funil = { lidoEm: Date.now(), total: linhas.length, completa, porStatus, validacao, objecoes: objecoes.slice(0, 30), precificacao: precificacao.slice(0, 30), fila };
     conexao?.salvarDados?.({ ...(estado.dados ?? {}), funil, atualizadoEm: Date.now() });
-    status.textContent = `Planilha lida: ${linhas.length} buffets. Se a sua planilha tiver mais linhas do que isso, me avise: o Google Drive pode ter mandado só uma parte.`;
+    status.textContent = completa
+      ? `Planilha lida inteira: ${linhas.length} buffets.`
+      : `Planilha lida em parte: ${linhas.length} de ${esperado} buffets (o Google Drive mandou só uma amostra). Os números podem estar abaixo do real.`;
   } catch (e) {
     status.textContent = {
       server_not_connected: 'O Google Drive não está conectado. Conecte em claude.ai → Configurações → Conectores e tente de novo.',
@@ -1243,7 +1313,7 @@ function desenharFunil() {
   const f = estado.dados?.funil;
   if (!f?.total) {
     box.replaceChildren();
-    if (!$('#status-planilha').textContent) $('#status-planilha').textContent = 'Ainda não lida. A planilha começa com 16 buffets de Uberlândia como "A abordar".';
+    if (!$('#status-planilha').textContent) $('#status-planilha').textContent = 'Ainda não lida. Clique em "Atualizar pela planilha" para trazer os números.';
     return;
   }
   const maior = Math.max(...Object.values(f.porStatus));

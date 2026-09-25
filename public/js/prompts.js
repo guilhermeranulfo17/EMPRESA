@@ -86,7 +86,8 @@ export function descreverDados(dados) {
   let texto = `Números reais de validação (fonte: ${v.fonte === 'planilha' ? 'planilha do funil' : 'digitados pelo CEO'}):\n${linhas.join('\n') || '- (nenhum número ainda)'}`;
   const f = dados.funil;
   if (f?.total) {
-    texto += `\nPlanilha do funil (lida em ${new Date(f.lidoEm).toLocaleString('pt-BR')}): ${f.total} buffets na lista. Por status: ${Object.entries(f.porStatus).map(([k, n]) => `${k}: ${n}`).join(', ')}.`;
+    texto += `\nPlanilha do funil (lida em ${new Date(f.lidoEm).toLocaleString('pt-BR')}${f.completa === false ? ', leitura parcial' : ''}): ${f.total} buffets na lista. Por status: ${Object.entries(f.porStatus).map(([k, n]) => `${k}: ${n}`).join(', ')}.`;
+    if (f.fila?.length) texto += `\nBuffets em aberto na planilha (buffet · cidade · prioridade · status · próximo passo), na ordem da planilha:\n${f.fila.map((b) => `- ${b}`).join('\n')}`;
     if (f.objecoes?.length) texto += `\nObjeções registradas na planilha: ${f.objecoes.map((o) => `"${o}"`).join('; ')}.`;
     if (f.precificacao?.length) texto += `\nComo os buffets dizem que precificam hoje: ${f.precificacao.map((o) => `"${o}"`).join('; ')}.`;
   }
