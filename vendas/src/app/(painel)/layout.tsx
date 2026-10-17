@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Abas } from '@/components/abas';
 import { sair } from '@/server/actions/acesso';
 import { exigirGui } from '@/server/guard';
@@ -11,7 +12,14 @@ export default async function LayoutPainel({ children }: { children: React.React
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h1 className="text-2xl font-bold">Vendas Orkestra</h1>
           <form action={sair} className="flex items-center gap-3 text-sm">
-            <span className="text-muted-foreground">{usuario.email}</span>
+            <Link
+              href="/ia"
+              className="rounded-control inline-flex min-h-11 items-center border px-4 font-semibold"
+              data-testid="link-ia"
+            >
+              Testar IA
+            </Link>
+            <span className="text-muted-foreground hidden sm:inline">{usuario.email}</span>
             <button type="submit" className="rounded-control min-h-11 border px-4 font-semibold">
               Sair
             </button>

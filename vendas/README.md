@@ -34,6 +34,17 @@ pnpm dev                       # http://localhost:3000
 
 Conta de teste: `gui@vendas.local` / `vendas12345`.
 
+## IA do copiloto
+
+- A chamada roda só no servidor. Provedor e modelo vêm de `VENDAS_IA_PROVEDOR` e `VENDAS_IA_MODELO`.
+- **Gemini (padrão, plano grátis):** crie a chave em https://aistudio.google.com/apikey e coloque
+  em `GEMINI_API_KEY` (no `.env.local` e na Vercel). Atenção: no plano grátis o Google pode usar o
+  conteúdo para melhorar os modelos; para conversas reais, prefira o plano pago ou o Claude.
+- **Trocar para o Claude:** `VENDAS_IA_PROVEDOR=claude` e `ANTHROPIC_API_KEY`. Mais nada muda.
+- **Prompt:** `prompts/copiloto.v1.md`. Para mudar sem perder o anterior, copie para
+  `copiloto.v2.md`, edite e defina `VENDAS_PROMPT_VERSAO=v2`. Cada sugestão grava a versão usada.
+- Para conferir: botão **Testar IA** no topo do painel.
+
 ## Colocar no ar (uma vez)
 
 1. Crie um projeto no Supabase (plano grátis) e rode as migrations de `supabase/migrations`
