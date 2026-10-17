@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Plus, Users } from 'lucide-react';
+import { Plus, Upload, Users } from 'lucide-react';
 import Link from 'next/link';
 import { EmptyState } from '@/components/empty-state';
 import { formatData } from '@/domain/dates';
@@ -18,10 +18,21 @@ export default async function PaginaLeads({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   await exigirGui();
-  const busca = um((await searchParams).q);
+  const params = await searchParams;
+  const busca = um(params.q);
+  const importados = um(params.importados);
   const leads = await listarLeadsVendas(busca);
   return (
     <div className="flex flex-col gap-4">
+      {importados !== null && /^\d+$/.test(importados) && (
+        <p
+          role="status"
+          data-testid="aviso-importacao"
+          className="bg-sucesso/10 text-sucesso border-sucesso/30 rounded-control border px-3 py-2 text-sm"
+        >
+          {importados === '1' ? '1 lead importado.' : `${importados} leads importados.`}
+        </p>
+      )}
       <div className="flex flex-wrap items-center gap-2">
         <form className="flex min-w-0 flex-1 basis-full gap-2 sm:basis-0" role="search">
           <input
@@ -36,6 +47,14 @@ export default async function PaginaLeads({
           </button>
         </form>
         <Link
+          href="/leads/importar"
+          className="rounded-control inline-flex min-h-11 items-center gap-1.5 border px-4 font-semibold whitespace-nowrap"
+          data-testid="importar-csv"
+        >
+          <Upload className="size-4" aria-hidden />
+          Importar CSV
+        </Link>
+        <Link
           href="/leads/novo"
           className="bg-primary text-primary-foreground inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 font-semibold whitespace-nowrap"
           data-testid="novo-lead"
@@ -49,7 +68,7 @@ export default async function PaginaLeads({
         <EmptyState icone={Users} titulo={busca ? 'Nenhum lead encontrado' : 'Nenhum lead ainda'}>
           {busca
             ? 'Tente outro nome, cidade ou telefone.'
-            : 'Cadastre os donos de buffet que você está prospectando.'}
+            : 'Cadastre donos de buffet à mão ou importe uma planilha CSV.'}
         </EmptyState>
       ) : (
         <ul className="flex flex-col gap-2" data-testid="lista-leads">
