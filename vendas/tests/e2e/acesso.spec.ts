@@ -25,7 +25,7 @@ test('o Gui entra, navega pelas abas e sai', async ({ page }) => {
   const abas: [string, RegExp, string][] = [
     ['Pipeline', /\/pipeline$/, 'Pipeline vazio'],
     ['Leads', /\/leads$/, 'Nenhum lead ainda'],
-    ['Conhecimento', /\/conhecimento$/, 'Base de conhecimento vazia'],
+    ['Conhecimento', /\/conhecimento$/, 'Adicionar à base'],
     ['Exemplos', /\/exemplos$/, 'Nenhum exemplo marcado'],
     ['Fila do dia', /\/$/, 'Nada na fila hoje'],
   ];
