@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { entrar, entrarComoGui, GUI } from './apoio';
+import { noBanco } from './banco';
 
 test('sem login vai para /entrar; quem não está na lista não entra', async ({ page }) => {
   await page.goto('/leads');
@@ -10,6 +11,10 @@ test('sem login vai para /entrar; quem não está na lista não entra', async ({
 
   await entrar(page, GUI.email, 'senha-errada');
   await expect(page.getByTestId('erro-login')).toHaveText('E-mail ou senha incorretos.');
+});
+
+test.beforeEach(async () => {
+  await noBanco((sql) => sql`delete from public.vendas_leads`);
 });
 
 test('o Gui entra, navega pelas abas e sai', async ({ page }) => {
