@@ -6,7 +6,7 @@ import { exigirGui } from '@/server/guard';
 export default async function LayoutPainel({ children }: { children: React.ReactNode }) {
   const usuario = await exigirGui();
   return (
-    <div className="mx-auto flex max-w-5xl flex-col gap-5 px-4 py-6" data-testid="painel">
+    <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-6" data-testid="painel">
       <header className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h1 className="text-2xl font-bold">Vendas Orkestra</h1>

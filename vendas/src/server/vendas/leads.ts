@@ -3,8 +3,9 @@ import { desc, eq } from 'drizzle-orm';
 import { formatPhoneBR } from '@/domain/phone';
 import type { EtapaVendas } from '@/domain/vendas/etapas';
 import { normalizarBusca } from '@/domain/vendas/lead';
+import type { CardPipeline } from '@/domain/vendas/pipeline';
 import { obterDb } from '@/server/db/client';
-import { vendasLeads } from '@/server/db/schema';
+import { vendasLeads, vendasMovimentos } from '@/server/db/schema';
 
 /* Leituras dos leads. Conexão do servidor: só depois de exigirGui(). */
 
@@ -74,4 +75,47 @@ function resumo(l: typeof vendasLeads.$inferSelect): LeadVendasResumo {
     proximoFollowup: l.proximoFollowup,
     naoContatar: l.naoContatar,
   };
+}
+
+/** Cards do pipeline (todas as etapas), mais recentes primeiro em cada coluna. */
+export async function listarPipeline(): Promise<CardPipeline[]> {
+  const linhas = await obterDb()
+    .select({
+      id: vendasLeads.id,
+      nome: vendasLeads.nome,
+      buffet: vendasLeads.buffet,
+      cidade: vendasLeads.cidade,
+      etapa: vendasLeads.etapa,
+      proximoFollowup: vendasLeads.proximoFollowup,
+      naoContatar: vendasLeads.naoContatar,
+    })
+    .from(vendasLeads)
+    .orderBy(desc(vendasLeads.atualizadoEm))
+    .limit(LIMITE_LISTA);
+  return linhas;
+}
+
+export type MovimentoLead = {
+  id: string;
+  de: EtapaVendas | null;
+  para: EtapaVendas;
+  origem: 'manual' | 'agente' | 'importacao';
+  motivo: string | null;
+  criadoEm: Date;
+};
+
+/** Histórico de etapas do lead, do mais recente para o mais antigo. */
+export async function listarMovimentos(leadId: string): Promise<MovimentoLead[]> {
+  return obterDb()
+    .select({
+      id: vendasMovimentos.id,
+      de: vendasMovimentos.de,
+      para: vendasMovimentos.para,
+      origem: vendasMovimentos.origem,
+      motivo: vendasMovimentos.motivo,
+      criadoEm: vendasMovimentos.criadoEm,
+    })
+    .from(vendasMovimentos)
+    .where(eq(vendasMovimentos.leadId, leadId))
+    .orderBy(desc(vendasMovimentos.criadoEm));
 }

@@ -19,6 +19,11 @@ export default defineConfig({
   },
   projects: [
     {
+      name: 'pc',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
+      testMatch: /pipeline\.spec\.ts/,
+    },
+    {
       name: 'celular',
       use: {
         ...devices['iPhone 13'],

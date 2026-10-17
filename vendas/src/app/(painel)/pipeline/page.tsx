@@ -1,17 +1,23 @@
 import type { Metadata } from 'next';
 import { Columns3 } from 'lucide-react';
 import { EmptyState } from '@/components/empty-state';
+import { Kanban } from '@/components/kanban';
 import { exigirGui } from '@/server/guard';
+import { listarPipeline } from '@/server/vendas/leads';
 
 export const metadata: Metadata = { title: 'Pipeline' };
 export const dynamic = 'force-dynamic';
 
 export default async function PaginaPipeline() {
   await exigirGui();
-  return (
-    <EmptyState icone={Columns3} titulo="Pipeline vazio">
-      Os leads aparecem aqui nas etapas Novo, Abordado, Respondeu, Interessado, Fechando, Cliente e
-      Perdido.
-    </EmptyState>
-  );
+  const cards = await listarPipeline();
+  if (cards.length === 0) {
+    return (
+      <EmptyState icone={Columns3} titulo="Pipeline vazio">
+        Os leads aparecem aqui nas etapas Novo, Abordado, Respondeu, Interessado, Fechando, Cliente
+        e Perdido.
+      </EmptyState>
+    );
+  }
+  return <Kanban inicial={cards} />;
 }
