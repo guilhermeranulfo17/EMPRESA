@@ -4,6 +4,7 @@ import {
   historicoParaPrompt,
   lerArquivoPrompt,
   lerSaidaAgente,
+  semTravessao,
 } from '@/domain/vendas/agente';
 
 const valida = {
@@ -69,5 +70,29 @@ describe('historicoParaPrompt', () => {
 
   it('histórico vazio vira lista vazia', () => {
     expect(historicoParaPrompt([])).toEqual([]);
+  });
+});
+
+describe('semTravessao', () => {
+  it('troca travessão por vírgula', () => {
+    expect(semTravessao('Oi Marta — tudo bem?')).toBe('Oi Marta, tudo bem?');
+    expect(semTravessao('Simples – direto – rápido')).toBe('Simples, direto, rápido');
+    expect(semTravessao('Sem traço nenhum.')).toBe('Sem traço nenhum.');
+  });
+  it('a saída lida do provedor já vem sem travessão', () => {
+    const r = lerSaidaAgente(
+      JSON.stringify({
+        diagnostico: 'x',
+        mensagem: 'Oi — tudo bem?',
+        etapa: 'abordado',
+        resumo: '',
+        proximo_followup: '',
+        angulo: 'abertura',
+        passar_para_humano: false,
+        nao_contatar: false,
+        motivo: '',
+      }),
+    );
+    expect(r.ok && r.saida.mensagem).toBe('Oi, tudo bem?');
   });
 });

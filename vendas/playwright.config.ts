@@ -21,7 +21,7 @@ export default defineConfig({
     {
       name: 'pc',
       use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
-      testMatch: /(pipeline|conhecimento|ia|conversa)\.spec\.ts/,
+      testMatch: /(pipeline|conhecimento|ia|conversa|fila|exemplos)\.spec\.ts/,
     },
     {
       name: 'celular',

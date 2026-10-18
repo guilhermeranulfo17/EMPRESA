@@ -84,7 +84,8 @@ export function lerSaidaAgente(texto: string): LeituraSaida {
     return { ok: false, erro: ERRO_FORMATO };
   }
   const v = saidaAgenteSchema.safeParse(bruto);
-  return v.success ? { ok: true, saida: v.data } : { ok: false, erro: ERRO_FORMATO };
+  if (!v.success) return { ok: false, erro: ERRO_FORMATO };
+  return { ok: true, saida: { ...v.data, mensagem: semTravessao(v.data.mensagem) } };
 }
 
 /** Prompt de versão: lê o "versao:" do cabeçalho do arquivo; o corpo é o resto. */
@@ -113,6 +114,8 @@ export function montarSituacao(p: {
   lead: SituacaoLead;
   historico: string[];
   entrada: string;
+  /** Seção de exemplos (boas, ruins e correções); vazia quando não há. */
+  exemplos?: string;
 }): string {
   const lead = [
     `Nome: ${p.lead.nome}`,
@@ -129,6 +132,7 @@ export function montarSituacao(p: {
     `# Base de conhecimento (só afirme o que está aqui)\n${p.base}`,
     `# Lead\n${lead}`,
     `# Histórico da conversa\n${p.historico.length ? p.historico.join('\n') : '(sem mensagens ainda)'}`,
+    ...(p.exemplos ? [p.exemplos] : []),
     `# O que o Gui colou agora\n${p.entrada}`,
   ].join('\n\n');
 }
@@ -144,4 +148,16 @@ const ROTULO_AUTOR: Record<MensagemHistorico['autor'], string> = {
 /** Histórico em linhas para o agente ("Lead: ...", "Gui: ..."), na ordem em que aconteceu. */
 export function historicoParaPrompt(mensagens: MensagemHistorico[]): string[] {
   return mensagens.map((m) => `${ROTULO_AUTOR[m.autor]}: ${m.texto.trim()}`);
+}
+
+/**
+ * Regra do Gui: nada de travessão nas mensagens. O que o copiloto mandar com "—" ou "–" vira
+ * vírgula (a regra também está no prompt; aqui é a garantia).
+ */
+export function semTravessao(texto: string): string {
+  return texto
+    .replace(/\s*[—–]\s*/g, ', ')
+    .replace(/,\s*,/g, ',')
+    .replace(/^,\s*/gm, '')
+    .trim();
 }

@@ -80,6 +80,7 @@ export const vendasSugestoes = pgTable(
     mensagemFinal: text('mensagem_final'),
     editada: boolean('editada').notNull().default(false),
     status: vendasStatusSugestao('status').notNull().default('pendente'),
+    tipo: text('tipo').$type<'resposta' | 'abordagem' | 'followup'>().notNull().default('resposta'),
     promptVersao: text('prompt_versao').notNull(),
     provedor: text('provedor').notNull(),
     modelo: text('modelo').notNull(),

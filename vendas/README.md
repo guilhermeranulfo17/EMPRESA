@@ -41,8 +41,8 @@ Conta de teste: `gui@vendas.local` / `vendas12345`.
   em `GEMINI_API_KEY` (no `.env.local` e na Vercel). Atenção: no plano grátis o Google pode usar o
   conteúdo para melhorar os modelos; para conversas reais, prefira o plano pago ou o Claude.
 - **Trocar para o Claude:** `VENDAS_IA_PROVEDOR=claude` e `ANTHROPIC_API_KEY`. Mais nada muda.
-- **Prompt:** `prompts/copiloto.v1.md`. Para mudar sem perder o anterior, copie para
-  `copiloto.v2.md`, edite e defina `VENDAS_PROMPT_VERSAO=v2`. Cada sugestão grava a versão usada.
+- **Prompt:** `prompts/copiloto.v2.md` (a v1 continua no repositório). Para mudar sem perder o anterior,
+  copie para `copiloto.v3.md`, edite e defina `VENDAS_PROMPT_VERSAO=v3`. Cada sugestão grava a versão usada.
 - Para conferir: botão **Testar IA** no topo do painel.
 
 ## Colocar no ar (uma vez)

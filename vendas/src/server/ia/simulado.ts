@@ -7,9 +7,32 @@ import type { PedidoIa, RespostaIa } from './tipos';
  * avisa que é simulada para nunca ser confundida com uma resposta de verdade.
  */
 export async function gerarSimulado(pedido: PedidoIa): Promise<RespostaIa> {
-  const pediuParar = /(\bpare\b|\bparar\b|não quero|nao quero|sair da lista)/i.test(
-    pedido.usuario.split('# O que o Gui colou agora').pop() ?? '',
-  );
+  const entrada = pedido.usuario.split('# O que o Gui colou agora').pop() ?? '';
+  const pediuParar = /(\bpare\b|\bparar\b|não quero|nao quero|sair da lista)/i.test(entrada);
+  const abordagem = entrada.includes('primeira abordagem');
+  const followup = entrada.includes('não respondeu desde a última mensagem');
+  if (abordagem || followup) {
+    return {
+      ok: true,
+      provedor: 'simulado',
+      modelo: 'simulado',
+      texto: JSON.stringify({
+        diagnostico: abordagem
+          ? '(simulado) Lead novo, ainda sem contato.'
+          : '(simulado) Lead sem responder, hora do follow-up.',
+        mensagem: abordagem
+          ? '(simulado) Oi! Vi o buffet de vocês e fiquei curioso — como fazem os orçamentos hoje?'
+          : '(simulado) Passando rapidinho pra lembrar da minha mensagem. Faz sentido conversar?',
+        etapa: 'abordado',
+        resumo: abordagem ? '(simulado) Abordado pela primeira vez.' : '(simulado) Follow-up enviado.',
+        proximo_followup: '',
+        angulo: abordagem ? 'abertura' : 'lembrete',
+        passar_para_humano: false,
+        nao_contatar: false,
+        motivo: '(simulado) Mensagem gerada pela fila.',
+      }),
+    };
+  }
   return {
     ok: true,
     provedor: 'simulado',

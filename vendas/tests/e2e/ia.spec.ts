@@ -9,7 +9,7 @@ test('Testar IA mostra a configuração e a resposta validada', async ({ page })
   await expect(page).toHaveURL(/\/ia$/);
   const config = page.getByTestId('config-ia');
   await expect(config).toContainText('Simulado');
-  await expect(config).toContainText('copiloto.v1.md');
+  await expect(config).toContainText('copiloto.v2.md');
   await expect(config).toContainText('Não precisa');
 
   await page.getByRole('button', { name: 'Testar IA' }).click();

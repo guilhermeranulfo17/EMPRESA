@@ -50,8 +50,8 @@ test('cola a resposta do lead, gera a sugestão e ela fica guardada', async ({ p
     const linhas = await sql`select status, provedor, prompt_versao from public.vendas_sugestoes
       where lead_id = ${leadId} order by criado_em`;
     expect(linhas).toEqual([
-      { status: 'descartada', provedor: 'simulado', prompt_versao: 'v1' },
-      { status: 'pendente', provedor: 'simulado', prompt_versao: 'v1' },
+      { status: 'descartada', provedor: 'simulado', prompt_versao: 'v2' },
+      { status: 'pendente', provedor: 'simulado', prompt_versao: 'v2' },
     ]);
   });
 });

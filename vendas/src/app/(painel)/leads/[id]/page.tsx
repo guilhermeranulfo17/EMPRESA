@@ -5,6 +5,7 @@ import { Conversa } from '@/components/conversa';
 import { FormLead } from '@/components/form-lead';
 import { formatData, formatDataHora } from '@/domain/dates';
 import { ROTULO_ETAPA_VENDAS } from '@/domain/vendas/etapas';
+import { MAX_TENTATIVAS, tipoParaGerar } from '@/domain/vendas/fila';
 import { exigirGui } from '@/server/guard';
 import { carregarSugestaoPendente, listarMensagens } from '@/server/vendas/conversa';
 import { carregarLeadVendas, listarMovimentos } from '@/server/vendas/leads';
@@ -28,6 +29,13 @@ export default async function LeadVendas({ params }: { params: Promise<{ id: str
     listarMensagens(id),
     carregarSugestaoPendente(id),
   ]);
+  const encerrado = l.etapa === 'cliente' || l.etapa === 'perdido';
+  const rotuloGerar =
+    encerrado || l.tentativas >= MAX_TENTATIVAS
+      ? null
+      : tipoParaGerar(l) === 'abordagem'
+        ? 'Gerar abordagem'
+        : 'Gerar follow-up';
   return (
     <div className="flex flex-col gap-4" data-testid="lead">
       <Link href="/leads" className="text-primary text-sm font-semibold">
@@ -51,11 +59,19 @@ export default async function LeadVendas({ params }: { params: Promise<{ id: str
             autor: m.autor,
             texto: m.texto,
             quando: formatDataHora(m.criadoEm),
+            sugestaoId: m.sugestaoId,
+            avaliacao: m.avaliacao,
           }))}
           pendente={
-            pendente && { id: pendente.id, entrada: pendente.entrada, saida: pendente.saida }
+            pendente && {
+              id: pendente.id,
+              tipo: pendente.tipo,
+              entrada: pendente.entrada,
+              saida: pendente.saida,
+            }
           }
           telefoneE164={l.telefoneE164}
+          rotuloGerar={rotuloGerar}
         />
         <div className="flex flex-col gap-4">
           <FormLead

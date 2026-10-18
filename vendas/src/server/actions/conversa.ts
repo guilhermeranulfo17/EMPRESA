@@ -8,12 +8,20 @@ import {
   historicoParaPrompt,
   montarSituacao,
   saidaAgenteSchema,
+  type Angulo,
   type SaidaAgente,
 } from '@/domain/vendas/agente';
 import { baseParaPrompt } from '@/domain/vendas/conhecimento';
 import { ROTULO_ETAPA_VENDAS } from '@/domain/vendas/etapas';
 import { obterDb } from '@/server/db/client';
-import { foiEditada, mensagemFinalSchema, planoAprovacao } from '@/domain/vendas/decisao';
+import {
+  foiEditada,
+  mensagemFinalSchema,
+  planoAprovacao,
+  type TipoSugestao,
+} from '@/domain/vendas/decisao';
+import { exemplosParaPrompt, idsUsados, selecionarExemplos } from '@/domain/vendas/exemplos';
+import { instrucaoGerada, MAX_TENTATIVAS, tipoParaGerar } from '@/domain/vendas/fila';
 import {
   vendasLeads,
   vendasMensagens,
@@ -23,6 +31,7 @@ import {
 import { exigirGui } from '@/server/guard';
 import { chamarCopiloto } from '@/server/ia/copiloto';
 import { listarConhecimento } from '@/server/vendas/conhecimento';
+import { listarExemplos, listarParesEditados } from '@/server/vendas/exemplos';
 import { acao, type Resultado } from './comum';
 
 export type ResultadoGerar =
@@ -36,70 +45,125 @@ const entradaSchema = z
   .max(20000, 'Texto longo demais. Cole só a parte nova da conversa.');
 
 /**
- * "Gerar resposta": manda para o copiloto a base de conhecimento, o lead, o histórico e o que o
- * Gui colou, e guarda a sugestão como pendente (a decisão vem depois). Uma sugestão nova
+ * Pede uma sugestão ao copiloto e guarda como pendente (a decisão vem depois). Junta a base de
+ * conhecimento, o lead, o histórico, os exemplos mais parecidos e a entrada. Uma sugestão nova
  * substitui a pendente anterior do mesmo lead.
  */
+async function criarSugestao(
+  leadId: string,
+  pedido: { tipo: 'resposta'; texto: string } | { tipo: 'gerada' },
+): Promise<ResultadoGerar> {
+  const db = obterDb();
+  const [lead] = await db.select().from(vendasLeads).where(eq(vendasLeads.id, leadId)).limit(1);
+  if (!lead) return { ok: false, erro: 'Lead não encontrado.' };
+  if (lead.naoContatar) {
+    return { ok: false, erro: 'Esse lead pediu para não ser contatado. Nada foi gerado.' };
+  }
+  const [mensagens, base, exemplos, pares, anteriores] = await Promise.all([
+    db
+      .select({ autor: vendasMensagens.autor, texto: vendasMensagens.texto })
+      .from(vendasMensagens)
+      .where(eq(vendasMensagens.leadId, leadId))
+      .orderBy(asc(vendasMensagens.criadoEm)),
+    listarConhecimento(),
+    listarExemplos(),
+    listarParesEditados(),
+    db
+      .select({ saida: vendasSugestoes.saida })
+      .from(vendasSugestoes)
+      .where(and(eq(vendasSugestoes.leadId, leadId), eq(vendasSugestoes.status, 'aprovada'))),
+  ]);
+
+  let tipo: TipoSugestao = 'resposta';
+  let entrada: string;
+  if (pedido.tipo === 'resposta') {
+    entrada = pedido.texto;
+  } else {
+    tipo = tipoParaGerar(lead);
+    if (tipo === 'followup' && lead.tentativas >= MAX_TENTATIVAS) {
+      return {
+        ok: false,
+        erro: `Já foram ${MAX_TENTATIVAS} tentativas sem resposta. Encerre o lead ou espere ele responder.`,
+      };
+    }
+    const angulos = anteriores
+      .map((a) => saidaAgenteSchema.safeParse(a.saida).data?.angulo)
+      .filter((a): a is Angulo => !!a);
+    entrada = instrucaoGerada(tipo, lead.tentativas, angulos);
+  }
+
+  const escolhidos = selecionarExemplos(
+    { texto: pedido.tipo === 'resposta' ? entrada : (lead.resumo ?? ''), etapa: lead.etapa },
+    exemplos,
+    pares,
+  );
+  const usuario = montarSituacao({
+    hoje: hojeNoFuso(),
+    base: baseParaPrompt(base),
+    lead: {
+      nome: lead.nome,
+      buffet: lead.buffet,
+      cidade: lead.cidade,
+      etapa: ROTULO_ETAPA_VENDAS[lead.etapa],
+      resumo: lead.resumo,
+      tentativas: lead.tentativas,
+    },
+    historico: historicoParaPrompt(mensagens),
+    exemplos: exemplosParaPrompt(escolhidos),
+    entrada,
+  });
+  const r = await chamarCopiloto(usuario);
+  if (!r.ok) return { ok: false, erro: r.erro };
+
+  const sugestaoId = await db.transaction(async (tx) => {
+    await tx
+      .update(vendasSugestoes)
+      .set({ status: 'descartada', decididoEm: new Date() })
+      .where(and(eq(vendasSugestoes.leadId, leadId), eq(vendasSugestoes.status, 'pendente')));
+    const [s] = await tx
+      .insert(vendasSugestoes)
+      .values({
+        leadId,
+        tipo,
+        entrada,
+        saida: r.saida,
+        mensagemSugerida: r.saida.mensagem,
+        promptVersao: r.promptVersao,
+        provedor: r.provedor,
+        modelo: r.modelo,
+        exemplosUsados: idsUsados(escolhidos),
+      })
+      .returning({ id: vendasSugestoes.id });
+    return s!.id;
+  });
+  revalidatePath('/', 'layout');
+  return { ok: true, sugestaoId, saida: r.saida };
+}
+
+/** "Gerar resposta": o Gui colou o que o lead respondeu (ou a conversa inteira). */
 export async function gerarResposta(leadId: string, texto: string): Promise<ResultadoGerar> {
   await exigirGui();
   if (!uuid.safeParse(leadId).success) return { ok: false, erro: 'Lead não encontrado.' };
   const entrada = entradaSchema.safeParse(texto);
   if (!entrada.success) return { ok: false, erro: entrada.error.issues[0]!.message };
   try {
-    const db = obterDb();
-    const [lead] = await db.select().from(vendasLeads).where(eq(vendasLeads.id, leadId)).limit(1);
-    if (!lead) return { ok: false, erro: 'Lead não encontrado.' };
-    if (lead.naoContatar) {
-      return { ok: false, erro: 'Esse lead pediu para não ser contatado. Nada foi gerado.' };
-    }
-    const [mensagens, base] = await Promise.all([
-      db
-        .select({ autor: vendasMensagens.autor, texto: vendasMensagens.texto })
-        .from(vendasMensagens)
-        .where(eq(vendasMensagens.leadId, leadId))
-        .orderBy(asc(vendasMensagens.criadoEm)),
-      listarConhecimento(),
-    ]);
-    const usuario = montarSituacao({
-      hoje: hojeNoFuso(),
-      base: baseParaPrompt(base),
-      lead: {
-        nome: lead.nome,
-        buffet: lead.buffet,
-        cidade: lead.cidade,
-        etapa: ROTULO_ETAPA_VENDAS[lead.etapa],
-        resumo: lead.resumo,
-        tentativas: lead.tentativas,
-      },
-      historico: historicoParaPrompt(mensagens),
-      entrada: entrada.data,
-    });
-    const r = await chamarCopiloto(usuario);
-    if (!r.ok) return { ok: false, erro: r.erro };
-
-    const sugestaoId = await db.transaction(async (tx) => {
-      await tx
-        .update(vendasSugestoes)
-        .set({ status: 'descartada', decididoEm: new Date() })
-        .where(and(eq(vendasSugestoes.leadId, leadId), eq(vendasSugestoes.status, 'pendente')));
-      const [s] = await tx
-        .insert(vendasSugestoes)
-        .values({
-          leadId,
-          entrada: entrada.data,
-          saida: r.saida,
-          mensagemSugerida: r.saida.mensagem,
-          promptVersao: r.promptVersao,
-          provedor: r.provedor,
-          modelo: r.modelo,
-        })
-        .returning({ id: vendasSugestoes.id });
-      return s!.id;
-    });
-    revalidatePath(`/leads/${leadId}`);
-    return { ok: true, sugestaoId, saida: r.saida };
+    return await criarSugestao(leadId, { tipo: 'resposta', texto: entrada.data });
   } catch {
     return { ok: false, erro: 'Não foi possível gerar a resposta agora.' };
+  }
+}
+
+/**
+ * "Gerar mensagem" sem colar nada (Fila do dia ou botão no lead): primeira abordagem para lead
+ * novo, follow-up com ângulo novo para quem não respondeu. Trava em 3 tentativas.
+ */
+export async function gerarMensagem(leadId: string): Promise<ResultadoGerar> {
+  await exigirGui();
+  if (!uuid.safeParse(leadId).success) return { ok: false, erro: 'Lead não encontrado.' };
+  try {
+    return await criarSugestao(leadId, { tipo: 'gerada' });
+  } catch {
+    return { ok: false, erro: 'Não foi possível gerar a mensagem agora.' };
   }
 }
 
@@ -124,13 +188,17 @@ export async function aprovarSugestao(sugestaoId: string, texto: string): Promis
       const saida = saidaAgenteSchema.safeParse(s.saida);
       if (!saida.success) return { ok: false, erro: 'Sugestão inválida. Gere de novo.' };
       const [lead] = await tx
-        .select({ etapa: vendasLeads.etapa, naoContatar: vendasLeads.naoContatar })
+        .select({
+          etapa: vendasLeads.etapa,
+          naoContatar: vendasLeads.naoContatar,
+          tentativas: vendasLeads.tentativas,
+        })
         .from(vendasLeads)
         .where(eq(vendasLeads.id, s.leadId))
         .for('update');
       if (!lead) return { ok: false, erro: 'Lead não encontrado.' };
 
-      const plano = planoAprovacao(lead, saida.data);
+      const plano = planoAprovacao(lead, saida.data, s.tipo, hojeNoFuso());
       const agora = new Date();
       await tx
         .update(vendasSugestoes)

@@ -1,5 +1,5 @@
 import 'server-only';
-import { desc, eq } from 'drizzle-orm';
+import { and, desc, eq, notInArray } from 'drizzle-orm';
 import { formatPhoneBR } from '@/domain/phone';
 import type { EtapaVendas } from '@/domain/vendas/etapas';
 import { normalizarBusca } from '@/domain/vendas/lead';
@@ -118,4 +118,30 @@ export async function listarMovimentos(leadId: string): Promise<MovimentoLead[]>
     .from(vendasMovimentos)
     .where(eq(vendasMovimentos.leadId, leadId))
     .orderBy(desc(vendasMovimentos.criadoEm));
+}
+
+/** Leads que podem entrar na Fila do dia (o domínio decide quem entra e em que ordem). */
+export async function listarLeadsFila() {
+  return obterDb()
+    .select({
+      id: vendasLeads.id,
+      nome: vendasLeads.nome,
+      buffet: vendasLeads.buffet,
+      cidade: vendasLeads.cidade,
+      etapa: vendasLeads.etapa,
+      resumo: vendasLeads.resumo,
+      proximoFollowup: vendasLeads.proximoFollowup,
+      tentativas: vendasLeads.tentativas,
+      naoContatar: vendasLeads.naoContatar,
+      telefoneE164: vendasLeads.telefoneE164,
+      criadoEm: vendasLeads.criadoEm,
+    })
+    .from(vendasLeads)
+    .where(
+      and(
+        eq(vendasLeads.naoContatar, false),
+        notInArray(vendasLeads.etapa, ['cliente', 'perdido']),
+      ),
+    )
+    .limit(LIMITE_LISTA);
 }
