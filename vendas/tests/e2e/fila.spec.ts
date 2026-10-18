@@ -60,7 +60,10 @@ test('fila mostra quem chamar hoje, gera abordagem e follow-up e encerra quem n�
   await expect(page.getByTestId('fila')).not.toContainText('Otto Atrasado');
 
   // encerrar
-  await itens.filter({ hasText: 'Edu Encerrar' }).getByRole('button', { name: /Encerrar/ }).click();
+  await itens
+    .filter({ hasText: 'Edu Encerrar' })
+    .getByRole('button', { name: /Encerrar/ })
+    .click();
   await expect(page.getByText('Nada na fila hoje')).toBeVisible();
 
   await noBanco(async (sql) => {
@@ -88,7 +91,9 @@ test('fila mostra quem chamar hoje, gera abordagem e follow-up e encerra quem n�
 test('no lead com 3 tentativas não há botão de follow-up', async ({ page }) => {
   await entrarComoGui(page);
   await page.getByTestId('aba-Leads').click();
-  await page.getByText('Edu Encerrar').click();
+  // o mesmo nome aparece na Fila (tela inicial): só clica depois que a lista de leads abriu
+  await expect(page.getByTestId('lista-leads')).toBeVisible();
+  await page.getByTestId('lista-leads').getByText('Edu Encerrar').click();
   await expect(page.getByTestId('conversa')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Gerar follow-up' })).toHaveCount(0);
   await page.goto('/leads');

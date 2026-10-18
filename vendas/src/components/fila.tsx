@@ -73,7 +73,7 @@ function ItemFila({ item }: { item: ItemFilaTela }) {
     .join(' · ');
 
   return (
-    <li className="bg-card rounded-card flex flex-col gap-3 border p-4" data-testid="item-fila">
+    <li className="bg-card rounded-card flex flex-col gap-3 border p-5" data-testid="item-fila">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
           <Link href={`/leads/${item.id}`} className="font-bold hover:underline">
@@ -126,7 +126,7 @@ function ItemFila({ item }: { item: ItemFilaTela }) {
         <button
           type="button"
           disabled={ocupado}
-          className="bg-primary text-primary-foreground min-h-11 self-start rounded-full px-5 font-semibold disabled:opacity-60"
+          className="bg-primary text-primary-foreground min-h-10 self-start px-4 text-sm font-semibold disabled:opacity-60"
           onClick={() => {
             setErro(null);
             iniciar(async () => {

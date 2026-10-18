@@ -13,7 +13,7 @@ export default async function ImportarLeads() {
       <Link href="/leads" className="text-primary text-sm font-semibold">
         ← Leads
       </Link>
-      <h2 className="text-xl font-bold">Importar leads por CSV</h2>
+      <h2 className="text-2xl font-bold tracking-tight">Importar leads por CSV</h2>
       <ImportarCsv />
     </div>
   );

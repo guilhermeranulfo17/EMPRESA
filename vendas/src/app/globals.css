@@ -1,26 +1,26 @@
 @import 'tailwindcss';
 
-/* Mesma identidade do Orkestra (escuro da marca): grafite, cartões arredondados, verde-limão. */
+/* Identidade do Vendas Orkestra: claro e minimalista, fundo lilás bem suave, cartões brancos e índigo. */
 :root {
-  color-scheme: dark;
-  --radius-card: 22px;
-  --radius-control: 14px;
+  color-scheme: light;
+  --radius-card: 18px;
+  --radius-control: 10px;
 
-  --background: #0c0c0c;
-  --foreground: #f4f4f2;
-  --card: #1a1a1a;
-  --primary: #b2f759;
-  --primary-foreground: #0c0c0c;
-  --muted: #232323;
-  --muted-foreground: #a0a09c;
-  --border: #2c2c2c;
-  --input: #3a3a3a;
-  --ring: #b2f759;
+  --background: #f5f4fe;
+  --foreground: #14122b;
+  --card: #ffffff;
+  --primary: #4b3bf5;
+  --primary-foreground: #ffffff;
+  --muted: #efedfc;
+  --muted-foreground: #6b6886;
+  --border: #e6e3f6;
+  --input: #d9d5ef;
+  --ring: #4b3bf5;
 
-  --alerta: #fcd34d;
-  --erro: #fb7185;
-  --sucesso: #4ade80;
-  --info: #7dd3fc;
+  --alerta: #b45309;
+  --erro: #dc2626;
+  --sucesso: #15803d;
+  --info: #0369a1;
 }
 
 @theme inline {
@@ -50,6 +50,7 @@
     background: var(--background);
     color: var(--foreground);
     font-family:
+      Inter,
       ui-sans-serif,
       system-ui,
       -apple-system,
@@ -57,4 +58,37 @@
       Roboto,
       sans-serif;
   }
+  ::selection {
+    background: rgb(75 59 245 / 0.18);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+/* Fora das camadas de propósito: vale para todos os cartões e botões principais sem mexer em cada tela. */
+.rounded-card {
+  box-shadow:
+    0 1px 2px rgb(20 18 43 / 0.04),
+    0 12px 32px -18px rgb(75 59 245 / 0.18);
+}
+.bg-primary.text-primary-foreground {
+  border-radius: var(--radius-control);
+  box-shadow: 0 8px 20px -10px rgb(75 59 245 / 0.65);
+  transition:
+    background-color 0.15s,
+    box-shadow 0.15s;
+}
+.bg-primary.text-primary-foreground:hover:not(:disabled) {
+  background-color: #3f2fe6;
+}
+
+/* Painel da tela de entrada: o degradê da marca. */
+.gradiente-marca {
+  background:
+    radial-gradient(55% 50% at 32% 48%, #1e0fb8 0%, rgb(30 15 184 / 0) 72%),
+    radial-gradient(45% 40% at 90% 6%, #c084fc 0%, rgb(192 132 252 / 0) 70%),
+    radial-gradient(60% 55% at 78% 80%, #dbeafe 0%, rgb(219 234 254 / 0) 70%),
+    linear-gradient(155deg, #7dd3fc 0%, #5b3df0 42%, #a78bfa 72%, #e0e7ff 100%);
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Columns3 } from 'lucide-react';
+import { CabecalhoPagina } from '@/components/cabecalho-pagina';
 import { EmptyState } from '@/components/empty-state';
 import { Kanban } from '@/components/kanban';
 import { exigirGui } from '@/server/guard';
@@ -19,5 +20,13 @@ export default async function PaginaPipeline() {
       </EmptyState>
     );
   }
-  return <Kanban inicial={cards} />;
+  return (
+    <>
+      <CabecalhoPagina
+        titulo="Pipeline"
+        descricao="Arraste o card para mudar a etapa. O copiloto também move quando a conversa avança."
+      />
+      <Kanban inicial={cards} />
+    </>
+  );
 }

@@ -42,7 +42,7 @@ export default async function LeadVendas({ params }: { params: Promise<{ id: str
         ← Leads
       </Link>
       <header className="flex flex-col gap-1">
-        <h2 className="text-xl font-bold">{l.nome}</h2>
+        <h2 className="text-2xl font-bold tracking-tight">{l.nome}</h2>
         <p className="text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 text-sm">
           <span data-testid="etapa-lead">Etapa: {ROTULO_ETAPA_VENDAS[l.etapa]}</span>
           <span>Tentativas sem resposta: {l.tentativas}</span>

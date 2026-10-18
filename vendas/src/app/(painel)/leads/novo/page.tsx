@@ -14,7 +14,7 @@ export default async function NovoLeadVendas() {
       <Link href="/leads" className="text-primary text-sm font-semibold">
         ← Leads
       </Link>
-      <h2 className="text-xl font-bold">Novo lead</h2>
+      <h2 className="text-2xl font-bold tracking-tight">Novo lead</h2>
       <FormLead inicial={LEAD_VAZIO} />
     </div>
   );

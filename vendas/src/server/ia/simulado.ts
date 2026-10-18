@@ -24,7 +24,9 @@ export async function gerarSimulado(pedido: PedidoIa): Promise<RespostaIa> {
           ? '(simulado) Oi! Vi o buffet de vocês e fiquei curioso — como fazem os orçamentos hoje?'
           : '(simulado) Passando rapidinho pra lembrar da minha mensagem. Faz sentido conversar?',
         etapa: 'abordado',
-        resumo: abordagem ? '(simulado) Abordado pela primeira vez.' : '(simulado) Follow-up enviado.',
+        resumo: abordagem
+          ? '(simulado) Abordado pela primeira vez.'
+          : '(simulado) Follow-up enviado.',
         proximo_followup: '',
         angulo: abordagem ? 'abertura' : 'lembrete',
         passar_para_humano: false,

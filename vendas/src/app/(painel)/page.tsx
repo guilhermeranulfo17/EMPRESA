@@ -57,7 +57,7 @@ export default async function PaginaFilaDoDia() {
   return (
     <div className="flex flex-col gap-4">
       <header>
-        <h2 className="text-xl font-bold">Fila do dia</h2>
+        <h2 className="text-2xl font-bold tracking-tight">Fila do dia</h2>
         <p className="text-muted-foreground text-sm" data-testid="resumo-fila">
           {dataPorExtenso(hoje)} · {resumo.join(' · ')}
         </p>

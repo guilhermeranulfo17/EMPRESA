@@ -28,7 +28,7 @@ export default async function PaginaExemplos() {
   return (
     <div className="flex flex-col gap-6">
       <header>
-        <h2 className="text-xl font-bold">Exemplos</h2>
+        <h2 className="text-2xl font-bold tracking-tight">Exemplos</h2>
         <p className="text-muted-foreground text-sm">
           {boas} {boas === 1 ? 'boa' : 'boas'}, {exemplos.length - boas}{' '}
           {exemplos.length - boas === 1 ? 'ruim' : 'ruins'} e {pares.length}{' '}

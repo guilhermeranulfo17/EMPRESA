@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
-/** Abas do Vendas Orkestra. A Fila do dia é a tela inicial. */
+/** Menu do Vendas Orkestra: faixa rolável no celular, lista vertical no PC. A Fila do dia é a tela inicial. */
 const ABAS = [
   { href: '/', rotulo: 'Fila do dia', Icone: CalendarCheck },
   { href: '/pipeline', rotulo: 'Pipeline', Icone: Columns3 },
@@ -17,8 +17,11 @@ const ABAS = [
 export function Abas() {
   const caminho = usePathname();
   return (
-    <nav aria-label="Seções" className="-mx-4 overflow-x-auto px-4">
-      <div className="bg-muted flex w-max gap-0.5 rounded-full p-0.5">
+    <nav
+      aria-label="Seções"
+      className="-mx-4 w-[calc(100%+2rem)] overflow-x-auto px-4 lg:mx-0 lg:w-auto lg:overflow-visible lg:px-0"
+    >
+      <div className="flex w-max gap-1 lg:w-auto lg:flex-col">
         {ABAS.map(({ href, rotulo, Icone }) => {
           const ativo = href === '/' ? caminho === '/' : caminho.startsWith(href);
           return (
@@ -27,12 +30,14 @@ export function Abas() {
               href={href}
               aria-current={ativo ? 'page' : undefined}
               className={cn(
-                'inline-flex min-h-9 items-center gap-1.5 rounded-full px-3 text-sm font-semibold whitespace-nowrap',
-                ativo ? 'bg-card shadow-sm' : 'text-muted-foreground hover:text-foreground',
+                'rounded-control inline-flex min-h-10 items-center gap-2.5 px-3 text-sm font-medium whitespace-nowrap transition-colors',
+                ativo
+                  ? 'bg-primary/10 text-primary font-semibold'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground',
               )}
               data-testid={`aba-${rotulo}`}
             >
-              <Icone className="size-4" aria-hidden />
+              <Icone className="size-[18px]" aria-hidden />
               {rotulo}
             </Link>
           );

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Plus, Upload, Users } from 'lucide-react';
 import Link from 'next/link';
+import { CabecalhoPagina } from '@/components/cabecalho-pagina';
 import { EmptyState } from '@/components/empty-state';
 import { formatData } from '@/domain/dates';
 import { ROTULO_ETAPA_VENDAS } from '@/domain/vendas/etapas';
@@ -24,6 +25,10 @@ export default async function PaginaLeads({
   const leads = await listarLeadsVendas(busca);
   return (
     <div className="flex flex-col gap-4">
+      <CabecalhoPagina
+        titulo="Leads"
+        descricao="Todos os donos de buffet que você prospecta. Busque, cadastre ou importe uma planilha."
+      />
       {importados !== null && /^\d+$/.test(importados) && (
         <p
           role="status"
@@ -56,7 +61,7 @@ export default async function PaginaLeads({
         </Link>
         <Link
           href="/leads/novo"
-          className="bg-primary text-primary-foreground inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 font-semibold whitespace-nowrap"
+          className="bg-primary text-primary-foreground inline-flex min-h-11 items-center gap-1.5 px-4 font-semibold whitespace-nowrap"
           data-testid="novo-lead"
         >
           <Plus className="size-4" aria-hidden />

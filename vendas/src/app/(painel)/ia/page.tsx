@@ -24,7 +24,7 @@ export default async function PaginaIa() {
   return (
     <div className="flex flex-col gap-5">
       <section className="bg-card rounded-card border p-4" data-testid="config-ia">
-        <h2 className="text-lg font-bold">Testar IA</h2>
+        <h2 className="text-2xl font-bold tracking-tight">Testar IA</h2>
         <p className="text-muted-foreground mt-1 text-sm">
           Gera uma resposta para um lead de teste usando a sua base de conhecimento. Nada é gravado.
         </p>

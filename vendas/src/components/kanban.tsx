@@ -126,9 +126,11 @@ export function Kanban({ inicial }: { inicial: CardPipeline[] }) {
                   >
                     {c.nome}
                   </Link>
-                  {(c.buffet || c.cidade) && (
+                  {((c.buffet && c.buffet !== c.nome) || c.cidade) && (
                     <span className="text-muted-foreground text-xs">
-                      {[c.buffet, c.cidade].filter(Boolean).join(' · ')}
+                      {[c.buffet !== c.nome ? c.buffet : null, c.cidade]
+                        .filter(Boolean)
+                        .join(' · ')}
                     </span>
                   )}
                   <span className="flex flex-wrap gap-1.5 text-xs">

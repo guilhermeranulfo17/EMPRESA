@@ -5,7 +5,7 @@ import { formatPhoneBR } from '@/domain/phone';
 import { cn } from '@/lib/utils';
 
 export const classeCampo =
-  'h-11 w-full min-w-0 rounded-control border border-input bg-card px-3 text-base outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-erro md:text-sm';
+  'h-11 w-full min-w-0 rounded-control border border-input bg-card px-3 text-base outline-none transition-shadow placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/15 aria-invalid:border-erro md:text-sm';
 
 /** Rótulo + controle + dica + erro, com os ids ligados para leitores de tela. */
 export function Campo({

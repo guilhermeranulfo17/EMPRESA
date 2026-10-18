@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export const viewport: Viewport = { themeColor: '#0c0c0c' };
+export const viewport: Viewport = { themeColor: '#f5f4fe' };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
