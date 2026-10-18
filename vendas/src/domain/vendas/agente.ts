@@ -132,3 +132,16 @@ export function montarSituacao(p: {
     `# O que o Gui colou agora\n${p.entrada}`,
   ].join('\n\n');
 }
+
+export type MensagemHistorico = { autor: 'lead' | 'gui' | 'conversa'; texto: string };
+
+const ROTULO_AUTOR: Record<MensagemHistorico['autor'], string> = {
+  lead: 'Lead',
+  gui: 'Gui',
+  conversa: 'Conversa colada',
+};
+
+/** Histórico em linhas para o agente ("Lead: ...", "Gui: ..."), na ordem em que aconteceu. */
+export function historicoParaPrompt(mensagens: MensagemHistorico[]): string[] {
+  return mensagens.map((m) => `${ROTULO_AUTOR[m.autor]}: ${m.texto.trim()}`);
+}

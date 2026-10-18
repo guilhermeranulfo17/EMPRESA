@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { ERRO_FORMATO, lerArquivoPrompt, lerSaidaAgente } from '@/domain/vendas/agente';
+import {
+  ERRO_FORMATO,
+  historicoParaPrompt,
+  lerArquivoPrompt,
+  lerSaidaAgente,
+} from '@/domain/vendas/agente';
 
 const valida = {
   diagnostico: 'Dono respondeu curioso, quer saber preço.',
@@ -48,5 +53,21 @@ describe('saída do copiloto', () => {
       versao: 'sem-versao',
       texto: 'Sem cabeçalho',
     });
+  });
+});
+
+describe('historicoParaPrompt', () => {
+  it('rotula quem falou, na ordem, sem espaços sobrando', () => {
+    expect(
+      historicoParaPrompt([
+        { autor: 'gui', texto: 'Oi, tudo bem?' },
+        { autor: 'lead', texto: '  Tudo, quem é?  ' },
+        { autor: 'conversa', texto: 'Lead: oi\nGui: oi' },
+      ]),
+    ).toEqual(['Gui: Oi, tudo bem?', 'Lead: Tudo, quem é?', 'Conversa colada: Lead: oi\nGui: oi']);
+  });
+
+  it('histórico vazio vira lista vazia', () => {
+    expect(historicoParaPrompt([])).toEqual([]);
   });
 });
