@@ -6,6 +6,8 @@ import { carregarPrompt } from '@/server/ia/copiloto';
 
 export const metadata: Metadata = { title: 'Testar IA' };
 export const dynamic = 'force-dynamic';
+// a IA pode levar mais de um minuto para responder
+export const maxDuration = 120;
 
 const NOME_PROVEDOR = {
   gemini: 'Gemini (Google)',

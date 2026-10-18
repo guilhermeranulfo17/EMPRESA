@@ -22,7 +22,7 @@ export async function gerarGemini(pedido: PedidoIa, modelo: string): Promise<Res
             temperature: 0.7,
           },
         }),
-        signal: AbortSignal.timeout(60_000),
+        signal: AbortSignal.timeout(90_000),
       },
     );
   } catch {
@@ -33,13 +33,21 @@ export async function gerarGemini(pedido: PedidoIa, modelo: string): Promise<Res
   if (r.status === 429) return { ok: false, erro: ERROS_IA.limite, ...base };
   if (!r.ok) return { ok: false, erro: ERROS_IA.fora, ...base };
   const corpo = (await r.json().catch(() => null)) as {
-    candidates?: { finishReason?: string; content?: { parts?: { text?: string }[] } }[];
+    candidates?: {
+      finishReason?: string;
+      content?: { parts?: { text?: string; thought?: boolean }[] };
+    }[];
     promptFeedback?: { blockReason?: string };
   } | null;
   if (corpo?.promptFeedback?.blockReason) return { ok: false, erro: ERROS_IA.recusou, ...base };
   const c = corpo?.candidates?.[0];
   if (c?.finishReason === 'SAFETY') return { ok: false, erro: ERROS_IA.recusou, ...base };
   if (c?.finishReason === 'MAX_TOKENS') return { ok: false, erro: ERROS_IA.cortada, ...base };
-  const texto = c?.content?.parts?.map((p) => p.text ?? '').join('') ?? '';
+  // partes de raciocínio (thought) não fazem parte da resposta
+  const texto =
+    c?.content?.parts
+      ?.filter((p) => !p.thought)
+      .map((p) => p.text ?? '')
+      .join('') ?? '';
   return texto ? { ok: true, texto, ...base } : { ok: false, erro: ERROS_IA.fora, ...base };
 }
