@@ -694,3 +694,78 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; }
 .feitas summary { cursor: pointer; font: 700 13px/1.2 var(--display); color: var(--tinta-2); text-transform: uppercase; letter-spacing: 0.06em; }
 .abas button { white-space: nowrap; }
 .abas .badge { margin-left: 2px; padding: 1px 4px; font-size: 10px; }
+
+/* ---------- escritório em 3D ---------- */
+.palco { display: flex; flex-direction: column; gap: 8px; min-height: 0; min-width: 0; }
+.palco > .planta { flex: 1; min-height: 0; }
+.palco-barra { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.palco-barra:not(:has(> :not([hidden]))) { display: none; }
+.alternar-vista { display: flex; border: 1px solid var(--linha); border-radius: 8px; overflow: hidden; background: var(--superficie); }
+.alternar-vista button { border: 0; background: none; padding: 6px 12px; cursor: pointer; font-weight: 600; font-size: 13px; }
+.alternar-vista button[aria-pressed="true"] { background: var(--ceo); color: var(--ceo-tinta); }
+.dica-palco { margin: 0; flex: 1 1 260px; color: var(--tinta-2); font-size: 12.5px; }
+.cena3d {
+  position: relative;
+  flex: 1;
+  min-height: 420px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--linha);
+  background: var(--chao);
+  isolation: isolate;
+}
+.cena3d canvas { display: block; width: 100%; height: 100%; touch-action: none; outline: none; }
+.cena-status { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; color: var(--tinta-2); font-size: 13px; }
+.camada-rotulos { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.rotulo3d {
+  position: absolute; left: 0; top: 0;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 2px 8px 2px 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--superficie) 86%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cor) 45%, var(--linha));
+  box-shadow: 0 1px 3px rgba(10, 20, 35, 0.18);
+  color: var(--tinta);
+  font-size: 11.5px;
+  line-height: 1.3;
+  white-space: nowrap;
+  will-change: transform;
+  transition: opacity 0.2s;
+}
+.rotulo3d b { font-weight: 600; }
+.rotulo3d small { display: none; color: var(--tinta-2); font-size: 11px; }
+.rotulo3d.ativo small, .rotulo3d.selecionado small { display: inline; }
+.rotulo3d.selecionado { background: var(--cor); border-color: var(--cor); color: #fff; }
+.rotulo3d.selecionado small { color: rgba(255, 255, 255, 0.85); }
+.rotulo3d.selecionado .ponto { background: #fff; }
+.rotulo3d.oculto, .balao3d.oculto { opacity: 0; }
+.balao3d {
+  position: absolute; left: 0; top: 0;
+  width: max-content;
+  max-width: min(230px, 60vw);
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: var(--superficie);
+  border: 1px solid color-mix(in srgb, var(--cor) 55%, var(--linha));
+  box-shadow: var(--sombra);
+  font-size: 12px;
+  line-height: 1.35;
+  will-change: transform;
+  z-index: 2;
+}
+.balao3d span { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.balao3d::after {
+  content: ""; position: absolute; top: 100%; left: 50%;
+  width: 8px; height: 8px; background: inherit; border: inherit; border-top: 0; border-left: 0;
+  transform: translate(-50%, -4px) rotate(45deg);
+}
+.balao3d.digitando { display: flex; gap: 4px; padding: 9px 12px; }
+.balao3d.digitando i { width: 6px; height: 6px; border-radius: 50%; background: var(--tinta-3); animation: pontinho 1s infinite; }
+.balao3d.digitando i:nth-child(2) { animation-delay: 0.15s; }
+.balao3d.digitando i:nth-child(3) { animation-delay: 0.3s; }
+@media (max-width: 1080px) {
+  .cena3d { flex: none; height: min(72vh, 640px); min-height: 360px; }
+}
+@media (max-width: 640px) {
+  .dica-palco { display: none; }
+}

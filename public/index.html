@@ -8,6 +8,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="css/escritorio.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
 </head>
 <body>
 <div class="app">
@@ -56,7 +62,18 @@
     </div>
   </div>
   <main class="layout">
-    <section class="planta" id="planta" aria-label="Planta do escritório"></section>
+    <section class="palco" aria-label="Escritório">
+      <div class="palco-barra">
+        <div class="alternar-vista" id="alternar-vista" role="group" aria-label="Como ver o escritório" hidden>
+          <button type="button" id="vista-3d" aria-pressed="true">3D</button>
+          <button type="button" id="vista-2d" aria-pressed="false">Planta</button>
+        </div>
+        <p id="dica-3d" class="dica-palco" hidden>Arraste para girar, role ou use dois dedos para aproximar. Clique numa pessoa para ver as conversas dela.</p>
+        <button type="button" class="btn" id="btn-recentrar" hidden>Recentralizar</button>
+      </div>
+      <div id="cena3d" class="cena3d" hidden><p class="cena-status" id="cena-status">Montando o escritório em 3D…</p></div>
+      <section class="planta" id="planta" aria-label="Planta do escritório"></section>
+    </section>
 
     <aside class="painel">
       <div class="abas" role="tablist">

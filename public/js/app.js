@@ -297,6 +297,7 @@ function receber(tipo, dados) {
   if (tipo === 'agente') {
     Object.assign(estado.agentes[dados.id], dados);
     desenharAgente(dados.id);
+    cena.api?.atualizarAgente(estado.agentes[dados.id]);
   } else if (tipo === 'mensagem') {
     estado.mensagens.push(dados);
     if (estado.mensagens.length > 400) estado.mensagens.shift();
@@ -367,6 +368,7 @@ function montarTudo() {
     modo.textContent = estado.modo === 'claude' ? 'Agentes Claude ao vivo' : 'Agentes simulados';
   }
   montarPlanta();
+  montarCena();
   montarFiltros();
   montarDestinos();
   desenharFeed();
@@ -469,13 +471,15 @@ function pontoDe(id) {
 }
 
 function animarEnvio(msg) {
+  cena.api?.mensagem(msg);
   const planta = $('#planta');
   const hub = $('#hub');
   if (!hub) return;
+  $('#hub-total').textContent = estado.mensagens.length;
+  if (cena.ativa) return;
   hub.classList.remove('pulso');
   void hub.offsetWidth;
   hub.classList.add('pulso');
-  $('#hub-total').textContent = estado.mensagens.length;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   const origem = pontoDe(msg.de);
@@ -503,6 +507,92 @@ function animarEnvio(msg) {
   }
 }
 
+// ---------- escritório em 3D ----------
+// A cena 3D é carregada à parte (Three.js pela CDN). Se o navegador não tiver WebGL ou a carga falhar, fica a planta 2D.
+const cena = { api: null, ativa: false, montando: null, ids: '' };
+const corHex = (id) => setorDe(estado.agentes[id]?.setor ?? id)?.cor ?? '#8A93A3';
+
+function temWebGL() {
+  try {
+    const c = document.createElement('canvas');
+    return !!(c.getContext('webgl2') || c.getContext('webgl'));
+  } catch {
+    return false;
+  }
+}
+
+function prefereVista3D() {
+  try {
+    return localStorage.getItem('orkestra-vista') !== 'planta';
+  } catch {
+    return true;
+  }
+}
+
+function mostrarVista(vista, lembrar = true) {
+  cena.ativa = vista === '3d';
+  $('#cena3d').hidden = !cena.ativa;
+  $('#planta').hidden = cena.ativa;
+  $('#dica-3d').hidden = !cena.ativa;
+  $('#btn-recentrar').hidden = !cena.ativa || !cena.api;
+  $('#vista-3d').setAttribute('aria-pressed', String(cena.ativa));
+  $('#vista-2d').setAttribute('aria-pressed', String(!cena.ativa));
+  if (lembrar) {
+    try {
+      localStorage.setItem('orkestra-vista', cena.ativa ? '3d' : 'planta');
+    } catch {
+      // sem armazenamento: vale só nesta visita
+    }
+  }
+}
+
+function sincronizarCena() {
+  cena.api.sincronizar(estado.agentes, { nomeDe, corDe: corHex, mensagens: estado.mensagens });
+  cena.api.definirVelocidade(estado.velocidade);
+  cena.api.destacar(filtro.tipo === 'agente' ? filtro.valor : null);
+}
+
+async function montarCena() {
+  const ids = Object.keys(estado.agentes).join(',');
+  if (cena.api && cena.ids === ids) return sincronizarCena();
+  if (cena.montando) return cena.montando;
+  if (!temWebGL()) return mostrarVista('planta', false);
+  $('#alternar-vista').hidden = false;
+  if (!prefereVista3D()) return mostrarVista('planta', false);
+  mostrarVista('3d', false);
+  cena.montando = (async () => {
+    try {
+      const { criarEscritorio3D } = await import('./escritorio3d.js');
+      cena.api?.destruir();
+      cena.api = await criarEscritorio3D($('#cena3d'), {
+        setores: estado.setores,
+        agentes: estado.agentes,
+        aoClicarAgente: (id) => alternarFiltro('agente', id),
+        aoClicarCaixa: () => trocarAba('caixa'),
+      });
+      cena.ids = Object.keys(estado.agentes).join(',');
+      $('#cena-status').hidden = true;
+      $('#btn-recentrar').hidden = !cena.ativa;
+      sincronizarCena();
+    } catch (erro) {
+      console.warn('Escritório 3D indisponível; usando a planta.', erro);
+      cena.api = null;
+      $('#alternar-vista').hidden = true;
+      mostrarVista('planta', false);
+    } finally {
+      cena.montando = null;
+    }
+  })();
+  return cena.montando;
+}
+
+$('#vista-3d').addEventListener('click', () => {
+  mostrarVista('3d');
+  if (!cena.api) montarCena();
+});
+$('#vista-2d').addEventListener('click', () => mostrarVista('planta'));
+$('#btn-recentrar').addEventListener('click', () => cena.api?.recentralizar());
+
 // ---------- caixa de comunicação ----------
 function montarFiltros() {
   const box = $('#filtros');
@@ -527,6 +617,7 @@ function definirFiltro(tipo, valor) {
   const chave = tipo === 'setor' ? `setor:${valor}` : tipo;
   for (const c of document.querySelectorAll('#filtros .chip[data-filtro]')) c.setAttribute('aria-pressed', String(c.dataset.filtro === chave));
   for (const a of document.querySelectorAll('.agente')) a.setAttribute('aria-pressed', String(tipo === 'agente' && a.id === `ag-${valor}`));
+  cena.api?.destacar(tipo === 'agente' ? valor : null);
   const extra = $('#filtro-agente');
   extra.replaceChildren();
   if (tipo === 'agente') {
@@ -692,6 +783,7 @@ for (const b of document.querySelectorAll('.abas button')) b.addEventListener('c
 function desenharControles() {
   $('#btn-pausa').textContent = estado.pausado ? 'Retomar' : 'Pausar';
   for (const b of document.querySelectorAll('.velocidades button')) b.setAttribute('aria-pressed', String(Number(b.dataset.vel) === estado.velocidade));
+  cena.api?.definirVelocidade(estado.velocidade);
 }
 $('#btn-pausa').addEventListener('click', () => conexao?.controle({ pausado: !estado.pausado }));
 for (const b of document.querySelectorAll('.velocidades button')) {
