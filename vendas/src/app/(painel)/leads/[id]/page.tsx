@@ -52,10 +52,14 @@ export default async function LeadVendas({ params }: { params: Promise<{ id: str
             texto: m.texto,
             quando: formatDataHora(m.criadoEm),
           }))}
-          pendente={pendente && { entrada: pendente.entrada, saida: pendente.saida }}
+          pendente={
+            pendente && { id: pendente.id, entrada: pendente.entrada, saida: pendente.saida }
+          }
+          telefoneE164={l.telefoneE164}
         />
         <div className="flex flex-col gap-4">
           <FormLead
+            key={l.atualizadoEm.toISOString()}
             id={l.id}
             inicial={{
               nome: l.nome,

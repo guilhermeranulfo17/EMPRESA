@@ -12,7 +12,14 @@ function Linha({ rotulo, children }: { rotulo: string; children: React.ReactNode
 }
 
 /** A saída do copiloto: mensagem sugerida em destaque, avisos e o diagnóstico. */
-export function SaidaCopiloto({ saida }: { saida: SaidaAgente }) {
+export function SaidaCopiloto({
+  saida,
+  semMensagem = false,
+}: {
+  saida: SaidaAgente;
+  /** Esconde a mensagem quando ela aparece num campo editável. */
+  semMensagem?: boolean;
+}) {
   return (
     <div className="flex flex-col gap-4">
       {saida.nao_contatar && (
@@ -31,12 +38,14 @@ export function SaidaCopiloto({ saida }: { saida: SaidaAgente }) {
           Hora de você assumir: {saida.motivo || 'o copiloto preferiu passar para você.'}
         </p>
       )}
-      <div className="bg-muted rounded-control p-3">
-        <p className="text-muted-foreground text-xs font-semibold uppercase">Mensagem sugerida</p>
-        <p className="mt-1 whitespace-pre-wrap" data-testid="mensagem-ia">
-          {saida.mensagem}
-        </p>
-      </div>
+      {!semMensagem && (
+        <div className="bg-muted rounded-control p-3">
+          <p className="text-muted-foreground text-xs font-semibold uppercase">Mensagem sugerida</p>
+          <p className="mt-1 whitespace-pre-wrap" data-testid="mensagem-ia">
+            {saida.mensagem}
+          </p>
+        </div>
+      )}
       <dl className="grid gap-3 md:grid-cols-2">
         <Linha rotulo="Diagnóstico">{saida.diagnostico}</Linha>
         <Linha rotulo="Resumo">{saida.resumo}</Linha>

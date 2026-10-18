@@ -5,8 +5,9 @@ import { useState, useTransition } from 'react';
 import { classeCampo } from '@/components/campos';
 import { SaidaCopiloto } from '@/components/saida-copiloto';
 import type { SaidaAgente } from '@/domain/vendas/agente';
+import { foiEditada, linkWhatsApp } from '@/domain/vendas/decisao';
 import { cn } from '@/lib/utils';
-import { gerarResposta } from '@/server/actions/conversa';
+import { aprovarSugestao, descartarSugestao, gerarResposta } from '@/server/actions/conversa';
 
 export type MensagemTela = {
   id: string;
@@ -26,11 +27,13 @@ export function Conversa({
   mensagens,
   pendente,
   naoContatar,
+  telefoneE164,
 }: {
   leadId: string;
   mensagens: MensagemTela[];
-  pendente: { entrada: string; saida: SaidaAgente } | null;
+  pendente: { id: string; entrada: string; saida: SaidaAgente } | null;
   naoContatar: boolean;
+  telefoneE164: string | null;
 }) {
   const router = useRouter();
   const [texto, setTexto] = useState('');
@@ -115,19 +118,119 @@ export function Conversa({
       )}
 
       {pendente && (
-        <div className="bg-card rounded-card flex flex-col gap-3 border p-4" data-testid="sugestao">
-          <div>
-            <p className="text-muted-foreground text-xs font-semibold uppercase">Você colou</p>
-            <p className="text-muted-foreground mt-1 line-clamp-4 text-sm whitespace-pre-wrap">
-              {pendente.entrada}
-            </p>
-          </div>
-          <SaidaCopiloto saida={pendente.saida} />
-          <p className="text-muted-foreground text-xs">
-            Aprovar, editar, descartar e abrir no WhatsApp chegam na próxima etapa.
-          </p>
-        </div>
+        <Decisao
+          key={pendente.id}
+          pendente={pendente}
+          telefoneE164={telefoneE164}
+          aoDecidir={() => router.refresh()}
+        />
       )}
     </section>
+  );
+}
+
+const BOTAO =
+  'bg-primary text-primary-foreground min-h-11 rounded-full px-5 font-semibold disabled:opacity-60';
+const BOTAO_SECUNDARIO = 'rounded-control min-h-11 border px-4 font-semibold disabled:opacity-60';
+
+/** A sugestão pendente: editar o texto, aprovar (abrindo ou não o WhatsApp) ou descartar. */
+function Decisao({
+  pendente,
+  telefoneE164,
+  aoDecidir,
+}: {
+  pendente: { id: string; entrada: string; saida: SaidaAgente };
+  telefoneE164: string | null;
+  aoDecidir: () => void;
+}) {
+  const [texto, setTexto] = useState(pendente.saida.mensagem);
+  const [erro, setErro] = useState<string | null>(null);
+  const [salvando, iniciar] = useTransition();
+  const editada = foiEditada(pendente.saida.mensagem, texto);
+  const link = linkWhatsApp(telefoneE164, texto.trim());
+
+  function aprovar(abrir: boolean) {
+    setErro(null);
+    // abre já no clique (senão o navegador bloqueia a nova aba)
+    if (abrir && link) window.open(link, '_blank', 'noopener');
+    iniciar(async () => {
+      const r = await aprovarSugestao(pendente.id, texto);
+      if (!r.ok) return setErro(r.erro);
+      aoDecidir();
+    });
+  }
+
+  return (
+    <div className="bg-card rounded-card flex flex-col gap-4 border p-4" data-testid="sugestao">
+      <div>
+        <p className="text-muted-foreground text-xs font-semibold uppercase">Você colou</p>
+        <p className="text-muted-foreground mt-1 line-clamp-4 text-sm whitespace-pre-wrap">
+          {pendente.entrada}
+        </p>
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="mensagem-final" className="text-sm font-semibold">
+          Mensagem sugerida{' '}
+          <span className="text-muted-foreground font-normal">(pode editar antes de enviar)</span>
+        </label>
+        <textarea
+          id="mensagem-final"
+          rows={4}
+          className={classeCampo}
+          value={texto}
+          onChange={(e) => setTexto(e.target.value)}
+          data-testid="mensagem-ia"
+        />
+        {editada && (
+          <p className="text-muted-foreground text-xs" data-testid="aviso-editada">
+            Você editou a mensagem. A versão original fica guardada para o copiloto aprender.
+          </p>
+        )}
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {link ? (
+          <button type="button" className={BOTAO} disabled={salvando} onClick={() => aprovar(true)}>
+            Aprovar e abrir no WhatsApp
+          </button>
+        ) : (
+          <p className="text-muted-foreground w-full text-xs">
+            Sem telefone cadastrado: copie a mensagem e envie por onde preferir.
+          </p>
+        )}
+        <button
+          type="button"
+          className={link ? BOTAO_SECUNDARIO : BOTAO}
+          disabled={salvando}
+          onClick={() => aprovar(false)}
+        >
+          {link ? 'Só aprovar' : 'Aprovar'}
+        </button>
+        <button
+          type="button"
+          className={BOTAO_SECUNDARIO}
+          disabled={salvando}
+          onClick={() => {
+            setErro(null);
+            iniciar(async () => {
+              const r = await descartarSugestao(pendente.id);
+              if (!r.ok) return setErro(r.erro);
+              aoDecidir();
+            });
+          }}
+        >
+          Descartar
+        </button>
+      </div>
+      {erro && (
+        <p
+          role="status"
+          className="bg-erro/10 text-erro border-erro/30 rounded-control border p-3 text-sm"
+          data-testid="erro-decisao"
+        >
+          {erro}
+        </p>
+      )}
+      <SaidaCopiloto saida={pendente.saida} semMensagem />
+    </div>
   );
 }
