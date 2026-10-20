@@ -791,3 +791,9 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; }
 .portaria-rotulo { margin: 0; font: 600 10.5px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--tinta-3); }
 .portaria h2 { margin: 0; font: 700 22px/1.1 var(--display); text-wrap: balance; }
 .portaria-empresas { margin: 0 0 4px; color: var(--tinta-2); font-size: 13px; }
+
+/* ---------- só a simulação: sem painel de chat e sem números de validação ---------- */
+.apenas-simulacao .painel,
+.apenas-simulacao .numeros,
+.apenas-simulacao #painel-ia { display: none; }
+.apenas-simulacao .layout { grid-template-columns: minmax(0, 1fr); }

@@ -13,6 +13,10 @@ const el = (tag, attrs = {}, ...filhos) => {
   return n;
 };
 
+// Por enquanto a página mostra só a simulação: falas prontas nos balões da cena, sem rodada de IA
+// e sem o painel de chat. Nada chama o Claude, então não gasta tokens. Para voltar, troque para false.
+const APENAS_SIMULACAO = true;
+
 let estado = null;
 let conexao = null;
 let filtro = { tipo: 'todos', valor: null };
@@ -67,9 +71,10 @@ async function conectarLocal() {
   receber('foto', escritorio.foto());
   mostrarAbertura('Abrindo o escritório…', 'Conectando os agentes e carregando o que já foi feito.');
 
+  if (APENAS_SIMULACAO) document.body.classList.add('apenas-simulacao');
   const [sample, memoria] = await Promise.all([
-    usar('sample'),
-    abrirMemoria({ aoErro: () => avisarMemoria('Não consegui salvar a última mudança. Se continuar, recarregue a página.') }),
+    APENAS_SIMULACAO ? null : usar('sample'),
+    APENAS_SIMULACAO ? null : abrirMemoria({ aoErro: () => avisarMemoria('Não consegui salvar a última mudança. Se continuar, recarregue a página.') }),
   ]);
 
   if (sample) {
@@ -112,7 +117,7 @@ async function conectarLocal() {
     desenharIA();
   } else {
     // Sem Claude: simulação, deixada clara na tela e nunca salva.
-    $('#aviso-demo').hidden = false;
+    $('#aviso-demo').hidden = APENAS_SIMULACAO;
     $('#painel-ia').hidden = true;
     escritorio.estado.velocidade = 200;
     for (let i = 0; i < 7; i++) await escritorio.passo();
@@ -609,7 +614,7 @@ function atualizarModoCena(modo) {
   $('#btn-recentrar').hidden = !dentro;
   $('#dica-3d').textContent = modo === 'fora'
     ? 'Arraste para ver o prédio de outros ângulos. Clique no prédio ou em Entrar no prédio.'
-    : 'Arraste para girar, role ou use dois dedos para aproximar. Clique numa pessoa para ver as conversas dela.';
+    : `Arraste para girar, role ou use dois dedos para aproximar. Clique numa pessoa para ${APENAS_SIMULACAO ? 'destacá-la' : 'ver as conversas dela'}.`;
 }
 
 // ---------- caixa de comunicação ----------
