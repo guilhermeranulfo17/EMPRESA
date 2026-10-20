@@ -635,7 +635,7 @@ class Pessoa {
 }
 
 // ---------- cena ----------
-export async function criarEscritorio3D(container, { setores, agentes, aoClicarAgente, aoClicarCaixa }) {
+export async function criarEscritorio3D(container, { setores, agentes, aoClicarAgente, aoClicarCaixa, aoMudarModo, grupo = 'Pro Hunter Comercial', empresas = [] }) {
   await document.fonts?.ready;
   const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
   const celular = matchMedia('(max-width: 700px)').matches;
@@ -870,6 +870,7 @@ export async function criarEscritorio3D(container, { setores, agentes, aoClicarA
   }
 
   const pessoas = new Map();
+  const figurantes = [];
   const zonas = new Map();
   const listaMalhas = [];
   fileiras.forEach((fileira, indiceFila) => {
@@ -1006,7 +1007,7 @@ export async function criarEscritorio3D(container, { setores, agentes, aoClicarA
   telao.position.set(X_TELAO, 1.75, -FUNDO + 0.105);
   add(telao);
   const mesaAlta = new THREE.Group();
-  mesaAlta.position.set(11.0, 0, 2.5);
+  mesaAlta.position.set(12.2, 0, 0.4);
   const tampo = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.04, 36), M.branco);
   tampo.position.y = 1.05;
   tampo.castShadow = tampo.receiveShadow = true;
@@ -1030,8 +1031,285 @@ export async function criarEscritorio3D(container, { setores, agentes, aoClicarA
     add(copo);
   }
   criarPlanta([12.85, 0, 5.5], 1.6, 'planta telão');
-  criarPlanta([12.95, 0, -0.6], 1.35, 'planta copa');
+  criarPlanta([12.95, 0, 2.2], 1.35, 'planta copa');
   criarPlanta([-11.35, 0, 5.5], 1.45, 'planta frente');
+
+  // --- recepção do prédio ---
+  {
+    const setorRecepcao = { id: 'recepcao', nome: 'Recepção', cor: '#7a8794' };
+    const { grupo: balcao } = criarMesa(setorRecepcao, 0, semente('recepção'));
+    balcao.position.set(9.4, 0, 4.15);
+    balcao.rotation.y = Math.PI;
+    add(balcao);
+    caixa(1.75, 1.08, 0.06, M.branco, [9.4, 0.54, 4.6], { raio: 0.01 });
+    caixa(1.8, 0.04, 0.22, M.carvalho, [9.4, 1.1, 4.62], { raio: 0.01 });
+    const cadeiraPai = new THREE.Group();
+    cadeiraPai.position.set(9.4, 0, 3.35);
+    add(cadeiraPai);
+    const cadeira = criarCadeira(cadeiraPai);
+    const casa = { assento: { x: 9.4, z: 3.37 }, passagem: { x: 9.4, z: 3.37 }, rumo: 0, anexo: 9.4, sinal: 1, cadeira, cadeiraZ: 0, telaMat: new THREE.MeshStandardMaterial() };
+    const recepcionista = new Pessoa({ id: 'recepção do prédio', nome: 'Recepção', cargo: '', status: 'trabalhando' }, setorRecepcao, casa, mundo);
+    add(recepcionista.raiz);
+    figurantes.push(recepcionista);
+
+    const diretorio = texturaDeCanvas(512, 1024, (c, w, h) => {
+      c.fillStyle = '#18202b';
+      c.fillRect(0, 0, w, h);
+      c.fillStyle = '#D98A1E';
+      c.fillRect(48, 70, 70, 8);
+      c.fillStyle = '#eef2f7';
+      c.font = '700 52px "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif';
+      c.fillText('PRO HUNTER', 48, 150);
+      c.fillText('COMERCIAL', 48, 210);
+      c.font = '500 24px "IBM Plex Mono", Menlo, monospace';
+      c.fillStyle = '#8fa0b5';
+      c.fillText('EMPRESAS DO GRUPO', 48, 300);
+      let y = 380;
+      for (const nome of empresas) {
+        c.fillStyle = '#D98A1E';
+        c.fillRect(48, y - 30, 10, 40);
+        c.fillStyle = '#eef2f7';
+        c.font = '600 40px "IBM Plex Sans", "Segoe UI", sans-serif';
+        c.fillText(nome, 76, y);
+        c.font = '400 24px "IBM Plex Sans", "Segoe UI", sans-serif';
+        c.fillStyle = '#aab6c6';
+        c.fillText('Térreo', 76, y + 36);
+        y += 120;
+      }
+      c.font = '400 26px "IBM Plex Sans", "Segoe UI", sans-serif';
+      c.fillStyle = '#6f7d90';
+      c.fillText('Novas empresas em breve', 48, y + 10);
+    });
+    const totem = new THREE.Group();
+    totem.position.set(12.75, 0, 4.25);
+    totem.rotation.y = -0.55;
+    caixa(1.0, 2.1, 0.14, M.preto, [0, 1.05, 0], { raio: 0.02, pai: totem });
+    const painel = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 1.8), new THREE.MeshStandardMaterial({ color: '#000', emissive: '#fff', emissiveMap: diretorio, emissiveIntensity: 0.95, roughness: 0.3 }));
+    painel.position.set(0, 1.1, 0.075);
+    totem.add(painel);
+    add(totem);
+  }
+
+  // --- o prédio por fora: fachada do térreo, andares de cima, telhado e letreiro ---
+  // Tudo que "abre" ao entrar fica em `casca`; os materiais são próprios para poderem sumir aos poucos.
+  const aoTrocarTema = [];
+  const C = {
+    concreto: new THREE.MeshStandardMaterial({ color: '#dcd8d0', roughness: 0.85, transparent: true }),
+    vidroAzul: new THREE.MeshStandardMaterial({ color: '#46708c', roughness: 0.07, metalness: 0.6, transparent: true }),
+    vidroClaro: new THREE.MeshStandardMaterial({ color: '#dcebf2', roughness: 0.04, metalness: 0.1, transparent: true, opacity: 0.17, depthWrite: false, side: THREE.DoubleSide }),
+    aluminio: new THREE.MeshStandardMaterial({ color: '#9aa1a8', roughness: 0.35, metalness: 0.85, transparent: true }),
+    escuro: new THREE.MeshStandardMaterial({ color: '#1b222d', roughness: 0.5, transparent: true }),
+  };
+  for (const m of Object.values(C)) m.userData.base = m.opacity;
+  const marca = texturaDeCanvas(2048, 256, (c, w, h) => {
+    c.fillStyle = '#1b222d';
+    c.fillRect(0, 0, w, h);
+    c.fillStyle = '#D98A1E';
+    c.fillRect(70, 88, 80, 80);
+    c.fillStyle = '#f4f1ea';
+    const texto = grupo.toUpperCase();
+    let tamanho = 150;
+    do {
+      c.font = `700 ${tamanho}px "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif`;
+      tamanho -= 6;
+    } while (c.measureText(texto).width > w - 196 - 70 && tamanho > 40);
+    c.textBaseline = 'middle';
+    c.fillText(texto, 196, h / 2 + 8);
+  });
+  const matMarca = new THREE.MeshBasicMaterial({ map: marca, transparent: true });
+  matMarca.userData.base = 1;
+  const materiaisCasca = [...Object.values(C), matMarca];
+
+  const casca = new THREE.Group();
+  const andares = new THREE.Group();
+  const fachada = new THREE.Group();
+  const frente = new THREE.Group();
+  casca.add(andares, fachada, frente);
+  add(casca);
+  const bloco = (w, h, d, mat, pos, pai) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+    m.position.set(...pos);
+    m.castShadow = true;
+    m.receiveShadow = true;
+    pai.add(m);
+    return m;
+  };
+
+  const L = largura + 0.6;
+  const P = FUNDO * 2 + 0.6;
+  const ALT_ANDAR = 3.3;
+  const N_ANDARES = 2;
+  const montantes = [];
+  for (let k = 0; k < N_ANDARES; k++) {
+    const y0 = ALTURA_PAREDE + k * ALT_ANDAR;
+    bloco(L, 0.5, P, C.concreto, [centroX, y0 + 0.25, 0], andares);
+    bloco(L - 0.2, ALT_ANDAR - 0.5, P - 0.2, C.vidroAzul, [centroX, y0 + 0.5 + (ALT_ANDAR - 0.5) / 2, 0], andares);
+    const yM = y0 + 0.5 + (ALT_ANDAR - 0.5) / 2;
+    for (let x = X_ESQ; x <= X_DIR + 0.01; x += (X_DIR - X_ESQ) / 18) {
+      montantes.push([x, yM, P / 2 - 0.08], [x, yM, -P / 2 + 0.08]);
+    }
+    for (let z = -FUNDO; z <= FUNDO + 0.01; z += (FUNDO * 2) / 8) {
+      montantes.push([X_ESQ - 0.22, yM, z], [X_DIR + 0.22, yM, z]);
+    }
+  }
+  const yTopo = ALTURA_PAREDE + N_ANDARES * ALT_ANDAR;
+  const geoMontante = new THREE.BoxGeometry(0.09, ALT_ANDAR - 0.5, 0.09);
+  const instancias = new THREE.InstancedMesh(geoMontante, C.aluminio, montantes.length);
+  const matriz = new THREE.Matrix4();
+  montantes.forEach((p, i) => instancias.setMatrixAt(i, matriz.makeTranslation(...p)));
+  instancias.castShadow = true;
+  andares.add(instancias);
+  bloco(L, 0.45, P, C.concreto, [centroX, yTopo + 0.22, 0], andares);
+  for (const [w, d, x, z] of [[L, 0.25, centroX, P / 2 - 0.12], [L, 0.25, centroX, -P / 2 + 0.12], [0.25, P, X_ESQ - 0.18, 0], [0.25, P, X_DIR + 0.18, 0]]) {
+    bloco(w, 0.7, d, C.concreto, [x, yTopo + 0.8, z], andares);
+  }
+  bloco(3.2, 1.3, 2.2, C.aluminio, [-6, yTopo + 1.1, -2.5], andares);
+  bloco(2.2, 1.0, 1.8, C.aluminio, [4, yTopo + 0.95, -3.2], andares);
+  bloco(1.6, 2.4, 1.6, C.escuro, [8.5, yTopo + 1.6, -1], andares);
+  const letreiro = new THREE.Group();
+  letreiro.position.set(centroX, yTopo + 2.35, P / 2 - 0.3);
+  bloco(16.4, 2.1, 0.3, C.escuro, [0, 0, 0], letreiro);
+  const letras = new THREE.Mesh(new THREE.PlaneGeometry(16, 2.0), matMarca);
+  letras.position.z = 0.16;
+  letreiro.add(letras);
+  for (const x of [-6, 6]) bloco(0.15, 1.2, 0.15, C.aluminio, [x, -1.4, -0.1], letreiro);
+  andares.add(letreiro);
+
+  // Fachada de vidro do térreo, com as portas da entrada.
+  const zFachada = FUNDO + 0.14;
+  const X_PORTA = 11;
+  for (const [x0, x1] of [[X_ESQ - 0.2, X_PORTA - 0.72], [X_PORTA + 0.72, X_DIR + 0.2]]) {
+    const vidro = new THREE.Mesh(new THREE.PlaneGeometry(x1 - x0, ALTURA_PAREDE - 0.4), C.vidroClaro);
+    vidro.position.set((x0 + x1) / 2, (ALTURA_PAREDE - 0.4) / 2 + 0.05, zFachada);
+    fachada.add(vidro);
+  }
+  for (let x = X_ESQ - 0.2; x <= X_DIR + 0.21; x += 1.6) {
+    if (Math.abs(x - X_PORTA) < 0.9) continue;
+    bloco(0.07, ALTURA_PAREDE - 0.35, 0.1, C.aluminio, [x, (ALTURA_PAREDE - 0.35) / 2, zFachada], fachada);
+  }
+  for (const x of [X_PORTA - 0.74, X_PORTA + 0.74]) bloco(0.1, 2.62, 0.14, C.aluminio, [x, 1.31, zFachada], fachada);
+  bloco(L, 0.4, 0.3, C.concreto, [centroX, ALTURA_PAREDE - 0.2, zFachada], fachada);
+  bloco(L, 0.06, 0.14, C.aluminio, [centroX, 0.03, zFachada], fachada);
+  bloco(4.4, 0.22, 2.2, C.escuro, [X_PORTA, 2.72, zFachada + 1.1], fachada);
+  const portas = [-1, 1].map((lado) => {
+    const g = new THREE.Group();
+    g.position.set(X_PORTA + lado * 0.36, 0, zFachada + 0.05);
+    const vidro = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 2.5), C.vidroClaro);
+    vidro.position.y = 1.27;
+    g.add(vidro);
+    for (const y of [0.03, 2.52]) bloco(0.72, 0.05, 0.05, C.aluminio, [0, y, 0], g);
+    bloco(0.04, 0.9, 0.04, C.aluminio, [lado * -0.28, 1.1, 0.05], g);
+    fachada.add(g);
+    return { g, lado, fechado: X_PORTA + lado * 0.36 };
+  });
+  let aberturaPorta = 0;
+  let portaAlvo = 0;
+
+  // Calçada, rua, árvores, postes e carros.
+  const yCalcada = -0.24;
+  const calcada = new THREE.Mesh(new THREE.BoxGeometry(70, 0.14, 4.4), mundo.material('#cfcac1', 0.9));
+  calcada.position.set(centroX, yCalcada - 0.07, FUNDO + 0.3 + 2.2);
+  calcada.receiveShadow = true;
+  add(calcada);
+  caixa(4.4, 0.13, 1.1, mundo.material('#bdb7ad', 0.85), [X_PORTA, -0.11, FUNDO + 0.85], { sombra: false });
+  const asfalto = texturaDeCanvas(1024, 256, (c, w, h) => {
+    c.fillStyle = '#45484d';
+    c.fillRect(0, 0, w, h);
+    const r = semente('asfalto');
+    for (let i = 0; i < 9000; i++) {
+      c.fillStyle = `rgba(${r() < 0.5 ? '255,255,255' : '0,0,0'},${r() * 0.07})`;
+      c.fillRect(r() * w, r() * h, 2, 2);
+    }
+    c.fillStyle = 'rgba(240,236,220,0.85)';
+    for (let x = 0; x < w; x += 128) c.fillRect(x + 20, h / 2 - 4, 70, 8);
+    c.fillStyle = 'rgba(240,236,220,0.6)';
+    c.fillRect(0, 10, w, 5);
+    c.fillRect(0, h - 15, w, 5);
+  }, { repetir: [7, 1] });
+  const rua = new THREE.Mesh(new THREE.PlaneGeometry(70, 8), new THREE.MeshStandardMaterial({ map: asfalto, roughness: 0.92 }));
+  rua.rotation.x = -Math.PI / 2;
+  rua.position.set(centroX, -0.355, FUNDO + 4.7 + 4);
+  rua.receiveShadow = true;
+  add(rua);
+  const calcada2 = calcada.clone();
+  calcada2.position.z = FUNDO + 12.7 + 2.2;
+  add(calcada2);
+  const matTronco = mundo.material('#5b4634', 0.95);
+  const matCopa = [mundo.material('#4f7d3c', 0.85), mundo.material('#3f6d33', 0.85), mundo.material('#5b8a45', 0.85)];
+  const geoCopa = new THREE.IcosahedronGeometry(1, 2);
+  function arvore(x, z, nome) {
+    const r = semente(nome);
+    const g = new THREE.Group();
+    g.position.set(x, yCalcada, z);
+    frente.add(g);
+    const tronco = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.16, 2.6, 10), matTronco);
+    tronco.position.y = 1.3;
+    tronco.castShadow = true;
+    g.add(tronco);
+    for (let i = 0; i < 5; i++) {
+      const copa = new THREE.Mesh(geoCopa, matCopa[i % 3]);
+      const s = 0.9 + r() * 0.6;
+      copa.scale.set(s, s * 0.85, s);
+      copa.position.set((r() - 0.5) * 1.4, 3.0 + r() * 1.1, (r() - 0.5) * 1.4);
+      copa.castShadow = true;
+      g.add(copa);
+    }
+  }
+  function poste(x, z) {
+    const g = new THREE.Group();
+    g.position.set(x, yCalcada, z);
+    bloco(0.1, 4.6, 0.1, C.escuro, [0, 2.3, 0], g);
+    bloco(0.9, 0.08, 0.14, C.escuro, [0.4, 4.6, 0], g);
+    const luz = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.05, 0.2), new THREE.MeshStandardMaterial({ color: '#fff', emissive: '#ffe2b0', emissiveIntensity: 0.2 }));
+    luz.position.set(0.7, 4.55, 0);
+    g.add(luz);
+    aoTrocarTema.push((escuro) => {
+      luz.material.emissiveIntensity = escuro ? 3 : 0.2;
+    });
+    frente.add(g);
+  }
+  for (const x of [-14, -7.5, -1, 5.5]) arvore(x, FUNDO + 3.7, `árvore ${x}`);
+  arvore(15.5, FUNDO + 3.7, 'árvore canto');
+  for (const x of [-11, -4, 2.5, 8.2]) poste(x, FUNDO + 4.1);
+  function carro(x, z, cor, rot) {
+    const g = new THREE.Group();
+    g.position.set(x, -0.36, z);
+    g.rotation.y = rot;
+    const lataria = mundo.material(cor, 0.35);
+    caixa(4.3, 0.62, 1.82, lataria, [0, 0.62, 0], { raio: 0.18, pai: g });
+    caixa(2.3, 0.56, 1.62, new THREE.MeshStandardMaterial({ color: '#56677a', roughness: 0.08, metalness: 0.7 }), [-0.2, 1.15, 0], { raio: 0.2, pai: g });
+    const roda = new THREE.CylinderGeometry(0.34, 0.34, 0.24, 18).rotateX(Math.PI / 2);
+    for (const [rx, rz] of [[-1.35, 0.85], [1.35, 0.85], [-1.35, -0.85], [1.35, -0.85]]) {
+      const m = new THREE.Mesh(roda, mundo.material('#16181b', 0.8));
+      m.position.set(rx, 0.34, rz);
+      g.add(m);
+    }
+    add(g);
+  }
+  carro(-5, FUNDO + 6.2, '#e8e6e1', 0);
+  carro(3.5, FUNDO + 6.2, '#7a1f24', 0);
+  carro(-12, FUNDO + 10.6, '#2d3e55', Math.PI);
+  const monumento = new THREE.Group();
+  monumento.position.set(6.4, yCalcada, FUNDO + 1.6);
+  caixa(3.6, 0.95, 0.5, C.concreto, [0, 0.47, 0], { pai: monumento });
+  const placaMonumento = new THREE.Mesh(new THREE.PlaneGeometry(3.3, 0.41), matMarca);
+  placaMonumento.position.set(0, 0.58, 0.26);
+  monumento.add(placaMonumento);
+  fachada.add(monumento);
+  aoTrocarTema.push((escuro) => {
+    C.vidroAzul.color.set(escuro ? '#1d3346' : '#46708c');
+    C.vidroAzul.emissive.set(escuro ? '#2a2216' : '#000000');
+  });
+
+  let abertura = 0;
+  function aplicarAbertura(a) {
+    abertura = a;
+    casca.visible = a < 0.999;
+    andares.position.y = suave(a) * 24;
+    fachada.position.y = -suave(Math.min(1, a * 1.15)) * 3.6;
+    frente.visible = a < 0.45;
+    for (const m of materiaisCasca) m.opacity = m.userData.base * (1 - suave(a));
+  }
 
   // --- pontos de destino ---
   const faixa = () => (Math.random() - 0.5) * 1.3;
@@ -1132,6 +1410,7 @@ export async function criarEscritorio3D(container, { setores, agentes, aoClicarA
   let inicioToque = null;
 
   function acharAgente(evento) {
+    if (modo !== 'dentro') return null;
     const r = renderer.domElement.getBoundingClientRect();
     ponteiro.set(((evento.clientX - r.left) / r.width) * 2 - 1, -((evento.clientY - r.top) / r.height) * 2 + 1);
     raio.setFromCamera(ponteiro, camera);
@@ -1144,6 +1423,7 @@ export async function criarEscritorio3D(container, { setores, agentes, aoClicarA
   });
   renderer.domElement.addEventListener('pointerup', (e) => {
     if (!inicioToque || Math.hypot(e.clientX - inicioToque.x, e.clientY - inicioToque.y) > 6) return;
+    if (modo === 'fora') return entrar();
     const alvo = acharAgente(e);
     if (alvo === 'caixa') aoClicarCaixa?.();
     else if (alvo) aoClicarAgente?.(alvo);
@@ -1176,6 +1456,7 @@ export async function criarEscritorio3D(container, { setores, agentes, aoClicarA
     cena.environmentIntensity = escuro ? 0.28 : 0.6;
     M.chao.color.set(escuro ? '#23262c' : '#c9c5bd');
     for (const luz of luminarias) luz.intensity = escuro ? 9 : 0;
+    for (const f of aoTrocarTema) f(escuro);
     renderer.toneMappingExposure = escuro ? 1.15 : 1.0;
   }
   aplicarTema();
@@ -1196,16 +1477,109 @@ export async function criarEscritorio3D(container, { setores, agentes, aoClicarA
   desenharTelao();
 
   // --- câmera ---
+  // Modos: 'fora' (o prédio visto da rua), 'entrando', 'dentro' (o andar aberto) e 'saindo'.
+  let modo = 'fora';
+  let voo = null;
   let enquadrado = false;
-  function enquadrar(forcar) {
-    if (enquadrado && !forcar) return;
-    enquadrado = true;
+  function poseDentro() {
     const aspecto = camera.aspect || 1.5;
     const distancia = Math.min(70, Math.max(24, 41 / Math.min(1.7, aspecto) + 6));
     const direcao = new THREE.Vector3(0, 0.78, 0.63).normalize();
-    controles.target.copy(ALVO_INICIAL);
-    camera.position.copy(ALVO_INICIAL).addScaledVector(direcao, distancia);
+    return { alvo: ALVO_INICIAL.clone(), pos: ALVO_INICIAL.clone().addScaledVector(direcao, distancia) };
+  }
+  function poseFora() {
+    const aspecto = camera.aspect || 1.5;
+    const alvo = new THREE.Vector3(-0.5, 3.4, 3);
+    const distancia = Math.min(95, Math.max(36, 50 / Math.min(1.7, aspecto) + 14));
+    const direcao = new THREE.Vector3(0.32, 0.24, 1).normalize();
+    return { alvo, pos: alvo.clone().addScaledVector(direcao, distancia) };
+  }
+  function configurarControles() {
+    const fora = modo === 'fora';
+    Object.assign(controles, fora
+      ? { minDistance: 18, maxDistance: 100, minPolarAngle: 0.35, maxPolarAngle: 1.5, minAzimuthAngle: -1.15, maxAzimuthAngle: 1.15 }
+      : { minDistance: 6, maxDistance: 72, minPolarAngle: 0.2, maxPolarAngle: 1.28, minAzimuthAngle: -1.0, maxAzimuthAngle: 1.0 });
+    controles.autoRotate = fora && !reduzido();
+    controles.autoRotateSpeed = 0.35;
+    camadaRotulos.hidden = modo !== 'dentro';
+  }
+  function irPara(pose) {
+    controles.target.copy(pose.alvo);
+    camera.position.copy(pose.pos);
+    camera.lookAt(pose.alvo);
     controles.update();
+  }
+  function enquadrar(forcar) {
+    if (enquadrado && !forcar) return;
+    enquadrado = true;
+    if (modo === 'fora' || modo === 'dentro') irPara(modo === 'fora' ? poseFora() : poseDentro());
+  }
+  function mudarModo(novo) {
+    modo = novo;
+    configurarControles();
+    aoMudarModo?.(modo);
+  }
+  // Voo de câmera por uma curva suave, com a câmera e o ponto para onde ela olha andando juntos.
+  function voar(pontos, alvos, duracao, aoTerminar) {
+    controles.enabled = false;
+    controles.autoRotate = false;
+    voo = {
+      pos: new THREE.CatmullRomCurve3(pontos, false, 'centripetal'),
+      alvo: new THREE.CatmullRomCurve3(alvos, false, 'centripetal'),
+      inicio: performance.now(), duracao, aoTerminar,
+    };
+  }
+  // O voo segue o relógio de verdade, então dura o mesmo em computador rápido ou lento.
+  function atualizarVoo() {
+    const k = Math.min(1, (performance.now() - voo.inicio) / 1000 / voo.duracao);
+    const u = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+    camera.position.copy(voo.pos.getPointAt(u));
+    controles.target.copy(voo.alvo.getPointAt(u));
+    camera.lookAt(controles.target);
+    if (k >= 1) {
+      const fim = voo.aoTerminar;
+      voo = null;
+      controles.enabled = true;
+      fim();
+      controles.update();
+    }
+    return u;
+  }
+  function entrar() {
+    if (modo !== 'fora') return;
+    const destino = poseDentro();
+    if (reduzido()) {
+      aplicarAbertura(1);
+      mudarModo('dentro');
+      irPara(destino);
+      return;
+    }
+    mudarModo('entrando');
+    const zPorta = FUNDO + 0.14;
+    voar(
+      [camera.position.clone(), new THREE.Vector3(X_PORTA + 1.5, 3.2, zPorta + 15), new THREE.Vector3(X_PORTA, 1.75, zPorta + 4.2), new THREE.Vector3(X_PORTA, 1.7, zPorta + 1.4), new THREE.Vector3(X_PORTA - 0.6, 1.7, 2.6), new THREE.Vector3(4, 9, 12), destino.pos],
+      [controles.target.clone(), new THREE.Vector3(X_PORTA, 1.8, zPorta), new THREE.Vector3(X_PORTA, 1.6, zPorta - 3), new THREE.Vector3(X_PORTA - 1, 1.5, zPorta - 6), new THREE.Vector3(2, 1.2, -1), new THREE.Vector3(0, 0.5, 0.5), destino.alvo],
+      9,
+      () => {
+        aplicarAbertura(1);
+        portaAlvo = 0;
+        mudarModo('dentro');
+      },
+    );
+  }
+  function sair() {
+    if (modo !== 'dentro') return;
+    const destino = poseFora();
+    aplicarAbertura(Math.min(abertura, 0.999));
+    if (reduzido()) {
+      aplicarAbertura(0);
+      mudarModo('fora');
+      irPara(destino);
+      return;
+    }
+    mudarModo('saindo');
+    const meio = camera.position.clone().lerp(destino.pos, 0.5).setY(Math.max(camera.position.y, destino.pos.y) + 6);
+    voar([camera.position.clone(), meio, destino.pos], [controles.target.clone(), destino.alvo.clone().lerp(controles.target, 0.5), destino.alvo], 3.6, () => mudarModo('fora'));
   }
   function redimensionar() {
     const w = container.clientWidth;
@@ -1216,10 +1590,13 @@ export async function criarEscritorio3D(container, { setores, agentes, aoClicarA
     camera.updateProjectionMatrix();
     enquadrar(false);
   }
+  configurarControles();
   const observadorTamanho = new ResizeObserver(redimensionar);
   observadorTamanho.observe(container);
   redimensionar();
+  aplicarAbertura(0);
   controles.addEventListener('change', () => {
+    if (modo !== 'dentro') return;
     controles.target.x = Math.max(X_ESQ + 1, Math.min(X_DIR - 1, controles.target.x));
     controles.target.z = Math.max(-FUNDO + 0.5, Math.min(FUNDO - 0.5, controles.target.z));
   });
@@ -1238,7 +1615,25 @@ export async function criarEscritorio3D(container, { setores, agentes, aoClicarA
     const dt = Math.min(0.05, relogio.getDelta());
     if (!visivel) return;
     const t = relogio.elapsedTime;
-    controles.update();
+    if (voo) {
+      const u = atualizarVoo();
+      if (modo === 'entrando') {
+        portaAlvo = camera.position.z < FUNDO + 7 ? 1 : 0;
+        aplicarAbertura(Math.max(0, Math.min(1, (u - 0.62) / 0.3)));
+      } else if (modo === 'saindo') {
+        aplicarAbertura(Math.max(0, 1 - u / 0.55));
+      }
+    } else {
+      if (modo === 'fora' && controles.autoRotate) {
+        const az = controles.getAzimuthalAngle();
+        if (az > 0.95) controles.autoRotateSpeed = Math.abs(controles.autoRotateSpeed);
+        if (az < -0.95) controles.autoRotateSpeed = -Math.abs(controles.autoRotateSpeed);
+      }
+      controles.update();
+    }
+    aberturaPorta += (portaAlvo - aberturaPorta) * Math.min(1, dt * 3);
+    for (const porta of portas) porta.g.position.x = porta.fechado + porta.lado * aberturaPorta * 0.72;
+    for (const figurante of figurantes) figurante.atualizar(dt, t, 1);
     for (const pessoa of pessoas.values()) {
       pessoa.atualizar(dt, t, fator);
       const tela = pessoa.casa.telaMat;
@@ -1350,7 +1745,12 @@ export async function criarEscritorio3D(container, { setores, agentes, aoClicarA
       fator = Math.max(0.5, Math.min(4, Number(v) || 1));
     },
     recentralizar() {
-      enquadrar(true);
+      if (modo === 'fora' || modo === 'dentro') irPara(modo === 'fora' ? poseFora() : poseDentro());
+    },
+    entrar,
+    sair,
+    get modo() {
+      return modo;
     },
     destruir() {
       renderer.setAnimationLoop(null);

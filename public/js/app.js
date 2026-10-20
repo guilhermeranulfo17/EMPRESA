@@ -358,6 +358,7 @@ const iniciais = (nome) => nome.slice(0, 1).toUpperCase();
 // ---------- montagem ----------
 function montarTudo() {
   $('#nome-empresa').textContent = estado.empresa.nome;
+  $('#grupo').textContent = estado.empresa.grupo ?? '';
   $('#objetivo').textContent = estado.empresa.objetivo_do_trimestre;
   estado.entregas ??= [];
   estado.pesquisas ??= [];
@@ -534,7 +535,7 @@ function mostrarVista(vista, lembrar = true) {
   $('#cena3d').hidden = !cena.ativa;
   $('#planta').hidden = cena.ativa;
   $('#dica-3d').hidden = !cena.ativa;
-  $('#btn-recentrar').hidden = !cena.ativa || !cena.api;
+  atualizarModoCena(cena.api?.modo);
   $('#vista-3d').setAttribute('aria-pressed', String(cena.ativa));
   $('#vista-2d').setAttribute('aria-pressed', String(!cena.ativa));
   if (lembrar) {
@@ -569,10 +570,13 @@ async function montarCena() {
         agentes: estado.agentes,
         aoClicarAgente: (id) => alternarFiltro('agente', id),
         aoClicarCaixa: () => trocarAba('caixa'),
+        aoMudarModo: atualizarModoCena,
+        grupo: estado.empresa.grupo ?? 'Pro Hunter Comercial',
+        empresas: [estado.empresa.nome],
       });
       cena.ids = Object.keys(estado.agentes).join(',');
       $('#cena-status').hidden = true;
-      $('#btn-recentrar').hidden = !cena.ativa;
+      atualizarModoCena(cena.api.modo);
       sincronizarCena();
     } catch (erro) {
       console.warn('Escritório 3D indisponível; usando a planta.', erro);
@@ -592,6 +596,21 @@ $('#vista-3d').addEventListener('click', () => {
 });
 $('#vista-2d').addEventListener('click', () => mostrarVista('planta'));
 $('#btn-recentrar').addEventListener('click', () => cena.api?.recentralizar());
+$('#btn-entrar').addEventListener('click', () => cena.api?.entrar());
+$('#btn-fora').addEventListener('click', () => cena.api?.sair());
+
+// O que aparece em volta da cena depende de onde a câmera está: na rua, entrando ou dentro do andar.
+function atualizarModoCena(modo) {
+  const dentro = cena.ativa && modo === 'dentro';
+  $('#portaria').hidden = !(cena.ativa && modo === 'fora');
+  $('#portaria-nome').textContent = estado?.empresa.grupo ?? 'Pro Hunter Comercial';
+  $('#portaria-empresas').textContent = `Empresas no prédio: ${estado?.empresa.nome ?? ''}`;
+  $('#btn-fora').hidden = !dentro;
+  $('#btn-recentrar').hidden = !dentro;
+  $('#dica-3d').textContent = modo === 'fora'
+    ? 'Arraste para ver o prédio de outros ângulos. Clique no prédio ou em Entrar no prédio.'
+    : 'Arraste para girar, role ou use dois dedos para aproximar. Clique numa pessoa para ver as conversas dela.';
+}
 
 // ---------- caixa de comunicação ----------
 function montarFiltros() {

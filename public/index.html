@@ -21,6 +21,7 @@
     <div class="marca">
       <svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="3" width="11" height="11" rx="2"/><rect x="18" y="3" width="11" height="11" rx="2"/><rect x="3" y="18" width="11" height="11" rx="2"/><rect x="18" y="18" width="11" height="11" rx="2"/></svg>
       <div>
+        <p id="grupo" class="grupo"></p>
         <h1 id="nome-empresa">Escritório</h1>
         <p id="objetivo" class="objetivo"></p>
       </div>
@@ -69,9 +70,18 @@
           <button type="button" id="vista-2d" aria-pressed="false">Planta</button>
         </div>
         <p id="dica-3d" class="dica-palco" hidden>Arraste para girar, role ou use dois dedos para aproximar. Clique numa pessoa para ver as conversas dela.</p>
+        <button type="button" class="btn" id="btn-fora" hidden>Ver o prédio por fora</button>
         <button type="button" class="btn" id="btn-recentrar" hidden>Recentralizar</button>
       </div>
-      <div id="cena3d" class="cena3d" hidden><p class="cena-status" id="cena-status">Montando o escritório em 3D…</p></div>
+      <div id="cena3d" class="cena3d" hidden>
+        <p class="cena-status" id="cena-status">Montando o escritório em 3D…</p>
+        <div class="portaria" id="portaria" hidden>
+          <p class="portaria-rotulo">Grupo</p>
+          <h2 id="portaria-nome">Pro Hunter Comercial</h2>
+          <p id="portaria-empresas" class="portaria-empresas"></p>
+          <button type="button" class="btn btn-forte" id="btn-entrar">Entrar no prédio</button>
+        </div>
+      </div>
       <section class="planta" id="planta" aria-label="Planta do escritório"></section>
     </section>
 

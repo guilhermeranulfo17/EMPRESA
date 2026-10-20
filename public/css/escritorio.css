@@ -769,3 +769,25 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; }
 @media (max-width: 640px) {
   .dica-palco { display: none; }
 }
+
+/* ---------- prédio do grupo: portaria e nome do grupo ---------- */
+.grupo { margin: 0 0 2px; font: 600 10.5px/1.2 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--tinta-3); }
+.grupo:empty { display: none; }
+.portaria {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 3;
+  display: grid;
+  gap: 6px;
+  justify-items: start;
+  max-width: min(320px, calc(100% - 32px));
+  padding: 14px 16px 16px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--superficie) 92%, transparent);
+  border: 1px solid var(--linha);
+  box-shadow: var(--sombra);
+}
+.portaria-rotulo { margin: 0; font: 600 10.5px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--tinta-3); }
+.portaria h2 { margin: 0; font: 700 22px/1.1 var(--display); text-wrap: balance; }
+.portaria-empresas { margin: 0 0 4px; color: var(--tinta-2); font-size: 13px; }
