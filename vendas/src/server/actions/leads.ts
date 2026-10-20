@@ -2,7 +2,12 @@
 
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
-import { leadVendasSchema, type LeadVendasEntrada } from '@/domain/vendas/lead';
+import { hojeNoFuso } from '@/domain/dates';
+import {
+  leadVendasSchema,
+  type LeadVendasDados,
+  type LeadVendasEntrada,
+} from '@/domain/vendas/lead';
 import { obterDb } from '@/server/db/client';
 import { vendasLeads, vendasMovimentos } from '@/server/db/schema';
 import { acao, camposDoZod, INVALIDO, type Resultado } from './comum';
@@ -11,7 +16,26 @@ import { acao, camposDoZod, INVALIDO, type Resultado } from './comum';
 
 const uuid = z.uuid();
 
-/** Cadastra um lead à mão: entra em Novo, com o movimento "Cadastro manual". */
+function colunas(d: LeadVendasDados) {
+  return {
+    nome: d.nome,
+    cidade: d.cidade,
+    uf: d.uf,
+    telefone: d.telefone?.telefone ?? null,
+    telefoneDigitos: d.telefone?.digitos ?? null,
+    whatsapp: d.telefone?.whatsapp ?? null,
+    categoria: d.categoria,
+    segmento: d.segmento,
+    prioridade: d.prioridade,
+    avaliacoes: d.avaliacoes,
+    origem: d.origem,
+    observacoes: d.observacoes,
+    proximoFollowup: d.proximoFollowup,
+    naoContatar: d.naoContatar,
+  };
+}
+
+/** Cadastra um lead à mão: entra em "Não contatado", com o movimento "Cadastro manual". */
 export async function criarLead(entrada: LeadVendasEntrada): Promise<Resultado<{ id: string }>> {
   return acao(async () => {
     const v = leadVendasSchema.safeParse(entrada);
@@ -21,21 +45,15 @@ export async function criarLead(entrada: LeadVendasEntrada): Promise<Resultado<{
       const [lead] = await tx
         .insert(vendasLeads)
         .values({
-          nome: d.nome,
-          buffet: d.buffet,
-          telefoneE164: d.telefone,
-          cidade: d.cidade,
-          origem: d.origem,
-          resumo: d.resumo,
-          proximoFollowup: d.proximoFollowup,
-          naoContatar: d.naoContatar,
+          ...colunas(d),
+          dataEntrada: d.dataEntrada ?? hojeNoFuso(),
           naoContatarEm: d.naoContatar ? new Date() : null,
         })
         .returning({ id: vendasLeads.id });
       await tx.insert(vendasMovimentos).values({
         leadId: lead!.id,
         de: null,
-        para: 'novo',
+        para: 'nao_contatado',
         origem: 'manual',
         motivo: 'Cadastro manual',
       });
@@ -45,7 +63,7 @@ export async function criarLead(entrada: LeadVendasEntrada): Promise<Resultado<{
   });
 }
 
-/** Edita os dados do lead (etapa e tentativas não mudam aqui). */
+/** Edita os dados do lead (a etapa não muda aqui). */
 export async function atualizarLead(id: string, entrada: LeadVendasEntrada): Promise<Resultado> {
   return acao(async () => {
     if (!uuid.safeParse(id).success) return { ok: false, erro: 'Lead não encontrado.' };
@@ -62,14 +80,8 @@ export async function atualizarLead(id: string, entrada: LeadVendasEntrada): Pro
       await tx
         .update(vendasLeads)
         .set({
-          nome: d.nome,
-          buffet: d.buffet,
-          telefoneE164: d.telefone,
-          cidade: d.cidade,
-          origem: d.origem,
-          resumo: d.resumo,
-          proximoFollowup: d.proximoFollowup,
-          naoContatar: d.naoContatar,
+          ...colunas(d),
+          ...(d.dataEntrada ? { dataEntrada: d.dataEntrada } : {}),
           // guarda quando o lead pediu para parar; desmarcar limpa a data
           ...(d.naoContatar !== atual.naoContatar && {
             naoContatarEm: d.naoContatar ? new Date() : null,

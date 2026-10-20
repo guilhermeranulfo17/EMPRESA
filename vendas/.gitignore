@@ -8,3 +8,8 @@ playwright-report/
 supabase/.temp/
 supabase/.branches/
 *.tsbuildinfo
+
+# lista de prospecção (telefones de pessoas reais): nunca vai para o repositório
+import/
+*.xlsx
+*.csv

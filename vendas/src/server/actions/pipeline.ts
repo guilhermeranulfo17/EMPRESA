@@ -10,7 +10,7 @@ import { acao, type Resultado } from './comum';
 
 const uuid = z.uuid();
 
-/** Move o lead de etapa (arrastar no Kanban ou "Mover para"). Grava o movimento com o motivo. */
+/** Muda a etapa do lead (1 toque na lista, no lead ou arrastando no kanban) e grava o histórico. */
 export async function moverLead(
   id: string,
   para: string,
@@ -27,7 +27,14 @@ export async function moverLead(
       if (!atual) return { ok: false, erro: 'Lead não encontrado.' };
       const m = validarMovimento(atual.etapa, para, motivo);
       if (!m.ok) return { ok: false, erro: m.erro };
-      await tx.update(vendasLeads).set({ etapa: m.para }).where(eq(vendasLeads.id, id));
+      await tx
+        .update(vendasLeads)
+        .set({
+          etapa: m.para,
+          ...(m.proximoFollowup === null ? { proximoFollowup: null } : {}),
+          ...(m.limparCadencia ? { ultimoModelo: null } : {}),
+        })
+        .where(eq(vendasLeads.id, id));
       await tx.insert(vendasMovimentos).values({
         leadId: id,
         de: atual.etapa,
@@ -35,7 +42,7 @@ export async function moverLead(
         origem: 'manual',
         motivo: m.motivo,
       });
-      return { ok: true, mensagem: 'Lead movido.', dados: { etapa: m.para } };
+      return { ok: true, mensagem: 'Etapa atualizada.', dados: { etapa: m.para } };
     });
   });
 }

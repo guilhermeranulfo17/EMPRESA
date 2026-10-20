@@ -3,11 +3,12 @@ import type { EtapaVendas } from './etapas';
 
 /*
  * Exemplos que ensinam o copiloto: conversas marcadas como boas ou ruins (com o motivo em uma
- * frase) e as correções do Gui (sugestão → o que ele mandou). Em cada "Gerar" entram até 5 boas,
- * 3 ruins e 3 correções, as mais parecidas com a conversa atual.
+ * frase) e as correções do Gui (sugestão → o que ele mandou). Em cada análise entram as 5 últimas
+ * correções (é assim que a IA aprende o jeito dele) e até 3 boas e 2 ruins, as mais parecidas
+ * com a conversa atual.
  */
 
-export const LIMITE_EXEMPLOS = { bons: 5, ruins: 3, pares: 3 } as const;
+export const LIMITE_EXEMPLOS = { bons: 3, ruins: 2, pares: 5 } as const;
 
 export const avaliacaoSchema = z.object({
   avaliacao: z.enum(['boa', 'ruim']),
@@ -91,11 +92,8 @@ export function selecionarExemplos(
       nota,
       LIMITE_EXEMPLOS.ruins,
     ),
-    pares: melhores(
-      pares,
-      (p) => pontuar(ref, `${p.entrada} ${p.sugerida}`, p.etapa),
-      LIMITE_EXEMPLOS.pares,
-    ),
+    // as correções chegam das mais recentes para as mais antigas
+    pares: pares.slice(0, LIMITE_EXEMPLOS.pares),
   };
 }
 
@@ -132,7 +130,7 @@ export function exemplosParaPrompt(e: ExemplosEscolhidos): string {
   }
   if (e.pares.length) {
     partes.push(
-      '# Correções do Gui (o que você sugeriu → o que ele mandou; aprenda com a diferença)\n' +
+      '# Últimas correções do Gui (o que você sugeriu e o que ele mandou de verdade; escreva como ele)\n' +
         e.pares
           .map((x, i) => `${i + 1}. Sugerido: ${corta(x.sugerida)}\n   Enviado: ${corta(x.final)}`)
           .join('\n'),

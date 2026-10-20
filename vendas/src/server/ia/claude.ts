@@ -3,9 +3,9 @@ import Anthropic from '@anthropic-ai/sdk';
 import { ERROS_IA, type PedidoIa, type RespostaIa } from './tipos';
 
 /*
- * Claude pelo SDK oficial, com saída em JSON Schema (output_config.format). Esforço baixo:
- * a resposta é uma mensagem curta de WhatsApp. Com recusa do classificador de segurança, o
- * próprio servidor tenta outro modelo (fallbacks: "default").
+ * Claude pelo SDK oficial (padrão: Sonnet 5.5), com saída em JSON Schema (output_config.format).
+ * Esforço baixo: a resposta é uma mensagem curta de WhatsApp. Com recusa do classificador de
+ * segurança, o próprio servidor tenta outro modelo (fallbacks: "default").
  */
 export async function gerarClaude(pedido: PedidoIa, modelo: string): Promise<RespostaIa> {
   const base = { provedor: 'claude' as const, modelo };

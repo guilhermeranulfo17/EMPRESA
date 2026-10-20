@@ -2,12 +2,13 @@
 
 import { useState, useTransition } from 'react';
 import { classeCampo } from '@/components/campos';
-import { SaidaCopiloto } from '@/components/saida-copiloto';
+import { formatData } from '@/domain/dates';
+import { ROTULO_ETAPA_VENDAS } from '@/domain/vendas/etapas';
 import { testarIa, type ResultadoTeste } from '@/server/actions/ia';
 
-const EXEMPLO = 'Oi, vi sua mensagem. Quanto custa esse sistema?';
+const EXEMPLO = 'Gui: Oi, tudo bem? Vi o buffet de vocês...\nLead: Oi! Quanto custa esse sistema?';
 
-/** Cola uma mensagem de lead, chama a IA e mostra a saída validada (ou o erro amigável). */
+/** Cola uma conversa de teste, chama a IA e mostra a saída validada (ou o erro amigável). */
 export function TestarIa() {
   const [texto, setTexto] = useState(EXEMPLO);
   const [resultado, setResultado] = useState<ResultadoTeste | null>(null);
@@ -22,11 +23,11 @@ export function TestarIa() {
         }}
       >
         <label htmlFor="mensagem-teste" className="text-sm font-semibold">
-          Mensagem do lead
+          Conversa de teste
         </label>
         <textarea
           id="mensagem-teste"
-          rows={4}
+          rows={6}
           className={classeCampo}
           value={texto}
           onChange={(e) => setTexto(e.target.value)}
@@ -56,7 +57,32 @@ export function TestarIa() {
             A IA respondeu no formato certo ({resultado.provedor}, {resultado.modelo}, prompt{' '}
             {resultado.promptVersao}).
           </p>
-          <SaidaCopiloto saida={resultado.saida} />
+          <dl className="grid gap-3 text-sm">
+            {(
+              [
+                ['Resumo', resultado.saida.resumo],
+                ['Próxima resposta', resultado.saida.mensagem],
+                ['Etapa sugerida', ROTULO_ETAPA_VENDAS[resultado.saida.etapa]],
+                [
+                  'Próximo follow-up',
+                  resultado.saida.proximo_followup
+                    ? formatData(resultado.saida.proximo_followup)
+                    : 'Sem data',
+                ],
+                ['Por quê', resultado.saida.motivo],
+              ] as const
+            ).map(([rotulo, valor]) => (
+              <div key={rotulo}>
+                <dt className="text-muted-foreground text-xs font-semibold uppercase">{rotulo}</dt>
+                <dd
+                  className="whitespace-pre-wrap"
+                  data-testid={rotulo === 'Próxima resposta' ? 'mensagem-ia' : undefined}
+                >
+                  {valor}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
       )}
     </section>

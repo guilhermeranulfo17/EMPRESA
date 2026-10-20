@@ -1,118 +1,93 @@
 import { describe, expect, it } from 'vitest';
 import type { SaidaAgente } from '@/domain/vendas/agente';
-import {
-  foiEditada,
-  linkWhatsApp,
-  mensagemFinalSchema,
-  planoAprovacao,
-} from '@/domain/vendas/decisao';
+import { decisaoSchema, foiEditada, planoAprovacao } from '@/domain/vendas/decisao';
 
 const saida: SaidaAgente = {
-  diagnostico: 'Lead quer saber o preço.',
-  mensagem: 'Custa R$ 97 por mês. Quer testar?',
-  etapa: 'interessado',
   resumo: 'Perguntou o preço.',
-  proximo_followup: '2026-10-20',
-  angulo: 'resposta',
-  passar_para_humano: false,
-  nao_contatar: false,
+  etapa: 'respondeu',
+  mensagem: 'Fica em torno de R$ 250 por mês. Quer ver?',
+  proximo_followup: '2026-10-21',
   motivo: 'Perguntou o preço',
+  nao_contatar: false,
 };
 
-describe('linkWhatsApp', () => {
-  it('monta o wa.me só com dígitos e o texto codificado', () => {
-    expect(linkWhatsApp('+5534999990001', 'Oi Marta! Tudo bem? 50% & mais')).toBe(
-      'https://wa.me/5534999990001?text=Oi%20Marta!%20Tudo%20bem%3F%2050%25%20%26%20mais',
-    );
+const decisao = (d: Partial<{ mensagem: string; etapa: string; proximoFollowup: string }> = {}) =>
+  decisaoSchema.parse({
+    mensagem: saida.mensagem,
+    etapa: saida.etapa,
+    proximoFollowup: saida.proximo_followup,
+    ...d,
   });
-  it('sem telefone não tem link', () => {
-    expect(linkWhatsApp(null, 'oi')).toBeNull();
-    expect(linkWhatsApp('', 'oi')).toBeNull();
-  });
-});
 
 describe('foiEditada', () => {
   it('ignora espaços nas pontas', () => {
     expect(foiEditada('Oi!', '  Oi!\n')).toBe(false);
-    expect(foiEditada('Oi!', 'Oi, Marta!')).toBe(true);
+    expect(foiEditada('Oi!', 'Oi, Paulo!')).toBe(true);
   });
 });
 
-describe('mensagemFinalSchema', () => {
-  it('recusa vazio', () => {
-    expect(mensagemFinalSchema.safeParse('   ').success).toBe(false);
-    expect(mensagemFinalSchema.parse(' oi ')).toBe('oi');
+describe('decisaoSchema', () => {
+  it('recusa mensagem vazia e etapa inexistente; data vazia vira null', () => {
+    expect(
+      decisaoSchema.safeParse({ mensagem: '  ', etapa: 'respondeu', proximoFollowup: '' }).success,
+    ).toBe(false);
+    expect(
+      decisaoSchema.safeParse({ mensagem: 'oi', etapa: 'cliente', proximoFollowup: '' }).success,
+    ).toBe(false);
+    expect(
+      decisaoSchema.parse({ mensagem: ' oi ', etapa: 'respondeu', proximoFollowup: '' }),
+    ).toEqual({
+      mensagem: 'oi',
+      etapa: 'respondeu',
+      proximoFollowup: null,
+    });
   });
 });
 
 describe('planoAprovacao', () => {
-  it('atualiza resumo e follow-up, zera tentativas e move o card com o motivo', () => {
-    expect(
-      planoAprovacao(
-        { etapa: 'abordado', naoContatar: false, tentativas: 2 },
-        saida,
-        'resposta',
-        '2026-10-18',
-      ),
-    ).toEqual({
-      lead: { resumo: 'Perguntou o preço.', proximoFollowup: '2026-10-20', tentativas: 0 },
-      movimento: { de: 'abordado', para: 'interessado', motivo: 'Perguntou o preço' },
+  it('aceitar como veio: resumo e follow-up da IA, etapa anda com o motivo da IA', () => {
+    expect(planoAprovacao({ etapa: 'mensagem_1', naoContatar: false }, saida, decisao())).toEqual({
+      lead: { resumo: 'Perguntou o preço.', proximoFollowup: '2026-10-21' },
+      movimento: { de: 'mensagem_1', para: 'respondeu', motivo: 'Perguntou o preço' },
     });
   });
 
-  it('mesma etapa não gera movimento; sem data limpa o follow-up; resumo vazio não apaga', () => {
+  it('etapa e data editadas pelo Gui valem; o motivo diz que foi ele', () => {
     const p = planoAprovacao(
-      { etapa: 'interessado', naoContatar: false, tentativas: 0 },
-      { ...saida, proximo_followup: '', resumo: '  ' },
-      'resposta',
-      '2026-10-18',
+      { etapa: 'mensagem_1', naoContatar: false },
+      saida,
+      decisao({ etapa: 'em_teste', proximoFollowup: '2026-10-25' }),
     );
-    expect(p).toEqual({ lead: { proximoFollowup: null, tentativas: 0 }, movimento: null });
+    expect(p.lead.proximoFollowup).toBe('2026-10-25');
+    expect(p.movimento).toEqual({
+      de: 'mensagem_1',
+      para: 'em_teste',
+      motivo: 'Etapa escolhida por você ao aceitar a sugestão',
+    });
   });
 
-  it('pedido de parar marca não contatar, tira o follow-up e usa motivo padrão se vier vazio', () => {
+  it('mesma etapa não gera movimento; etapa encerrada apaga o follow-up', () => {
+    expect(
+      planoAprovacao({ etapa: 'respondeu', naoContatar: false }, saida, decisao()).movimento,
+    ).toBeNull();
+    const fechou = planoAprovacao(
+      { etapa: 'em_teste', naoContatar: false },
+      saida,
+      decisao({ etapa: 'fechou' }),
+    );
+    expect(fechou.lead.proximoFollowup).toBeNull();
+  });
+
+  it('pedido para parar marca não contatar e tira o follow-up', () => {
     const p = planoAprovacao(
-      { etapa: 'abordado', naoContatar: false, tentativas: 1 },
-      { ...saida, nao_contatar: true, etapa: 'perdido', motivo: '' },
-      'resposta',
-      '2026-10-18',
+      { etapa: 'mensagem_1', naoContatar: false },
+      { ...saida, nao_contatar: true, etapa: 'sem_interesse' },
+      decisao({ etapa: 'sem_interesse' }),
     );
     expect(p.lead).toEqual({
       resumo: 'Perguntou o preço.',
       proximoFollowup: null,
-      tentativas: 0,
       naoContatar: true,
-    });
-    expect(p.movimento).toEqual({
-      de: 'abordado',
-      para: 'perdido',
-      motivo: 'Sugestão do copiloto aprovada',
-    });
-  });
-});
-
-describe('planoAprovacao de mensagem gerada pela fila', () => {
-  it('abordagem: soma uma tentativa, tira de Novo e volta em 3 dias sem data do copiloto', () => {
-    const p = planoAprovacao(
-      { etapa: 'novo', naoContatar: false, tentativas: 0 },
-      { ...saida, etapa: 'novo', proximo_followup: '', angulo: 'abertura' },
-      'abordagem',
-      '2026-10-18',
-    );
-    expect(p.lead).toMatchObject({ tentativas: 1, proximoFollowup: '2026-10-21' });
-    expect(p.movimento).toMatchObject({ de: 'novo', para: 'abordado' });
-  });
-
-  it('follow-up respeita a data do copiloto e não zera as tentativas', () => {
-    const p = planoAprovacao(
-      { etapa: 'abordado', naoContatar: false, tentativas: 1 },
-      { ...saida, etapa: 'abordado', proximo_followup: '2026-10-25' },
-      'followup',
-      '2026-10-18',
-    );
-    expect(p).toEqual({
-      lead: { resumo: 'Perguntou o preço.', proximoFollowup: '2026-10-25', tentativas: 2 },
-      movimento: null,
     });
   });
 });

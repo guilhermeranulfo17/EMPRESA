@@ -1,41 +1,20 @@
 import { z } from 'zod';
-import { ETAPAS_VENDAS } from './etapas';
+import { ROTULO_SEGMENTO, rotuloCidade, type Segmento } from './campos';
+import { ETAPAS_VENDAS, ROTULO_ETAPA_VENDAS, type EtapaVendas } from './etapas';
 
 /*
- * Saída do copiloto de vendas. O provedor de IA recebe o JSON Schema abaixo e a resposta é
- * validada de novo aqui com Zod (os dois provedores, Gemini e Claude, passam pela mesma
- * validação). Resposta inválida nunca é gravada: vira um erro amigável.
+ * Saída do assistente de IA. O provedor recebe o JSON Schema abaixo e a resposta é validada de
+ * novo aqui com Zod. Resposta inválida nunca é gravada: vira um erro amigável.
+ * (Sugestões antigas tinham mais campos, como diagnostico e angulo: o Zod só ignora.)
  */
 
-export const ANGULOS = [
-  'abertura',
-  'resposta',
-  'lembrete',
-  'valor_novo',
-  'prova_social',
-  'ultima_chamada',
-] as const;
-export type Angulo = (typeof ANGULOS)[number];
-
-export const ROTULO_ANGULO: Record<Angulo, string> = {
-  abertura: 'Abertura',
-  resposta: 'Resposta',
-  lembrete: 'Lembrete',
-  valor_novo: 'Valor novo',
-  prova_social: 'Prova social',
-  ultima_chamada: 'Última chamada',
-};
-
 export const saidaAgenteSchema = z.object({
-  diagnostico: z.string().trim().min(1).max(2000),
-  mensagem: z.string().trim().max(4000),
+  resumo: z.string().trim().min(1).max(2000),
   etapa: z.enum(ETAPAS_VENDAS),
-  resumo: z.string().trim().max(2000),
+  mensagem: z.string().trim().max(4000),
   proximo_followup: z.union([z.literal(''), z.string().regex(/^\d{4}-\d{2}-\d{2}$/)]),
-  angulo: z.enum(ANGULOS),
-  passar_para_humano: z.boolean(),
-  nao_contatar: z.boolean(),
   motivo: z.string().trim().max(500),
+  nao_contatar: z.boolean(),
 });
 export type SaidaAgente = z.infer<typeof saidaAgenteSchema>;
 
@@ -43,33 +22,20 @@ export type SaidaAgente = z.infer<typeof saidaAgenteSchema>;
 export const SCHEMA_SAIDA_AGENTE = {
   type: 'object',
   additionalProperties: false,
-  required: [
-    'diagnostico',
-    'mensagem',
-    'etapa',
-    'resumo',
-    'proximo_followup',
-    'angulo',
-    'passar_para_humano',
-    'nao_contatar',
-    'motivo',
-  ],
+  required: ['resumo', 'etapa', 'mensagem', 'proximo_followup', 'motivo', 'nao_contatar'],
   properties: {
-    diagnostico: { type: 'string' },
-    mensagem: { type: 'string' },
+    resumo: { type: 'string', description: 'Resumo da conversa em no máximo 2 linhas.' },
     etapa: { type: 'string', enum: [...ETAPAS_VENDAS] },
-    resumo: { type: 'string' },
+    mensagem: { type: 'string', description: 'Próxima mensagem para o Gui mandar no WhatsApp.' },
     proximo_followup: { type: 'string', description: 'AAAA-MM-DD ou vazio' },
-    angulo: { type: 'string', enum: [...ANGULOS] },
-    passar_para_humano: { type: 'boolean' },
+    motivo: { type: 'string', description: 'Por que essa etapa e essa data, em uma frase.' },
     nao_contatar: { type: 'boolean' },
-    motivo: { type: 'string' },
   },
 } as const;
 
 export type LeituraSaida = { ok: true; saida: SaidaAgente } | { ok: false; erro: string };
 
-export const ERRO_FORMATO = 'A IA respondeu fora do formato. Tente gerar de novo.';
+export const ERRO_FORMATO = 'A IA respondeu fora do formato. Tente de novo.';
 
 /** Lê o texto do provedor: aceita o JSON puro ou dentro de ```json ... ```. */
 export function lerSaidaAgente(texto: string): LeituraSaida {
@@ -85,7 +51,15 @@ export function lerSaidaAgente(texto: string): LeituraSaida {
   }
   const v = saidaAgenteSchema.safeParse(bruto);
   if (!v.success) return { ok: false, erro: ERRO_FORMATO };
-  return { ok: true, saida: { ...v.data, mensagem: semTravessao(v.data.mensagem) } };
+  return {
+    ok: true,
+    saida: {
+      ...v.data,
+      mensagem: semTravessao(v.data.mensagem),
+      resumo: semTravessao(v.data.resumo),
+      motivo: semTravessao(v.data.motivo),
+    },
+  };
 }
 
 /** Prompt de versão: lê o "versao:" do cabeçalho do arquivo; o corpo é o resto. */
@@ -97,16 +71,19 @@ export function lerArquivoPrompt(conteudo: string): { versao: string; texto: str
 
 export type SituacaoLead = {
   nome: string;
-  buffet: string | null;
   cidade: string | null;
-  etapa: string;
+  uf: string | null;
+  segmento: Segmento | null;
+  categoria: string | null;
+  etapa: EtapaVendas;
   resumo: string | null;
-  tentativas: number;
+  observacoes: string | null;
+  proximoFollowup: string | null;
 };
 
 /**
- * Texto que vai como mensagem do usuário para o agente: base de conhecimento, o lead, o
- * histórico e o que o Gui colou agora. "Hoje" vem do servidor (no fuso de São Paulo).
+ * Texto que vai como mensagem do usuário para a IA: base de conhecimento, o lead, o que já foi
+ * registrado, as correções do Gui e a conversa colada agora. "Hoje" vem do servidor.
  */
 export function montarSituacao(p: {
   hoje: string;
@@ -114,26 +91,31 @@ export function montarSituacao(p: {
   lead: SituacaoLead;
   historico: string[];
   entrada: string;
-  /** Seção de exemplos (boas, ruins e correções); vazia quando não há. */
+  /** Seção de exemplos e correções; vazia quando não há. */
   exemplos?: string;
 }): string {
+  const l = p.lead;
   const lead = [
-    `Nome: ${p.lead.nome}`,
-    p.lead.buffet && `Buffet: ${p.lead.buffet}`,
-    p.lead.cidade && `Cidade: ${p.lead.cidade}`,
-    `Etapa atual: ${p.lead.etapa}`,
-    `Tentativas sem resposta: ${p.lead.tentativas}`,
-    p.lead.resumo && `Resumo até agora: ${p.lead.resumo}`,
+    `Empresa: ${l.nome}`,
+    (l.cidade || l.uf) && `Cidade: ${rotuloCidade(l.cidade, l.uf)}`,
+    l.segmento && `Segmento: ${ROTULO_SEGMENTO[l.segmento]}`,
+    l.categoria && `Categoria no Google: ${l.categoria}`,
+    `Etapa atual: ${ROTULO_ETAPA_VENDAS[l.etapa]} (${l.etapa})`,
+    l.proximoFollowup && `Follow-up marcado: ${l.proximoFollowup}`,
+    l.resumo && `Resumo até agora: ${l.resumo}`,
+    l.observacoes && `Observações do Gui: ${l.observacoes}`,
   ]
     .filter(Boolean)
     .join('\n');
   return [
     `Hoje é ${p.hoje}.`,
-    `# Base de conhecimento (só afirme o que está aqui)\n${p.base}`,
+    ...(p.base.trim()
+      ? [`# Base de conhecimento (só afirme o que está aqui ou no contexto)\n${p.base}`]
+      : []),
     `# Lead\n${lead}`,
-    `# Histórico da conversa\n${p.historico.length ? p.historico.join('\n') : '(sem mensagens ainda)'}`,
+    `# Mensagens já registradas no CRM\n${p.historico.length ? p.historico.join('\n') : '(nenhuma)'}`,
     ...(p.exemplos ? [p.exemplos] : []),
-    `# O que o Gui colou agora\n${p.entrada}`,
+    `# Conversa do WhatsApp colada agora\n${p.entrada}`,
   ].join('\n\n');
 }
 
@@ -145,14 +127,16 @@ const ROTULO_AUTOR: Record<MensagemHistorico['autor'], string> = {
   conversa: 'Conversa colada',
 };
 
-/** Histórico em linhas para o agente ("Lead: ...", "Gui: ..."), na ordem em que aconteceu. */
-export function historicoParaPrompt(mensagens: MensagemHistorico[]): string[] {
-  return mensagens.map((m) => `${ROTULO_AUTOR[m.autor]}: ${m.texto.trim()}`);
+/** Histórico em linhas para a IA ("Lead: ...", "Gui: ..."), na ordem em que aconteceu. */
+export function historicoParaPrompt(mensagens: MensagemHistorico[], limite = 12): string[] {
+  return mensagens
+    .slice(-limite)
+    .map((m) => `${ROTULO_AUTOR[m.autor]}: ${m.texto.trim().slice(0, 1500)}`);
 }
 
 /**
- * Regra do Gui: nada de travessão nas mensagens. O que o copiloto mandar com "—" ou "–" vira
- * vírgula (a regra também está no prompt; aqui é a garantia).
+ * Regra do Gui: nada de travessão. O que a IA mandar com "—" ou "–" vira vírgula (a regra também
+ * está no prompt; aqui é a garantia).
  */
 export function semTravessao(texto: string): string {
   return texto

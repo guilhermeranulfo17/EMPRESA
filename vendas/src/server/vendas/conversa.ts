@@ -68,30 +68,3 @@ export async function carregarSugestaoPendente(leadId: string): Promise<Sugestao
     criadoEm: s.criadoEm,
   };
 }
-
-/** Sugestões pendentes de vários leads de uma vez (Fila do dia). */
-export async function sugestoesPendentes(): Promise<Map<string, SugestaoPendente>> {
-  const linhas = await obterDb()
-    .select()
-    .from(vendasSugestoes)
-    .where(eq(vendasSugestoes.status, 'pendente'))
-    .orderBy(desc(vendasSugestoes.criadoEm));
-  const porLead = new Map<string, SugestaoPendente>();
-  for (const s of linhas) {
-    if (porLead.has(s.leadId)) continue;
-    const saida = saidaAgenteSchema.safeParse(s.saida);
-    if (!saida.success) continue;
-    porLead.set(s.leadId, {
-      id: s.id,
-      leadId: s.leadId,
-      tipo: s.tipo,
-      entrada: s.entrada,
-      saida: saida.data,
-      provedor: s.provedor,
-      modelo: s.modelo,
-      promptVersao: s.promptVersao,
-      criadoEm: s.criadoEm,
-    });
-  }
-  return porLead;
-}

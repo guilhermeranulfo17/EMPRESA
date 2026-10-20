@@ -3,19 +3,24 @@
 import Link from 'next/link';
 import { useEffect, useState, useTransition } from 'react';
 import { formatData } from '@/domain/dates';
+import { rotuloCidade } from '@/domain/vendas/campos';
 import { ETAPAS_VENDAS, ROTULO_ETAPA_VENDAS, type EtapaVendas } from '@/domain/vendas/etapas';
 import { agruparPorEtapa, type CardPipeline } from '@/domain/vendas/pipeline';
+import { ROTAS } from '@/lib/rotas';
 import { cn } from '@/lib/utils';
 import { moverLead } from '@/server/actions/pipeline';
 
+/** Cards por coluna na tela (o resto fica na lista, filtrada pela etapa). */
+const POR_COLUNA = 60;
+
 /**
- * Kanban de vendas. No PC as 7 colunas ficam lado a lado e o card é arrastado (arrastar nativo
+ * Funil em kanban. No PC as 7 colunas ficam lado a lado e o card é arrastado (arrastar nativo
  * do navegador). No celular cada etapa é uma aba e o card tem "Mover para". A mudança aparece na
- * hora e volta atrás se o servidor recusar.
+ * hora, entra no histórico e volta atrás se o servidor recusar.
  */
 export function Kanban({ inicial }: { inicial: CardPipeline[] }) {
   const [cards, setCards] = useState(inicial);
-  const [aba, setAba] = useState<EtapaVendas>('novo');
+  const [aba, setAba] = useState<EtapaVendas>('nao_contatado');
   const [sobre, setSobre] = useState<EtapaVendas | null>(null);
   const [erro, setErro] = useState('');
   const [salvando, iniciar] = useTransition();
@@ -111,7 +116,7 @@ export function Kanban({ inicial }: { inicial: CardPipeline[] }) {
                   Arraste um card para cá
                 </p>
               )}
-              {grupos[etapa].map((c) => (
+              {grupos[etapa].slice(0, POR_COLUNA).map((c) => (
                 <article
                   key={c.id}
                   draggable
@@ -120,17 +125,18 @@ export function Kanban({ inicial }: { inicial: CardPipeline[] }) {
                   className="bg-card rounded-control flex cursor-grab flex-col gap-1 border p-3 text-sm active:cursor-grabbing"
                 >
                   <Link
-                    href={`/leads/${c.id}`}
+                    href={ROTAS.lead(c.id)}
                     draggable={false}
                     className="font-semibold hover:underline"
                   >
+                    {c.prioridade && (
+                      <span className="text-primary mr-1.5 font-bold">{c.prioridade}</span>
+                    )}
                     {c.nome}
                   </Link>
-                  {((c.buffet && c.buffet !== c.nome) || c.cidade) && (
+                  {(c.cidade || c.uf) && (
                     <span className="text-muted-foreground text-xs">
-                      {[c.buffet !== c.nome ? c.buffet : null, c.cidade]
-                        .filter(Boolean)
-                        .join(' · ')}
+                      {rotuloCidade(c.cidade, c.uf)}
                     </span>
                   )}
                   <span className="flex flex-wrap gap-1.5 text-xs">
@@ -157,6 +163,14 @@ export function Kanban({ inicial }: { inicial: CardPipeline[] }) {
                   </label>
                 </article>
               ))}
+              {grupos[etapa].length > POR_COLUNA && (
+                <Link
+                  href={`${ROTAS.leads}?etapa=${etapa}`}
+                  className="text-muted-foreground px-2 py-3 text-center text-xs font-semibold"
+                >
+                  Mais {grupos[etapa].length - POR_COLUNA} na lista
+                </Link>
+              )}
             </section>
           ))}
         </div>

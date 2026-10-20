@@ -15,7 +15,7 @@ export type ResultadoTeste =
 const entradaSchema = z
   .string()
   .trim()
-  .min(1, 'Cole uma mensagem para testar.')
+  .min(1, 'Cole uma conversa para testar.')
   .max(4000, 'Texto longo demais para o teste.');
 
 /**
@@ -32,12 +32,15 @@ export async function testarIa(texto: string): Promise<ResultadoTeste> {
       hoje: hojeNoFuso(),
       base,
       lead: {
-        nome: 'Lead de teste',
-        buffet: 'Buffet de teste',
+        nome: 'Buffet de teste',
         cidade: null,
-        etapa: 'abordado',
+        uf: null,
+        segmento: null,
+        categoria: null,
+        etapa: 'mensagem_1',
         resumo: null,
-        tentativas: 0,
+        observacoes: null,
+        proximoFollowup: null,
       },
       historico: [],
       entrada: entrada.data,

@@ -48,26 +48,27 @@ describe('selecionarExemplos', () => {
     ),
     ...Array.from({ length: 5 }, (_, i) => ex(`r${i}`, 'ruim', 'tanto faz')),
   ];
-  const pares: ParEditado[] = Array.from({ length: 4 }, (_, i) => ({
+  // as correções chegam das mais recentes para as mais antigas
+  const pares: ParEditado[] = Array.from({ length: 7 }, (_, i) => ({
     sugestaoId: `p${i}`,
-    entrada: 'oi',
+    entrada: i === 6 ? 'quanto custa' : 'oi',
     sugerida: 's',
     final: 'f',
-    etapa: 'novo',
+    etapa: 'mensagem_1',
   }));
 
-  it('respeita os limites: 5 boas, 3 ruins e 3 correções', () => {
+  it('respeita os limites: 3 boas, 2 ruins e as 5 últimas correções', () => {
     const s = selecionarExemplos({ texto: 'quanto custa', etapa: 'respondeu' }, exemplos, pares);
-    expect(s.bons).toHaveLength(5);
-    expect(s.ruins).toHaveLength(3);
-    expect(s.pares).toHaveLength(3);
-    expect(idsUsados(s)).toHaveLength(11);
+    expect(s.bons).toHaveLength(3);
+    expect(s.ruins).toHaveLength(2);
+    expect(s.pares.map((p) => p.sugestaoId)).toEqual(['p0', 'p1', 'p2', 'p3', 'p4']);
+    expect(idsUsados(s)).toHaveLength(10);
   });
 
-  it('o mais parecido vem primeiro; no empate, os mais recentes (ordem recebida)', () => {
+  it('nos exemplos, o mais parecido vem primeiro; no empate, os mais recentes (ordem recebida)', () => {
     const s = selecionarExemplos({ texto: 'quanto custa', etapa: 'respondeu' }, exemplos, pares);
     expect(s.bons[0]!.sugestaoId).toBe('b6');
-    expect(s.bons.slice(1).map((b) => b.sugestaoId)).toEqual(['b0', 'b1', 'b2', 'b3']);
+    expect(s.bons.slice(1).map((b) => b.sugestaoId)).toEqual(['b0', 'b1']);
   });
 });
 
@@ -78,7 +79,13 @@ describe('exemplosParaPrompt', () => {
       bons: [ex('b1', 'boa', 'quanto custa')],
       ruins: [ex('r1', 'ruim', 'oi')],
       pares: [
-        { sugestaoId: 'p1', entrada: 'oi', sugerida: 'Olá!', final: 'Oi Marta!', etapa: 'novo' },
+        {
+          sugestaoId: 'p1',
+          entrada: 'oi',
+          sugerida: 'Olá!',
+          final: 'Oi Marta!',
+          etapa: 'mensagem_1',
+        },
       ],
     });
     expect(secao).toContain('Exemplos que o Gui aprovou');
@@ -88,13 +95,23 @@ describe('exemplosParaPrompt', () => {
     const texto = montarSituacao({
       hoje: '2026-10-18',
       base: 'b',
-      lead: { nome: 'A', buffet: null, cidade: null, etapa: 'Novo', resumo: null, tentativas: 0 },
+      lead: {
+        nome: 'Buffet A',
+        cidade: null,
+        uf: null,
+        segmento: null,
+        categoria: null,
+        etapa: 'mensagem_1',
+        resumo: null,
+        observacoes: null,
+        proximoFollowup: null,
+      },
       historico: [],
       entrada: 'quanto custa?',
       exemplos: secao,
     });
     expect(texto.indexOf('Exemplos que o Gui aprovou')).toBeLessThan(
-      texto.indexOf('# O que o Gui colou agora'),
+      texto.indexOf('# Conversa do WhatsApp colada agora'),
     );
   });
 });

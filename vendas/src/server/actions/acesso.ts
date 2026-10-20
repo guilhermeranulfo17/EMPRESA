@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { emailPermitido } from '@/domain/acesso';
 import { criarClienteSupabase } from '@/lib/supabase/server';
+import { ROTAS } from '@/lib/rotas';
 import { emailsPermitidos } from '@/server/env';
 
 const ERRO = 'E-mail ou senha incorretos.';
@@ -19,7 +20,7 @@ export async function entrar(entrada: { email: string; senha: string }): Promise
     password: v.data.senha,
   });
   if (error) return { erro: ERRO };
-  redirect('/');
+  redirect(ROTAS.hoje);
 }
 
 export async function sair(): Promise<void> {

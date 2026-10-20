@@ -24,7 +24,7 @@ export type ResultadoCopiloto =
   | { ok: false; erro: string; provedor: Provedor; modelo: string; promptVersao: string };
 
 export async function carregarPrompt(): Promise<{ versao: string; texto: string }> {
-  const versao = (process.env.VENDAS_PROMPT_VERSAO || 'v2').replace(/[^a-z0-9-]/gi, '');
+  const versao = (process.env.VENDAS_PROMPT_VERSAO || 'v3').replace(/[^a-z0-9-]/gi, '');
   const arquivo = path.join(process.cwd(), 'prompts', `copiloto.${versao}.md`);
   return lerArquivoPrompt(await readFile(arquivo, 'utf8'));
 }

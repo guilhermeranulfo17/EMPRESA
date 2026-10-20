@@ -1,19 +1,21 @@
-import { ETAPAS_VENDAS, type EtapaVendas } from './etapas';
+import type { Prioridade } from './campos';
+import { encerrada, ETAPAS_VENDAS, type EtapaVendas } from './etapas';
 
 /*
- * Pipeline (Kanban) de vendas. Mover o card grava a etapa nova e um movimento com origem e
- * motivo. Qualquer etapa pode ir para qualquer outra (é o Gui corrigindo); só não registra
- * movimento para a mesma etapa.
+ * Mudança de etapa à mão (1 toque na lista, no lead ou arrastando no kanban). Grava a etapa nova
+ * e um movimento com origem e motivo. Qualquer etapa pode ir para qualquer outra (é o Gui
+ * corrigindo); só não registra movimento para a mesma etapa.
  */
 
-export const MOTIVO_MANUAL = 'Ajuste manual no pipeline';
+export const MOTIVO_MANUAL = 'Mudança manual';
 export const LIMITE_MOTIVO = 500;
 
 export type CardPipeline = {
   id: string;
   nome: string;
-  buffet: string | null;
   cidade: string | null;
+  uf: string | null;
+  prioridade: Prioridade | null;
   etapa: EtapaVendas;
   proximoFollowup: string | null;
   naoContatar: boolean;
@@ -32,9 +34,17 @@ export function agruparPorEtapa<T extends { etapa: EtapaVendas }>(
 }
 
 export type Movimento =
-  { ok: true; para: EtapaVendas; motivo: string } | { ok: false; erro: string };
+  | {
+      ok: true;
+      para: EtapaVendas;
+      motivo: string;
+      /** undefined = mantém o follow-up; null = apaga. */
+      proximoFollowup?: null;
+      limparCadencia: boolean;
+    }
+  | { ok: false; erro: string };
 
-/** Valida o movimento pedido. Motivo vazio vira o padrão do ajuste manual. */
+/** Valida o movimento pedido. Encerrar ou voltar para Não contatado apaga o follow-up. */
 export function validarMovimento(de: EtapaVendas, para: string, motivo?: string): Movimento {
   if (!(ETAPAS_VENDAS as readonly string[]).includes(para)) {
     return { ok: false, erro: 'Etapa inválida.' };
@@ -44,5 +54,13 @@ export function validarMovimento(de: EtapaVendas, para: string, motivo?: string)
   if (texto.length > LIMITE_MOTIVO) {
     return { ok: false, erro: `Use no máximo ${LIMITE_MOTIVO} caracteres no motivo.` };
   }
-  return { ok: true, para: para as EtapaVendas, motivo: texto || MOTIVO_MANUAL };
+  const etapa = para as EtapaVendas;
+  const zera = etapa === 'nao_contatado' || encerrada(etapa);
+  return {
+    ok: true,
+    para: etapa,
+    motivo: texto || MOTIVO_MANUAL,
+    ...(zera ? { proximoFollowup: null } : {}),
+    limparCadencia: etapa === 'nao_contatado',
+  };
 }

@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { entrarComoGui } from './apoio';
+import { BASE, entrarComoGui } from './apoio';
 import { noBanco } from './banco';
 
 test.beforeEach(async () => {
@@ -8,7 +8,7 @@ test.beforeEach(async () => {
 
 test('adiciona, edita, desativa e exclui itens da base de conhecimento', async ({ page }) => {
   await entrarComoGui(page);
-  await page.getByTestId('aba-Conhecimento').click();
+  await page.goto(`${BASE}/conhecimento`);
   const form = page.getByTestId('form-conhecimento');
 
   // produto

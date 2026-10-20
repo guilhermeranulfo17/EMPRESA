@@ -1,7 +1,5 @@
 'use client';
 
-import { mascaraTelefoneBR } from '@/domain/mascara';
-import { formatPhoneBR } from '@/domain/phone';
 import { cn } from '@/lib/utils';
 
 export const classeCampo =
@@ -57,32 +55,5 @@ export function CampoCheck({
         {dica && <span className="text-muted-foreground block text-xs">{dica}</span>}
       </span>
     </label>
-  );
-}
-
-/** Telefone com máscara BR; mostra um E.164 salvo já formatado (o servidor converte de volta). */
-export function CampoTelefone({
-  id,
-  valor,
-  onChange,
-  invalido,
-}: {
-  id: string;
-  valor: string;
-  onChange: (texto: string) => void;
-  invalido?: boolean;
-}) {
-  return (
-    <input
-      id={id}
-      type="tel"
-      inputMode="tel"
-      autoComplete="tel-national"
-      placeholder="(34) 99135-5450"
-      aria-invalid={invalido || undefined}
-      className={classeCampo}
-      value={valor.startsWith('+55') ? formatPhoneBR(valor) : valor}
-      onChange={(e) => onChange(mascaraTelefoneBR(e.target.value))}
-    />
   );
 }
