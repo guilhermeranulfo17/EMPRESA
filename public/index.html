@@ -73,6 +73,18 @@
         <button type="button" class="btn" id="btn-fora" hidden>Ver o prédio por fora</button>
         <button type="button" class="btn" id="btn-recentrar" hidden>Recentralizar</button>
       </div>
+      <div class="acoes-predio" id="acoes-predio" hidden>
+        <button type="button" class="btn" id="btn-mapa" hidden>Mapa dos leads</button>
+        <button type="button" class="btn" id="btn-reuniao">Reunião agora</button>
+        <button type="button" class="btn" id="btn-sprint">Sprint de 25 min</button>
+        <button type="button" class="btn" id="btn-filmar">Filmar</button>
+        <button type="button" class="btn" id="btn-som" aria-pressed="false">Som: desligado</button>
+        <button type="button" class="btn" id="btn-planilha3d">Atualizar planilha</button>
+        <button type="button" class="btn" id="btn-horario">Horário: real</button>
+        <button type="button" class="btn" id="btn-qualidade">Qualidade: alta</button>
+        <button type="button" class="btn" id="btn-comemorar">Ver comemoração</button>
+        <p class="status-predio" id="status-predio" aria-live="polite"></p>
+      </div>
       <div id="cena3d" class="cena3d" hidden>
         <p class="cena-status" id="cena-status">Montando o escritório em 3D…</p>
         <div class="portaria" id="portaria" hidden>
@@ -81,6 +93,23 @@
           <p id="portaria-empresas" class="portaria-empresas"></p>
           <button type="button" class="btn btn-forte" id="btn-entrar">Entrar no prédio</button>
         </div>
+        <section class="cartao3d" id="cartao3d" hidden aria-labelledby="cartao3d-titulo">
+          <div class="cartao3d-cab">
+            <h3 id="cartao3d-titulo"></h3>
+            <button type="button" class="btn btn-mini" id="cartao3d-fechar" aria-label="Fechar">Fechar</button>
+          </div>
+          <p id="cartao3d-sub" class="dica-linha"></p>
+          <ul id="cartao3d-lista"></ul>
+        </section>
+        <div class="hud-sprint" id="hud-sprint" hidden>
+          <span class="hud-rotulo">Sprint</span>
+          <b id="hud-tempo">25:00</b>
+          <span id="hud-abordagens">0 abordagens</span>
+          <button type="button" class="btn btn-forte" id="hud-mais">+1 abordagem</button>
+          <button type="button" class="btn" id="hud-encerrar">Encerrar</button>
+        </div>
+        <p class="aviso3d" id="aviso3d" hidden role="status"></p>
+        <button type="button" class="btn btn-parar-filmagem" id="btn-parar-filmagem" hidden>Parar filmagem (Esc)</button>
       </div>
       <section class="planta" id="planta" aria-label="Planta do escritório"></section>
     </section>

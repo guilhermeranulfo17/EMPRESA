@@ -574,11 +574,16 @@ async function montarCena() {
         setores: estado.setores,
         agentes: estado.agentes,
         aoClicarAgente: (id) => alternarFiltro('agente', id),
-        aoClicarCaixa: () => trocarAba('caixa'),
+        aoClicarCaixa: () => (APENAS_SIMULACAO ? null : trocarAba('caixa')),
         aoMudarModo: atualizarModoCena,
+        aoInfo: (info) => cena.predio?.mostrarCartao(info),
+        aoAviso: (texto) => cena.predio?.avisar(texto),
         grupo: estado.empresa.grupo ?? 'Pro Hunter Comercial',
         empresas: [estado.empresa.nome],
       });
+      const { iniciarPredio } = await import('./predio.js');
+      cena.predio = iniciarPredio({ api: cena.api, usar, lerPlanilha, normalizarStatus, $ });
+      $('#acoes-predio').hidden = false;
       cena.ids = Object.keys(estado.agentes).join(',');
       $('#cena-status').hidden = true;
       atualizarModoCena(cena.api.modo);
@@ -607,6 +612,8 @@ $('#btn-fora').addEventListener('click', () => cena.api?.sair());
 // O que aparece em volta da cena depende de onde a câmera está: na rua, entrando ou dentro do andar.
 function atualizarModoCena(modo) {
   const dentro = cena.ativa && modo === 'dentro';
+  cena.predio?.aoMudarModo(modo);
+  $('#acoes-predio').hidden = !cena.ativa || !cena.predio;
   $('#portaria').hidden = !(cena.ativa && modo === 'fora');
   $('#portaria-nome').textContent = estado?.empresa.grupo ?? 'Pro Hunter Comercial';
   $('#portaria-empresas').textContent = `Empresas no prédio: ${estado?.empresa.nome ?? ''}`;

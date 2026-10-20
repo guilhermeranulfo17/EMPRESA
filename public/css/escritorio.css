@@ -797,3 +797,83 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; }
 .apenas-simulacao .numeros,
 .apenas-simulacao #painel-ia { display: none; }
 .apenas-simulacao .layout { grid-template-columns: minmax(0, 1fr); }
+
+/* ---------- prédio: ações, cartão de informação, sprint e filmagem ---------- */
+.acoes-predio { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.acoes-predio .btn { font-size: 12.5px; padding: 5px 10px; }
+.acoes-predio .btn[aria-pressed="true"] { border-color: var(--ok); color: var(--ok); }
+.status-predio { margin: 0; flex: 1 1 260px; color: var(--tinta-2); font-size: 12px; }
+.status-predio:empty { display: none; }
+.btn-mini { font-size: 12px; padding: 3px 8px; }
+.cartao3d {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 4;
+  width: min(340px, calc(100% - 24px));
+  max-height: calc(100% - 24px);
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--superficie) 95%, transparent);
+  border: 1px solid var(--linha);
+  box-shadow: var(--sombra);
+}
+.cartao3d-cab { display: flex; align-items: start; justify-content: space-between; gap: 10px; }
+.cartao3d h3 { margin: 0; font: 700 16px/1.25 var(--display); text-wrap: balance; }
+.cartao3d ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; overflow-y: auto; }
+.cartao3d li { display: grid; gap: 3px; padding-top: 8px; border-top: 1px solid var(--superficie-2); font-size: 13px; }
+.cartao3d li span { color: var(--tinta-2); font-size: 12.5px; }
+.cartao3d li .btn { justify-self: start; font-variant-numeric: tabular-nums; }
+.hud-sprint {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: calc(100% - 24px);
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--superficie) 95%, transparent);
+  border: 1px solid var(--linha);
+  box-shadow: var(--sombra);
+}
+.hud-rotulo { font: 600 10.5px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--tinta-3); }
+.hud-sprint b { font: 700 24px/1 var(--display); font-variant-numeric: tabular-nums; }
+.hud-sprint span { font-size: 13px; color: var(--tinta-2); font-variant-numeric: tabular-nums; }
+.aviso3d {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 5;
+  margin: 0;
+  max-width: min(520px, calc(100% - 32px));
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--ceo);
+  color: var(--ceo-tinta);
+  font-size: 13px;
+  box-shadow: var(--sombra);
+}
+.btn-parar-filmagem { position: absolute; top: 12px; right: 12px; z-index: 6; opacity: 0.25; transition: opacity 0.2s; }
+.btn-parar-filmagem:hover, .btn-parar-filmagem:focus-visible { opacity: 1; }
+.rotulo3d.voce { background: var(--ceo); border-color: var(--ceo); color: var(--ceo-tinta); }
+.rotulo3d.voce .ponto { background: var(--ceo-tinta); }
+
+/* modo filmagem: só a cena, ocupando a tela inteira */
+body.filmando .topo,
+body.filmando .palco-barra,
+body.filmando .acoes-predio,
+body.filmando .aviso,
+body.filmando .portaria,
+body.filmando .cartao3d,
+body.filmando .hud-sprint { display: none !important; }
+body.filmando .cena3d { position: fixed; inset: 0; z-index: 50; border-radius: 0; border: 0; height: 100%; min-height: 0; }

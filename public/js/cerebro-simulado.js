@@ -3,88 +3,118 @@
 
 const sortear = (lista) => lista[Math.floor(Math.random() * lista.length)];
 
+// Falas sobre o momento real da Orkestra (oferta de validação, leads quentes, Uberlândia, preço, sistema).
+// Escritas à mão: não gastam IA. Os agentes sugerem e perguntam; quem executa é o CEO.
 const BANCO = {
   comercial: {
-    status: ['Montando lista de buffets móveis', 'Revisando conversas da IA vendedora', 'Preparando apresentação do sistema', 'Atualizando o funil da semana', 'Testando nova mensagem fria', 'Contando quanto falta para a meta do mês'],
+    status: ['Revendo a lista de buffets quentes', 'Separando quem pediu proposta', 'Ajustando a mensagem da oferta de validação', 'Conferindo o funil na planilha', 'Priorizando os buffets de Uberlândia', 'Preparando o roteiro do follow-up'],
     perguntas: [
-      { para: 'marketing', texto: 'Quando o buffet recebe nossa mensagem fria, ele vai olhar o nosso Instagram. O perfil já mostra o orçamento interativo funcionando?' },
-      { para: 'financeiro', texto: 'Para bater 5 vendas no mês, quantas apresentações vocês acham que precisamos fazer? Quero montar a meta por semana.' },
-      { para: 'suporte', texto: 'Quando fecharmos os primeiros buffets, em quanto tempo conseguimos deixar o orçamento interativo deles no ar? Quero prometer isso na venda.' },
-      { para: 'marketing', texto: 'Preciso de um vídeo curto de 30 segundos mostrando um orçamento sendo montado. A IA vendedora pode mandar isso no meio da conversa.' },
-      { para: 'financeiro', texto: 'Posso oferecer o primeiro mês com desconto para quem fechar ainda esta semana, ou isso atrapalha a meta de MRR?' },
-      { para: 'suporte', texto: 'Qual informação do buffet vocês precisam para a implantação? Já peço tudo no fechamento para ninguém esperar.' },
+      { para: 'marketing', texto: 'Para os 22 buffets que já conversaram com a gente, a mensagem nova precisa explicar a oferta em duas linhas: catálogo montado de graça e link na bio por 14 dias. Me ajuda a enxugar?' },
+      { para: 'financeiro', texto: 'Se um buffet aceitar o teste hoje, o preço de fundador do dia 14 já está decidido? Não quero improvisar o valor na conversa.' },
+      { para: 'suporte', texto: 'Quantos catálogos a gente consegue montar por semana sem atrasar ninguém? Preciso saber antes de oferecer o teste para mais buffets.' },
+      { para: 'marketing', texto: 'O Instagram da Orkestra ainda fala em CRM? Quem recebe a nossa mensagem vai olhar o perfil antes de responder.' },
+      { para: 'ti', texto: 'O domínio próprio já está no ar? Mandar o link de preview para um buffet desconfiado derruba a conversa.' },
+      { para: 'financeiro', texto: 'Quanto vale para um buffet fechar um evento a mais por ano? Quero levar essa conta pronta na conversa.' },
+      { para: 'suporte', texto: 'Quando o buffet diz que o preço muda muito, como a gente explica que o catálogo dá conta disso?' },
     ],
     ideias: [
-      { titulo: 'Oferta de apresentação de 15 minutos', descricao: 'Quando o buffet hesitar na conversa com a IA, ela oferece uma apresentação curta de 15 minutos com a Júlia. Medimos quantas apresentações viram venda.' },
-      { titulo: 'Cadência de 3 toques no WhatsApp', descricao: 'Mensagem de abertura, um vídeo do orçamento interativo dois dias depois e um último contato com prazo. Comercial escreve, Marketing grava o vídeo, e medimos a taxa de resposta de cada toque.' },
-      { titulo: 'Lista de buffets por região', descricao: 'Começar a prospecção por uma região de cada vez, para gerar conversas e depois indicações entre buffets que se conhecem. Nina mapeia, Bianca prospecta.' },
+      { titulo: 'Zerar as propostas devidas primeiro', descricao: 'Antes de abordar gente nova, mandar o material para quem pediu e ficou sem resposta. Já são conversas quentes; esquecer delas é o maior desperdício do funil.' },
+      { titulo: 'Follow-up com prazo de 48 horas', descricao: 'Toda conversa aberta ganha um próximo passo com data na planilha. Se passar de 48 horas sem retorno, o buffet volta para a pilha do dia.' },
+      { titulo: 'Oferecer o teste para os quentes fora de Uberlândia', descricao: 'Catálogo e link na bio funcionam a distância. Os buffets de BH, Goiânia e Fortaleza já conhecem a Orkestra e podem entrar no teste agora.' },
     ],
-    respostas: ['Do lado comercial, consigo testar isso na prospecção desta semana.', 'Isso vira argumento na conversa da IA. Vou ajustar o roteiro hoje.', 'Faz sentido. Trago no fim da semana o impacto disso no funil.', 'Boa! Vou separar os buffets que responderam e testar com eles primeiro.'],
-    apoios: ['Apoio. Isso ajuda direto a meta de 5 vendas por mês.', 'Apoio, os buffets vão entender mais rápido o valor do orçamento interativo.', 'Apoio. Dá para medir no funil em duas semanas.'],
-    questionamentos: ['Gosto, mas isso não tira tempo da prospecção? A meta de 5 vendas depende de volume de conversas.', 'Como a IA vendedora explica isso para o buffet sem complicar a conversa?'],
-    ceo: ['Entendido! Vou alinhar o time comercial e trago o plano aqui na caixa.', 'Recebido. Já estou ajustando a prospecção e o roteiro da IA para isso.', 'Pode deixar. Vou puxar Marketing e Financeiro para fecharmos um plano.'],
+    respostas: ['Do lado comercial, encaixo isso nas abordagens desta semana.', 'Faz sentido. Vou sugerir ao CEO colocar isso na planilha como próximo passo.', 'Boa, isso vira argumento na conversa com o dono do buffet.', 'Anotado. Ajusto a mensagem da oferta com isso.'],
+    apoios: ['Apoio. Isso coloca mais buffets no teste de 14 dias.', 'Apoio, ataca direto o follow-up que ficou parado.', 'Apoio. Dá para medir na planilha em uma semana.'],
+    questionamentos: ['Gosto, mas isso não tira tempo das conversas com os buffets quentes?', 'Como isso aparece para o dono do buffet sem complicar a oferta?'],
+    ceo: ['Entendido. Sugiro marcar isso como próximo passo na planilha.', 'Recebido. Vou propor a ordem das abordagens por prioridade.', 'Combinado. Trago a lista de quem falar primeiro.'],
   },
   marketing: {
-    status: ['Gravando vídeo do orçamento interativo', 'Ajustando a bio do Instagram', 'Escrevendo a promessa principal', 'Pesquisando grupos de buffets', 'Mapeando fornecedores de festa', 'Planejando posts da semana'],
+    status: ['Reescrevendo a bio do Instagram', 'Roteirizando o vídeo de 60 segundos', 'Revisando a frase principal', 'Montando o post do buffet demo', 'Separando prints do orçamento no celular', 'Pesquisando como os buffets mostram preço'],
     perguntas: [
-      { para: 'comercial', texto: 'Qual frase da IA vendedora mais faz o buffet responder? Quero usar a mesma linguagem nos posts.' },
-      { para: 'suporte', texto: 'Quando tivermos o primeiro cliente usando, podemos gravar a tela do orçamento dele? Um caso real vale mais que qualquer anúncio.' },
-      { para: 'financeiro', texto: 'Temos verba para testar um anúncio pequeno para buffets, ou seguimos só com prospecção fria e conteúdo por enquanto?' },
-      { para: 'comercial', texto: 'Buffet móvel costuma perguntar primeiro sobre preço ou sobre como funciona? Isso muda o roteiro do vídeo.' },
-      { para: 'suporte', texto: 'Quais partes do sistema os clientes novos acham mais fáceis? Quero destacar isso no conteúdo.' },
-      { para: 'financeiro', texto: 'Uma parceria com fornecedor de festa que indique buffets pode ganhar comissão? Qual valor faz sentido com o plano de R$ 347?' },
+      { para: 'comercial', texto: 'Qual objeção os buffets mais repetiram: preço aberto, preço que muda ou já respondo rápido? Quero responder isso em conteúdo.' },
+      { para: 'suporte', texto: 'Quando o primeiro buffet colocar o link na bio, posso gravar a tela do orçamento dele? Um caso real vale mais que qualquer post.' },
+      { para: 'ti', texto: 'A página demo abre bem no celular? É o principal material de venda e precisa carregar em menos de 3 segundos.' },
+      { para: 'financeiro', texto: 'Segura o tráfego pago até a oferta estar validada, certo? Prefiro gastar zero agora e investir quando tiver número real.' },
+      { para: 'comercial', texto: 'Posso usar a frase: o cliente monta a festa, vê o preço e cai no seu WhatsApp já qualificado? Testa na próxima conversa e me diz se pegou.' },
     ],
     ideias: [
-      { titulo: 'Perfil do Instagram como vitrine', descricao: 'Deixar no perfil da Orkestra 3 vídeos fixos mostrando um orçamento interativo sendo montado. Todo buffet que recebe mensagem fria vai olhar o perfil antes de responder.' },
-      { titulo: 'Parceria com fornecedores de festa', descricao: 'Fornecedores de decoração, bebidas e locação falam com buffets todo dia. Oferecer uma comissão por indicação que vire cliente. Nina fecha as parcerias e o Financeiro define o valor.' },
-      { titulo: 'Página de demonstração do orçamento', descricao: 'Um link com um orçamento interativo de exemplo que a IA vendedora manda no WhatsApp, para o buffet testar como o cliente dele veria.' },
+      { titulo: 'Vídeo de 60 segundos do cliente montando a festa', descricao: 'Gravar a tela do celular montando um orçamento no buffet demo, do link da bio até o WhatsApp. Serve para o Instagram e para mandar na abordagem.' },
+      { titulo: 'Trocar CRM por orçamento automático em todo lugar', descricao: 'Logo, bio, destaque e página demo falando a mesma coisa: orçamento automático no link da bio. Quem chega pelo nosso contato precisa entender em 5 segundos.' },
     ],
-    respostas: ['Ótimo insumo! Vou transformar isso em conteúdo esta semana.', 'Anotado. Ajusto a mensagem principal com base nisso.', 'Consigo um vídeo de teste em dois dias e mostro aqui.', 'Isso muda o roteiro. Vou reescrever usando as palavras que os buffets usam.'],
-    apoios: ['Apoio! Isso dá prova para o buffet confiar na gente.', 'Apoio. Melhora a qualidade das conversas, não só a quantidade.', 'Apoio. Consigo fazer sem gastar verba.'],
-    questionamentos: ['Qual é a promessa principal? Sem uma frase clara, o buffet não entende o valor.', 'Como vamos medir isso? Preciso saber se trouxe conversa ou venda.'],
-    ceo: ['Recebido! Vou ajustar o plano de marketing e compartilho aqui.', 'Entendido. Já estou revendo conteúdo e mensagem com esse foco.', 'Pode deixar. Monto uma proposta com o Comercial ainda hoje.'],
+    respostas: ['Ótimo insumo. Transformo isso em roteiro de conteúdo.', 'Anotado. Ajusto a mensagem principal com base nisso.', 'Isso muda o roteiro do vídeo. Vou usar as palavras que os buffets usam.', 'Boa. Isso entra na bio.'],
+    apoios: ['Apoio. Dá prova para o buffet confiar.', 'Apoio, melhora a primeira impressão de quem recebe a mensagem.', 'Apoio. Não custa nada fazer.'],
+    questionamentos: ['Qual é a frase que o buffet vai lembrar? Sem ela, o resto não pega.', 'Como medimos se isso trouxe conversa?'],
+    ceo: ['Recebido. Monto o rascunho para você aprovar.', 'Entendido. Reviso a mensagem com esse foco.', 'Pode deixar comigo a proposta de texto.'],
   },
   suporte: {
-    status: ['Preparando o roteiro de implantação', 'Montando checklist do cliente novo', 'Escrevendo tutorial do orçamento', 'Organizando modelos de cardápio', 'Planejando acompanhamento dos primeiros clientes', 'Revisando perguntas que podem surgir'],
+    status: ['Revisando o roteiro de onboarding', 'Montando o checklist do catálogo', 'Preparando o acompanhamento dos dias 3, 7 e 14', 'Conferindo regras de preço por convidado', 'Escrevendo o relatório de 14 dias', 'Separando orçamentos antigos para teste'],
     perguntas: [
-      { para: 'comercial', texto: 'O que a IA vendedora está prometendo sobre a implantação? Quero garantir que a gente cumpra exatamente isso.' },
-      { para: 'marketing', texto: 'Podemos fazer um vídeo de boas-vindas curto para o cliente novo? Ajuda o buffet a configurar sozinho os primeiros pacotes.' },
-      { para: 'financeiro', texto: 'A cobrança começa no dia da venda ou quando o orçamento do buffet entra no ar? Preciso explicar isso no onboarding.' },
-      { para: 'comercial', texto: 'Na apresentação, os buffets perguntam sobre cardápios com muitas opções? Quero ter um modelo pronto.' },
-      { para: 'marketing', texto: 'Quando o primeiro cliente fechar uma festa pelo orçamento interativo, vocês querem essa história para um post?' },
-      { para: 'financeiro', texto: 'Se um cliente novo pedir para pausar no mês sem festas, qual regra seguimos?' },
+      { para: 'comercial', texto: 'Quando um buffet aceitar o teste, me passa o contato de quem cuida do cardápio? A reunião de 30 minutos precisa da pessoa certa.' },
+      { para: 'ti', texto: 'O preço calculado bate com 3 orçamentos antigos do buffet? Se o buffet precisar desdizer o valor, ele abandona a ferramenta.' },
+      { para: 'financeiro', texto: 'No dia 14, o relatório mostra quantos orçamentos chegaram. Qual número de orçamentos justifica o preço de fundador?' },
+      { para: 'marketing', texto: 'Dá para ter um passo a passo de como colocar o link na bio e nos destaques? Muitos donos de buffet travam nisso.' },
     ],
     ideias: [
-      { titulo: 'Implantação em 48 horas', descricao: 'Todo cliente novo tem o orçamento interativo no ar em até 48 horas depois da venda. Duda configura cardápios e pacotes junto com o buffet por WhatsApp.' },
-      { titulo: 'Check-in na primeira festa', descricao: 'Otto fala com o cliente logo depois do primeiro orçamento fechado pelo sistema, pede um depoimento e pergunta se conhece outro buffet que se beneficiaria.' },
-      { titulo: 'Modelos prontos de cardápio', descricao: 'Ter 3 modelos de orçamento prontos para os tipos mais comuns de buffet móvel. O cliente só ajusta preços e itens, e a implantação fica mais rápida.' },
+      { titulo: 'Catálogo pronto em 24 horas', descricao: 'Depois da reunião de 30 minutos, o catálogo do buffet fica pronto em um dia, conferido com orçamentos antigos. O link vai para a bio no mesmo dia.' },
+      { titulo: 'Relatório de 14 dias com números do buffet', descricao: 'No fim do teste, mostrar quantos orçamentos chegaram, de quais pacotes e em que horários. É isso que sustenta a proposta paga.' },
     ],
-    respostas: ['Consigo preparar isso no processo de implantação até o fim do dia.', 'Boa! Isso deixa o começo do cliente bem mais tranquilo.', 'Vou incluir no checklist de onboarding e te aviso.', 'Faz sentido. Anoto para acompanhar com os primeiros clientes.'],
-    apoios: ['Apoio! Cliente que começa bem não cancela.', 'Apoio. Isso gera os primeiros casos de sucesso que o Marketing precisa.', 'Apoio, e o Suporte ajuda a testar com os primeiros clientes.'],
-    questionamentos: ['Quem atende o cliente se isso gerar dúvida? Somos só dois no Suporte.', 'Precisamos combinar o que foi prometido na venda, senão vira frustração depois.'],
-    ceo: ['Entendido! Vou preparar o Suporte para isso e trago um resumo.', 'Recebido. O time de Suporte & Sucesso já está nisso.', 'Pode deixar. Vejo o que muda na implantação e volto aqui.'],
+    respostas: ['Faz sentido. Coloco isso no roteiro do onboarding.', 'Anotado. Ajusto o checklist do catálogo.', 'Boa, isso evita retrabalho no primeiro cliente.'],
+    apoios: ['Apoio. Deixa o buffet seguro para usar.', 'Apoio, ajuda o link a virar o canal principal de orçamento.'],
+    questionamentos: ['Quem garante que isso cabe na semana sem atrasar os catálogos?'],
+    ceo: ['Recebido. Preparo o passo a passo para você revisar.', 'Entendido. Ajusto o onboarding com isso.'],
   },
   financeiro: {
-    status: ['Atualizando o painel de MRR', 'Calculando quanto falta para a meta', 'Revisando a cobrança recorrente', 'Projetando o caixa do trimestre', 'Estimando custo por cliente', 'Conferindo recebimentos do mês'],
+    status: ['Simulando o preço de fundador', 'Calculando o valor de um evento a mais', 'Montando a proposta do dia 14', 'Conferindo as metas de validação', 'Comparando planos de R$ 197 a R$ 397'],
     perguntas: [
-      { para: 'comercial', texto: 'A meta é R$ 5.000 de MRR: cerca de 15 clientes a R$ 347. Como está o funil para as 5 vendas deste mês?' },
-      { para: 'marketing', texto: 'Se testarmos anúncio, qual é o máximo que podemos pagar por cliente? Pela minha conta, até uns R$ 347 se paga no primeiro mês.' },
-      { para: 'suporte', texto: 'Cada cancelamento no começo pesa muito na meta. Como vamos acompanhar os primeiros clientes de perto?' },
-      { para: 'comercial', texto: 'Desconto no primeiro mês ajuda a fechar, mas atrasa o MRR. Podemos combinar um limite para isso?' },
-      { para: 'marketing', texto: 'Quanto custaria produzir os vídeos do orçamento interativo? Quero reservar no caixa.' },
-      { para: 'suporte', texto: 'A cobrança do cliente novo deve começar quando o orçamento dele entrar no ar? Precisamos alinhar isso com o Comercial.' },
+      { para: 'comercial', texto: 'Quantos buffets aceitaram o teste até agora, pela planilha? Sem esse número eu não consigo projetar nada.' },
+      { para: 'suporte', texto: 'Quanto tempo leva montar um catálogo? Preciso saber o custo de cada teste para definir o preço.' },
+      { para: 'marketing', texto: 'O argumento de um evento a mais por ano: evento de R$ 15 mil a R$ 50 mil contra assinatura de R$ 297. Dá para virar post?' },
+      { para: 'comercial', texto: 'Na proposta do dia 14, prefere um plano só ou dois? Opção demais trava a decisão do buffet.' },
     ],
     ideias: [
-      { titulo: 'Painel semanal da meta', descricao: 'Toda segunda, um resumo na caixa com MRR atual, vendas da semana, quanto falta para os R$ 5.000 e o ritmo necessário. Bruno monta, todos os setores usam.' },
-      { titulo: 'Plano anual com desconto', descricao: 'Oferecer o plano anual com desconto para buffets que já estão convencidos. Entra caixa antecipado e diminui o risco de cancelamento.' },
-      { titulo: 'Cobrança automática no cartão', descricao: 'Começar todos os clientes na cobrança recorrente no cartão, para evitar atraso e não gastar tempo cobrando um por um.' },
+      { titulo: 'Preço de fundador com prazo', descricao: 'No dia 14, oferecer o preço de fundador só para quem fechar na hora, por Pix ou cartão. Só pagamento real conta como validação.' },
+      { titulo: 'Um plano só na validação', descricao: 'Testar um único plano (por exemplo, R$ 297) com preço de fundador. Depois que 3 buffets pagarem, a gente testa a escada de preços.' },
     ],
-    respostas: ['Faço as contas hoje e digo se cabe no caixa.', 'Faz sentido, desde que se pague em poucos meses.', 'Vou simular três cenários para a meta e compartilho aqui.', 'Ok. Me passa o custo estimado que eu calculo o impacto.'],
-    apoios: ['Apoio. O custo é baixo e dá para medir rápido.', 'Apoio, com limite de gasto e revisão em 30 dias.', 'Apoio. Isso ajuda a bater a meta de MRR.'],
-    questionamentos: ['Antes de aprovar: quanto custa e em quanto tempo se paga?', 'Precisamos de um teto de gasto. Sem isso, não consigo recomendar.', 'Como saberemos que funcionou? Sem uma métrica, vira custo escondido.'],
-    ceo: ['Entendido! Vou calcular o impacto na meta e trago aqui.', 'Recebido. Preparo os números para decidirmos com segurança.', 'Pode deixar. Confiro caixa e meta de MRR e retorno ainda hoje.'],
+    respostas: ['Faço a conta e trago o impacto no preço.', 'Anotado. Isso entra na proposta do dia 14.', 'Boa. Ajusto a simulação com esse dado.'],
+    apoios: ['Apoio. É simples e dá para medir.', 'Apoio, o custo é baixo.'],
+    questionamentos: ['Quanto isso custa por buffet em teste?', 'Isso traz pagamento real ou só elogio?'],
+    ceo: ['Recebido. Monto a simulação de preço para você decidir.', 'Entendido. Trago os números ainda hoje.'],
+  },
+  ti: {
+    status: ['Revisando os bugs do teste real', 'Conferindo o domínio próprio', 'Testando o orçamento no celular', 'Revendo o aviso de lead novo', 'Checando backups e dados de cada buffet', 'Segurando funcionalidade nova'],
+    perguntas: [
+      { para: 'comercial', texto: 'Qual buffet entra primeiro no teste? Quero conferir o catálogo dele no celular antes do link ir para a bio.' },
+      { para: 'suporte', texto: 'Quais regras de preço apareceram em mais de um buffet? Só essas entram no sistema agora.' },
+      { para: 'marketing', texto: 'Posso esconder Pipeline, Agenda e Dashboard do painel durante o teste? Simplifica a vida do buffet.' },
+      { para: 'financeiro', texto: 'A cobrança por Pix pode ser manual nos primeiros 3 clientes? Evita integrar gateway antes da hora.' },
+    ],
+    ideias: [
+      { titulo: 'Aviso no WhatsApp a cada orçamento', descricao: 'Quando um cliente final conclui o orçamento, o buffet recebe um aviso na hora. Se o buffet não vê o lead, o teste não mostra valor.' },
+      { titulo: 'Congelar funcionalidade nova até 3 pagando', descricao: 'Só corrigir o que bloqueia o teste real: domínio, bugs, preço certo e aviso de lead. Todo o resto espera.' },
+    ],
+    respostas: ['Anotado. Coloco no backlog com prioridade.', 'Faz sentido. Confiro isso antes do primeiro buffet real.', 'Boa. Isso é bug que bloqueia o teste.'],
+    apoios: ['Apoio. Não exige funcionalidade nova.', 'Apoio, deixa o sistema confiável para o primeiro cliente.'],
+    questionamentos: ['Isso é funcionalidade nova? A regra é esperar 3 buffets pagando.'],
+    ceo: ['Recebido. Coloco no backlog e te mostro o que muda.', 'Entendido. Priorizo o que bloqueia o teste.'],
   },
 };
+
+// Falas montadas com os dados reais da planilha (nomes dos buffets esperando retorno).
+let contexto = { pendentes: [], quentes: 0 };
+export function definirContextoSimulado(novo) {
+  contexto = { ...contexto, ...novo };
+}
+function perguntasDoMomento(setorId) {
+  const nomes = contexto.pendentes.map((l) => l.buffet).filter(Boolean);
+  if (!nomes.length) return [];
+  const um = sortear(nomes);
+  const comercial = [
+    { para: 'marketing', texto: `${um} está esperando retorno. Me ajuda com a mensagem de hoje para eles?` },
+    { para: 'marketing', texto: `${nomes.length} buffets estão esperando retorno na planilha. Um vídeo curto ajudaria a reabrir essas conversas?` },
+    { para: 'financeiro', texto: `Se ${um} aceitar o teste, qual preço de fundador eu ofereço no dia 14?` },
+  ];
+  const outros = [{ para: 'comercial', texto: `Vi ${um} na pilha de quem espera retorno. Precisa de algo do nosso setor para destravar?` }];
+  return setorId === 'comercial' ? comercial : outros;
+}
 
 const GENERICO = {
   status: ['Organizando as tarefas do dia', 'Revisando indicadores do setor', 'Documentando processos', 'Em reunião rápida com o time'],
@@ -139,7 +169,8 @@ export class CerebroSimulado {
     }
 
     const setoresExistentes = new Set(ctx.setores.map((s) => s.id));
-    const perguntas = banco.perguntas.filter((p) => p.para === 'todos' || (setoresExistentes.has(p.para) && p.para !== ctx.setor.id));
+    const dinamicas = Math.random() < 0.35 ? perguntasDoMomento(ctx.setor.id) : [];
+    const perguntas = [...dinamicas, ...banco.perguntas].filter((p) => p.para === 'todos' || (setoresExistentes.has(p.para) && p.para !== ctx.setor.id));
     const pergunta = sortear(perguntas.length ? perguntas : GENERICO.perguntas);
     // às vezes fala direto com um colega do setor em vez do setor inteiro
     const colegas = ctx.colegas.filter((c) => c.setor === pergunta.para);
