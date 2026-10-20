@@ -2,7 +2,7 @@
 
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { PRIORIDADES, ROTULO_SEGMENTO, SEGMENTOS } from '@/domain/vendas/campos';
 import { ETAPAS_VENDAS, ROTULO_ETAPA_VENDAS } from '@/domain/vendas/etapas';
 import { cn } from '@/lib/utils';
@@ -30,8 +30,15 @@ export function FiltrosLeads({
   const [aberto, setAberto] = useState(ativos > 0);
   const [busca, setBusca] = useState(params.get('q') ?? '');
 
+  // a escolha vale na hora: dois filtros trocados em seguida não se atropelam enquanto a URL muda
+  const atual = useRef(new URLSearchParams(params));
+  useEffect(() => {
+    atual.current = new URLSearchParams(params);
+  }, [params]);
+
   function mudar(chave: string, valor: string) {
-    const novo = new URLSearchParams(params);
+    const novo = new URLSearchParams(atual.current);
+    atual.current = novo;
     if (valor) novo.set(chave, valor);
     else novo.delete(chave);
     novo.delete('ver');
@@ -139,6 +146,7 @@ export function FiltrosLeads({
               type="button"
               onClick={() => {
                 setBusca('');
+                atual.current = new URLSearchParams();
                 router.replace(caminho);
               }}
               className="text-muted-foreground col-span-2 inline-flex min-h-10 items-center gap-1 text-sm font-semibold md:col-span-4"

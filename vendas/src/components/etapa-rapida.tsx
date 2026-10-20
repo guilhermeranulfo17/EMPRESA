@@ -40,7 +40,7 @@ export function SeletorEtapa({ id, etapa: inicial }: { id: string; etapa: EtapaV
   const { etapa, erro, salvando, mover } = useMover(id, inicial);
   return (
     <label className="relative shrink-0" title={erro || 'Mudar etapa'}>
-      <span className="sr-only">Etapa</span>
+      <span className="sr-only">Mudar etapa</span>
       <select
         value={etapa}
         disabled={salvando}

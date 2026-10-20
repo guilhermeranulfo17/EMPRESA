@@ -150,12 +150,10 @@ test('CSV do Excel (ponto e vírgula, Windows-1252) e arquivo sem as colunas cer
   await expect(page.getByTestId('lista-leads')).toContainText('Buffet São João');
 
   await page.goto(`${BASE}/leads/importar`);
-  await page
-    .getByTestId('arquivo')
-    .setInputFiles({
-      name: 'errada.csv',
-      mimeType: 'text/csv',
-      buffer: Buffer.from('empresa;cidade\nX;Y\n'),
-    });
+  await page.getByTestId('arquivo').setInputFiles({
+    name: 'errada.csv',
+    mimeType: 'text/csv',
+    buffer: Buffer.from('empresa;cidade\nX;Y\n'),
+  });
   await expect(page.getByTestId('erro-importacao')).toContainText('NOME DA EMPRESA e NUMERO');
 });

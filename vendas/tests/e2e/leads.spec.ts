@@ -82,10 +82,10 @@ test('filtra por cidade, prioridade, segmento e etapa; muda de etapa com 1 toque
   await page.getByLabel('Segmento').selectOption('doces');
   await expect(itens).toHaveCount(1);
   await page.getByLabel('Segmento').selectOption('');
-  await page.getByLabel('Etapa').selectOption('respondeu');
+  await page.getByLabel('Etapa', { exact: true }).selectOption('respondeu');
   await expect(itens).toHaveCount(1);
   await expect(itens.first()).toContainText('Espaço Araguari');
-  await page.getByLabel('Etapa').selectOption('');
+  await page.getByLabel('Etapa', { exact: true }).selectOption('');
   await expect(itens).toHaveCount(3);
 
   // busca sem acento

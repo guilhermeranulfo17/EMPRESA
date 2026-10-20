@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { CheckCircle2, Target } from 'lucide-react';
 import { AjustesMetas } from '@/components/ajustes-metas';
 import { diaDaSemana, formatData, hojeNoFuso } from '@/domain/dates';
-import { ROTULO_ETAPA_VENDAS } from '@/domain/vendas/etapas';
+import { ROTULO_CURTO_ETAPA, ROTULO_ETAPA_VENDAS } from '@/domain/vendas/etapas';
 import { montarPainel, porcentagem } from '@/domain/vendas/painel';
 import { cn } from '@/lib/utils';
 import { exigirGui } from '@/server/guard';
@@ -128,7 +128,7 @@ export default async function PaginaPainel() {
               key={f.etapa}
               className="grid grid-cols-[8.5rem_1fr_2.5rem] items-center gap-2 text-sm"
             >
-              <span className="text-muted-foreground truncate">{ROTULO_ETAPA_VENDAS[f.etapa]}</span>
+              <span className="text-muted-foreground truncate">{ROTULO_CURTO_ETAPA[f.etapa]}</span>
               <span className="h-5" title={`${ROTULO_ETAPA_VENDAS[f.etapa]}: ${f.quantidade}`}>
                 <span
                   className="bg-primary block h-full rounded-r-[4px]"

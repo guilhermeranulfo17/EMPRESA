@@ -1,6 +1,6 @@
 # Escritório de Agentes da Orkestra
 
-> **Vendas Orkestra** (CRM e copiloto de IA do Gui para vender o Orkestra a donos de buffet) é
+> **Prospecção Orkestra** (o CRM do Gui para vender o Orkestra a buffets, em `/admin/prospeccao`) é
 > um app separado na pasta [`vendas/`](vendas/README.md), com banco, login e deploy próprios.
 
 A Orkestra faz orçamento automático no link da bio do Instagram de buffets: o cliente monta a festa, vê o preço e cai no WhatsApp do buffet já qualificado.
