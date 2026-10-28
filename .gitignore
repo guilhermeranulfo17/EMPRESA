@@ -6,3 +6,6 @@ data/
 # lista de prospecção do Vendas Orkestra (telefones reais): nunca vai para o repositório
 /import/
 *.xlsx
+
+# SFX Kit (67 MB de WAVs): baixado sob demanda, ver CLAUDE.md
+/sfx-kit/
