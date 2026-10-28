@@ -1,5 +1,10 @@
 # Instruções para o Claude neste projeto
 
+## Edição de vídeos
+
+Quando o usuário mandar um vídeo para editar, use a skill `/editar-video` (efeitos visuais, trilha original e
+efeitos sonoros, com conferência no final).
+
 ## Efeitos sonoros em vídeos
 
 Ordem de preferência: SFX Kit primeiro (CC0, sem crédito), depois Openverse, e por último criar com o Earshot.
