@@ -1576,12 +1576,13 @@ def match_page(c, e, j, wx, wy):
     kind = ['serif', 'mont', 'ui', 'serif', 'anton', 'monts'][j % 6]
     size = W * [0.085, 0.07, 0.072, 0.095, 0.08, 0.068][j % 6]; f = font(kind, size); lh = size * 1.22
     word = e.o.get('text', 'Claude'); red = rgb(e.o.get('color'), (214, 40, 40))
+    pool = e.o['filler'].split() if e.o.get('filler') else MATCH_TXT
     im = Image.new('RGB', (W, H), paper); d = ImageDraw.Draw(im); ink = (40, 38, 36)
     base = f.getbbox('Ag'); asc = -base[1]
     ww = f.getlength(word); bx0 = wx - ww / 2
     def run(x, y, direction):
         while (x < W + size if direction > 0 else x > -size * 6):
-            w_ = rnd.choice(MATCH_TXT) + ' '
+            w_ = rnd.choice(pool) + ' '
             if direction < 0: x -= f.getlength(w_)
             d.text((x, y), w_, font=f, fill=ink)
             if direction > 0: x += f.getlength(w_)
