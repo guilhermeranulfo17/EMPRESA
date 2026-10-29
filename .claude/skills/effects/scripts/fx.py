@@ -464,7 +464,7 @@ def fx_tap(c, e):
     on = c.lt >= at
     col = rgb(e.o.get('color'), (124, 92, 255)) if on else (0, 149, 246)
     im = rrect(bw, bh, bh * 0.28, col + (255,)); d = ImageDraw.Draw(im)
-    d.text((bw / 2, bh / 2), 'Following' if on else '+ Follow', font=font('ui', bh * 0.4), fill=(255, 255, 255, 255), anchor='mm')
+    d.text((bw / 2, bh / 2), e.o.get('label_on', 'Following') if on else e.o.get('label_off', '+ Follow'), font=font('ui', bh * 0.4), fill=(255, 255, 255, 255), anchor='mm')
     pop = ease_back(c.lt / 0.3)
     sq = 1.0
     if on: q = (c.lt - at) / 0.3; sq = 1 - 0.12 * math.sin(math.pi * clamp(q)) if q < 1 else 1

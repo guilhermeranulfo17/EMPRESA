@@ -53,7 +53,7 @@ A single effect needs no plan: `.venv/bin/python scripts/fx.py orbit <video> <ou
 | 10 | `swipe` | A before and after slider sweeps across you | `grade` (the "after" look) |
 | 11 | `todo` | A checklist card beside your head ticks off as you talk | `text` (items with `\|`), `ticks` (video seconds with `\|`), `title` |
 | 12 | `comment-box` | An Instagram comment bar types a word and posts it | `text` (default EFFECTS) |
-| 13 | `tap` | A Follow button pops up and flips to Following | `at` (video second of the flip), `x`, `y` (0 to 1), `color` |
+| 13 | `tap` | A Follow button pops up and flips to Following | `at` (video second of the flip), `x`, `y` (0 to 1), `color`, `label_off`, `label_on` (button text, e.g. `+ Seguir` and `Seguindo`) |
 | 14 | `pause-point` | Freezes the frame and points at you with a hand-drawn arrow | `text` (label), `color`, `label_x` |
 | 15 | `uninstall` | A glitchy uninstall bar breaks the frame apart | `text` |
 | 16 | `reel-frame` | Your video shrinks into an Instagram reel card | `text` (handle) |
