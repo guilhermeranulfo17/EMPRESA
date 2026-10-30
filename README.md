@@ -1,5 +1,8 @@
 # Escritório de Agentes da Orkestra
 
+> **BM Vagas CRM** (prospecção B2B da unidade Rocha & Nascimento) é um app separado na pasta
+> [`bm-vagas-crm/`](bm-vagas-crm/README.md): front-end em React + Vite, com dados de exemplo.
+
 > **Prospecção Orkestra** (o CRM do Gui para vender o Orkestra a buffets, em `/admin/prospeccao`) é
 > um app separado na pasta [`vendas/`](vendas/README.md), com banco, login e deploy próprios.
 
