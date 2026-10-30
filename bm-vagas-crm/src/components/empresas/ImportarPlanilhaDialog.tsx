@@ -220,9 +220,12 @@ export function ImportarPlanilhaDialog({ aberto, onOpenChange }: { aberto: boole
               />
               <div className="mt-4 flex flex-col items-start gap-1 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
                 <span>Dica: no Excel, use “Salvar como” e escolha CSV.</span>
-                <Button variant="link" onClick={baixarModelo} className="h-auto">
-                  <Download className="size-4" /> Baixar planilha modelo
-                </Button>
+                {/* Na página publicada no claude.ai, downloads não funcionam. */}
+                {import.meta.env.VITE_ROUTER !== 'memoria' && (
+                  <Button variant="link" onClick={baixarModelo} className="h-auto">
+                    <Download className="size-4" /> Baixar planilha modelo
+                  </Button>
+                )}
               </div>
             </motion.div>
           )}

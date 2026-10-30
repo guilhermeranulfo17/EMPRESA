@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
+import { BrowserRouter, MemoryRouter, Navigate, Route, Routes } from 'react-router'
 import { MotionConfig } from 'framer-motion'
 import { CrmProvider } from '@/store/CrmProvider'
 import { UiProvider } from '@/store/UiProvider'
@@ -11,10 +11,13 @@ import Empresas from '@/pages/Empresas'
 import Assistentes from '@/pages/Assistentes'
 import Configuracoes from '@/pages/Configuracoes'
 
+// Na versão publicada no claude.ai a navegação fica só na memória da página.
+const Router = import.meta.env.VITE_ROUTER === 'memoria' ? MemoryRouter : BrowserRouter
+
 export default function App() {
   return (
     <MotionConfig reducedMotion="user">
-      <BrowserRouter>
+      <Router>
         <CrmProvider>
           <UiProvider>
             <TooltipProvider delayDuration={250}>
@@ -32,7 +35,7 @@ export default function App() {
             </TooltipProvider>
           </UiProvider>
         </CrmProvider>
-      </BrowserRouter>
+      </Router>
     </MotionConfig>
   )
 }
