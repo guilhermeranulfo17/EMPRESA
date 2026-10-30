@@ -4,6 +4,7 @@ import { BarraLateral } from './BarraLateral'
 import { NavegacaoCelular, TopoCelular } from './NavegacaoCelular'
 import { FichaEmpresa } from '@/components/ficha/FichaEmpresa'
 import { NovaEmpresaDialog } from '@/components/funil/NovaEmpresaDialog'
+import { BoasVindas } from './BoasVindas'
 
 export function AppLayout() {
   const location = useLocation()
@@ -28,6 +29,7 @@ export function AppLayout() {
       <NavegacaoCelular />
       <FichaEmpresa />
       <NovaEmpresaDialog />
+      <BoasVindas />
     </div>
   )
 }
