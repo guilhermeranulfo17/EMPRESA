@@ -4,11 +4,11 @@ import { cn } from '@/lib/utils'
 import type { TipoInteracao } from '@/types'
 
 const ESTILO: Record<TipoInteracao, string> = {
-  whatsapp: 'bg-[#25D366]/10 text-[#4BE38A] ring-[#25D366]/25',
-  ligacao: 'bg-info/10 text-[#60A5FA] ring-info/25',
-  email: 'bg-[#A3A3A3]/10 text-[#D4D4D4] ring-white/10',
-  reuniao: 'bg-primary/10 text-[#FF8A4C] ring-primary/25',
-  anotacao: 'bg-warning/10 text-[#FACC15] ring-warning/25',
+  whatsapp: 'bg-[#25D366]/12 text-[#128C4A] ring-transparent',
+  ligacao: 'bg-info/10 text-info-ink ring-transparent',
+  email: 'bg-surface-3 text-ink-2 ring-transparent',
+  reuniao: 'bg-primary/10 text-primary-ink ring-transparent',
+  anotacao: 'bg-warning/15 text-warning-ink ring-transparent',
 }
 
 export function IconeTipo({ tipo, className }: { tipo: TipoInteracao; className?: string }) {

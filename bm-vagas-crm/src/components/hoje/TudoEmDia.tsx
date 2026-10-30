@@ -26,7 +26,7 @@ export function TudoEmDia({ proximos }: { proximos: number }) {
           initial={{ scale: 0, rotate: -30 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: 'spring', stiffness: 260, damping: 16, delay: 0.1 }}
-          className="relative grid size-20 place-items-center rounded-full bg-success text-black shadow-[0_0_60px_-10px_rgba(34,197,94,0.7)]"
+          className="relative grid size-20 place-items-center rounded-full bg-success text-white shadow-[0_0_60px_-10px_rgba(34,197,94,0.7)]"
         >
           <Check className="size-10" strokeWidth={3} />
         </motion.div>

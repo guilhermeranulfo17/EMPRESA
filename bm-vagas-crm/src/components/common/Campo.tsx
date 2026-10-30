@@ -20,7 +20,7 @@ export function Campo({
     <div className={cn('flex flex-col gap-1.5', className)}>
       <Label htmlFor={id}>{label}</Label>
       {children}
-      {dica && <p className="text-xs text-[#7a7a7a]">{dica}</p>}
+      {dica && <p className="text-xs text-muted-foreground">{dica}</p>}
     </div>
   )
 }

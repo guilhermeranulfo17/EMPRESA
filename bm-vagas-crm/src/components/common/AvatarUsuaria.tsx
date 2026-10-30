@@ -4,8 +4,8 @@ import type { UsuariaId } from '@/types'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 const ESTILO: Record<UsuariaId, string> = {
-  rosali: 'bg-[#13233d] text-[#8DB8FF] ring-[#2b4a7a]',
-  marlete: 'bg-[#341a0b] text-[#FF9A5E] ring-[#6b3410]',
+  rosali: 'bg-[#E8EEFB] text-[#1D4ED8] ring-transparent',
+  marlete: 'bg-[#FFEBDD] text-[#C24600] ring-transparent',
 }
 
 export function AvatarUsuaria({

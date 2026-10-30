@@ -13,13 +13,16 @@ export function BarraLateral() {
   const pendentes = carregando ? 0 : contatosDoDia(empresas).length
 
   return (
-    <aside className="sticky top-0 hidden h-dvh w-[264px] shrink-0 flex-col border-r border-border bg-[#0d0d0d]/90 px-4 py-6 backdrop-blur lg:flex">
+    <aside className="sticky top-0 hidden h-dvh w-[280px] shrink-0 p-4 lg:block">
+      <div className="flex h-full flex-col rounded-[24px] bg-surface px-4 py-6 shadow-[var(--shadow-soft)]">
       <div className="px-2">
         <Logo />
-        <p className="mt-3 text-xs font-medium tracking-wide text-[#7a7a7a]">Unidade {UNIDADE}</p>
+        <p className="mt-3 text-xs font-medium tracking-wide text-muted-foreground">Unidade {UNIDADE}</p>
       </div>
 
-      <nav aria-label="Menu principal" className="mt-9 flex flex-col gap-1">
+      <p className="mt-9 px-3.5 text-[11px] font-semibold tracking-[0.12em] text-subtle uppercase">Menu</p>
+
+      <nav aria-label="Menu principal" className="mt-2 flex flex-col gap-1">
         {ITENS_NAV.map(({ para, nome, icone: Icone }) => (
           <NavLink
             key={para}
@@ -27,8 +30,8 @@ export function BarraLateral() {
             end={para === '/'}
             className={({ isActive }) =>
               cn(
-                'group relative flex h-12 items-center gap-3 rounded-[12px] px-3.5 text-[15px] font-semibold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                isActive ? 'text-foreground' : 'text-muted-foreground hover:bg-surface hover:text-foreground',
+                'group relative flex h-12 items-center gap-3 rounded-full px-4 text-[15px] font-semibold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                isActive ? 'text-white' : 'text-muted-foreground hover:bg-surface-2 hover:text-foreground',
               )
             }
           >
@@ -37,21 +40,19 @@ export function BarraLateral() {
                 {isActive && (
                   <motion.span
                     layoutId="nav-ativo"
-                    className="absolute inset-0 rounded-[12px] border border-[#2a2a2a] bg-surface-2"
+                    className="absolute inset-0 rounded-full bg-primary shadow-[0_8px_20px_-10px_rgba(255,90,0,0.6)]"
                     transition={{ type: 'spring', stiffness: 500, damping: 40 }}
                   />
                 )}
-                {isActive && (
-                  <motion.span
-                    layoutId="nav-barra"
-                    className="absolute top-3 bottom-3 left-0 w-[3px] rounded-full bg-primary"
-                    transition={{ type: 'spring', stiffness: 500, damping: 40 }}
-                  />
-                )}
-                <Icone className={cn('relative size-5', isActive && 'text-primary')} strokeWidth={isActive ? 2.2 : 1.8} />
+                <Icone className="relative size-5" strokeWidth={isActive ? 2.1 : 1.7} />
                 <span className="relative flex-1">{nome}</span>
                 {para === '/' && pendentes > 0 && (
-                  <span className="relative grid h-6 min-w-6 place-items-center rounded-full bg-primary px-1.5 font-display text-xs font-bold text-white tabular">
+                  <span
+                    className={cn(
+                      'relative grid h-6 min-w-6 place-items-center rounded-full px-1.5 font-display text-xs font-bold tabular',
+                      isActive ? 'bg-white text-primary-ink' : 'bg-primary text-white',
+                    )}
+                  >
                     {pendentes}
                   </span>
                 )}
@@ -63,6 +64,7 @@ export function BarraLateral() {
 
       <div className="mt-auto">
         <TrocarUsuaria />
+      </div>
       </div>
     </aside>
   )

@@ -11,7 +11,7 @@ export function Logo({ compacto = false, className }: { compacto?: boolean; clas
   }
   return (
     <span className={cn('inline-flex items-center gap-2 select-none', className)} aria-label="BM Vagas">
-      <span className="grid size-9 place-items-center rounded-[10px] border border-[#2a2a2a] bg-[#161616] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+      <span className="grid size-9 place-items-center rounded-[10px] border border-border bg-[#161616] ">
         <span className="rounded-[4px] bg-white px-[5px] py-[1px] font-display text-[13px] leading-[1.15] font-black tracking-tight text-[#0A0A0A]">
           BM
         </span>

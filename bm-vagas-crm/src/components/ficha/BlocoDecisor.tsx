@@ -68,7 +68,7 @@ export function BlocoDecisor({ empresa }: { empresa: Empresa }) {
       ) : (
         <>
           <div className="flex items-center gap-3.5">
-            <span className="grid size-12 shrink-0 place-items-center rounded-full bg-surface-3 font-display text-base font-bold text-[#d4d4d4] ring-1 ring-[#333]">
+            <span className="grid size-12 shrink-0 place-items-center rounded-full bg-surface-3 font-display text-base font-bold text-ink-2 ring-1 ring-border">
               {iniciais(p.nome)}
             </span>
             <div className="min-w-0">
@@ -80,13 +80,13 @@ export function BlocoDecisor({ empresa }: { empresa: Empresa }) {
             {p.telefone && (
               <div className="flex gap-2">
                 <dt className="sr-only">Telefone</dt>
-                <dd className="text-[#d4d4d4] tabular">{formatarTelefone(p.telefone)}</dd>
+                <dd className="text-ink-2 tabular">{formatarTelefone(p.telefone)}</dd>
               </div>
             )}
             {p.email && (
               <div className="flex gap-2">
                 <dt className="sr-only">E-mail</dt>
-                <dd className="truncate text-[#d4d4d4]">{p.email}</dd>
+                <dd className="truncate text-ink-2">{p.email}</dd>
               </div>
             )}
           </dl>

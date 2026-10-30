@@ -108,7 +108,7 @@ export default function Empresas() {
 
       {origemRafael && (
         <div className="mt-5 flex items-center gap-3 rounded-[14px] border border-primary/30 bg-primary/[0.06] px-4 py-3 text-sm">
-          <span className="flex-1 text-[#d4d4d4]">Mostrando só as empresas encontradas pelo Rafael.</span>
+          <span className="flex-1 text-ink-2">Mostrando só as empresas encontradas pelo Rafael.</span>
           <Button
             variant="ghost"
             size="sm"
@@ -127,7 +127,7 @@ export default function Empresas() {
 
       <div className="mt-6 flex flex-col gap-2.5 lg:flex-row">
         <div className="relative flex-1">
-          <Search className="pointer-events-none absolute top-1/2 left-3.5 size-[18px] -translate-y-1/2 text-[#6b6b6b]" aria-hidden />
+          <Search className="pointer-events-none absolute top-1/2 left-3.5 size-[18px] -translate-y-1/2 text-muted-foreground" aria-hidden />
           <label htmlFor="busca-empresas" className="sr-only">
             Buscar empresa
           </label>
@@ -204,7 +204,7 @@ export default function Empresas() {
               </label>
               <div
                 aria-hidden
-                className="hidden flex-1 grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,0.9fr)_150px] gap-x-4 text-[12px] font-semibold tracking-wider text-[#7a7a7a] uppercase sm:grid"
+                className="hidden flex-1 grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,0.9fr)_150px] gap-x-4 text-[12px] font-semibold tracking-wider text-muted-foreground uppercase sm:grid"
               >
                 <span>Empresa {algumaMarcada && <span className="text-primary normal-case">· {selecionadas.size} selecionadas</span>}</span>
                 <span>Local e segmento</span>
@@ -230,7 +230,7 @@ export default function Empresas() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 400, damping: 34 }}
-            className="fixed inset-x-3 bottom-[84px] z-30 mx-auto flex max-w-2xl flex-wrap items-center gap-2 rounded-[16px] border border-[#333] bg-[#1a1a1a]/95 p-2.5 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.95)] backdrop-blur lg:bottom-6 lg:left-[264px]"
+            className="fixed inset-x-3 bottom-[84px] z-30 mx-auto flex max-w-2xl flex-wrap items-center gap-2 rounded-[16px] border border-border bg-surface/95 p-2.5 shadow-[0_24px_60px_-12px_rgba(60,40,20,0.14)] backdrop-blur lg:bottom-6 lg:left-[264px]"
             role="region"
             aria-label="Ações para as empresas selecionadas"
           >
@@ -286,23 +286,23 @@ function LinhaEmpresa({
           </span>
         </span>
         <span className="hidden min-w-0 text-sm sm:block">
-          <span className="block truncate text-[#d4d4d4]">
+          <span className="block truncate text-ink-2">
             {e.cidade}/{e.uf}
           </span>
-          <span className="block truncate text-[13px] text-[#7a7a7a]">{e.segmento}</span>
+          <span className="block truncate text-[13px] text-muted-foreground">{e.segmento}</span>
         </span>
         <span className="hidden truncate text-sm text-muted-foreground tabular sm:block">
           {e.decisor.telefone ? formatarTelefone(e.decisor.telefone) : '—'}
         </span>
         <span className="flex items-center gap-2">
           <Badge variant={st.variante}>{st.nome}</Badge>
-          <span className="text-[13px] text-[#7a7a7a] sm:hidden">
+          <span className="text-[13px] text-muted-foreground sm:hidden">
             {e.cidade}/{e.uf}
           </span>
         </span>
       </button>
       <AvatarUsuaria id={e.responsavelId} tamanho="sm" />
-      <ChevronRight className="hidden size-4 text-[#555] transition-transform group-hover:translate-x-0.5 sm:block" aria-hidden />
+      <ChevronRight className="hidden size-4 text-subtle transition-transform group-hover:translate-x-0.5 sm:block" aria-hidden />
     </li>
   )
 }

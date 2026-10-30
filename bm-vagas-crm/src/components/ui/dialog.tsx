@@ -12,7 +12,7 @@ function DialogOverlay({ className, ...props }: React.ComponentProps<typeof Dial
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
       className={cn(
-        'fixed inset-0 z-50 bg-black/70 backdrop-blur-[2px] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+        'fixed inset-0 z-50 bg-[#2a2420]/25 backdrop-blur-[2px] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
         className,
       )}
       {...props}
@@ -32,7 +32,7 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          'fixed z-50 grid w-full gap-5 border border-border bg-surface p-6 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)] duration-200 outline-none',
+          'fixed z-50 grid w-full gap-5 border border-border bg-surface p-6 shadow-[0_30px_80px_-20px_rgba(60,40,20,0.12)] duration-200 outline-none',
           // celular: sobe de baixo; desktop: centralizado
           'inset-x-0 bottom-0 max-h-[92dvh] overflow-y-auto rounded-t-[20px] pb-[max(1.5rem,env(safe-area-inset-bottom))] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:slide-in-from-bottom-8 data-[state=closed]:slide-out-to-bottom-8 data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
           'sm:inset-x-auto sm:bottom-auto sm:top-1/2 sm:left-1/2 sm:max-w-lg sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-[18px] sm:pb-6 sm:data-[state=open]:slide-in-from-bottom-0 sm:data-[state=open]:zoom-in-[0.97] sm:data-[state=closed]:zoom-out-[0.97] sm:data-[state=closed]:slide-out-to-bottom-0',

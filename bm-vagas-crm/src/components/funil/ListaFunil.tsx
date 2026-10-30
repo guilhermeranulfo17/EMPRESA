@@ -23,7 +23,7 @@ export function ListaFunil({ empresas }: { empresas: Empresa[] }) {
       {/* Desktop: tabela */}
       <table className="hidden w-full text-left text-sm md:table">
         <thead>
-          <tr className="border-b border-border text-[12px] tracking-wider text-[#7a7a7a] uppercase">
+          <tr className="border-b border-border text-[12px] tracking-wider text-muted-foreground uppercase">
             <th className="px-5 py-3.5 font-semibold">Empresa</th>
             <th className="px-3 py-3.5 font-semibold">Etapa</th>
             <th className="px-3 py-3.5 font-semibold">Serviço</th>
@@ -54,7 +54,7 @@ export function ListaFunil({ empresas }: { empresas: Empresa[] }) {
                 </p>
               </td>
               <td className="px-3 py-3.5">
-                <span className="inline-flex items-center gap-2 text-[#d4d4d4]">
+                <span className="inline-flex items-center gap-2 text-ink-2">
                   <span className="size-2 rounded-full" style={{ backgroundColor: e.etapaId ? COR_ETAPA[e.etapaId] : '#555' }} />
                   {nomeEtapa(config, e.etapaId)}
                 </span>
@@ -64,7 +64,7 @@ export function ListaFunil({ empresas }: { empresas: Empresa[] }) {
               <td className="px-3 py-3.5">
                 <DiasParado desde={e.etapaDesde} />
               </td>
-              <td className={cn('px-3 py-3.5', estaAtrasado(e) ? 'font-semibold text-[#F87171]' : 'text-muted-foreground')}>
+              <td className={cn('px-3 py-3.5', estaAtrasado(e) ? 'font-semibold text-danger-ink' : 'text-muted-foreground')}>
                 {e.proximoContato ? textoProximoContato(e.proximoContato) : '—'}
               </td>
               <td className="px-5 py-3.5">
@@ -88,7 +88,7 @@ export function ListaFunil({ empresas }: { empresas: Empresa[] }) {
                 </span>
               </span>
               <AvatarUsuaria id={e.responsavelId} tamanho="sm" comDica={false} />
-              <ChevronRight className="size-4 text-[#555]" />
+              <ChevronRight className="size-4 text-subtle" />
             </button>
           </li>
         ))}

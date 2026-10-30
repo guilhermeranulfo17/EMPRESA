@@ -24,11 +24,11 @@ export const CardFunil = forwardRef<HTMLDivElement, Props>(function CardFunil(
     <div
       ref={ref}
       className={cn(
-        'group relative cursor-grab touch-manipulation rounded-[14px] border border-border bg-surface-2 p-4 text-left transition-[transform,box-shadow,border-color,opacity] duration-200 select-none',
-        'hover:-translate-y-0.5 hover:border-[#363636] hover:shadow-[var(--shadow-lift)] active:cursor-grabbing',
+        'group relative cursor-grab touch-manipulation rounded-[16px] border border-transparent bg-surface p-4 shadow-[var(--shadow-soft)] text-left transition-[transform,box-shadow,border-color,opacity] duration-200 select-none',
+        'hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)] active:cursor-grabbing',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
         fantasma && 'opacity-35',
-        arrastando && 'rotate-[2deg] cursor-grabbing border-primary/50 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.95),0_0_0_1px_rgba(255,90,0,0.25)]',
+        arrastando && 'rotate-[2deg] cursor-grabbing border-primary/40 shadow-[0_30px_60px_-24px_rgba(60,40,20,0.3)]',
         className,
       )}
       {...props}
@@ -40,13 +40,13 @@ export const CardFunil = forwardRef<HTMLDivElement, Props>(function CardFunil(
         </div>
         <AvatarUsuaria id={empresa.responsavelId} tamanho="sm" />
       </div>
-      <div className="mt-2.5 flex items-center gap-1 text-[13px] text-[#8a8a8a]">
+      <div className="mt-2.5 flex items-center gap-1 text-[13px] text-muted-foreground">
         <MapPin className="size-3.5" aria-hidden />
         <span className="truncate">
           {empresa.cidade}/{empresa.uf}
         </span>
         {empresa.valorEstimado > 0 && (
-          <span className="ml-auto font-display font-semibold text-[#d4d4d4] tabular">{formatarMoedaCurta(empresa.valorEstimado)}</span>
+          <span className="ml-auto shrink-0 pl-2 font-display font-semibold text-ink-2 tabular">{formatarMoedaCurta(empresa.valorEstimado)}</span>
         )}
       </div>
       <div className="mt-3 flex items-center justify-between gap-2">

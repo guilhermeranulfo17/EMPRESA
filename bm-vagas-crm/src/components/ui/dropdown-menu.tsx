@@ -15,7 +15,7 @@ function DropdownMenuContent({
       <DropdownMenuPrimitive.Content
         sideOffset={sideOffset}
         className={cn(
-          'z-50 min-w-48 rounded-[12px] border border-border bg-popover p-1.5 text-popover-foreground shadow-[0_20px_50px_-12px_rgba(0,0,0,0.85)]',
+          'z-50 min-w-48 rounded-[12px] border border-border bg-popover p-1.5 text-popover-foreground shadow-[0_20px_50px_-12px_rgba(60,40,20,0.12)]',
           'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-[0.97]',
           className,
         )}
@@ -40,7 +40,7 @@ function DropdownMenuItem({ className, ...props }: React.ComponentProps<typeof D
 function DropdownMenuLabel({ className, ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Label>) {
   return (
     <DropdownMenuPrimitive.Label
-      className={cn('px-2.5 pt-1.5 pb-1 text-[11px] font-semibold tracking-wider text-[#6b6b6b] uppercase', className)}
+      className={cn('px-2.5 pt-1.5 pb-1 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase', className)}
       {...props}
     />
   )

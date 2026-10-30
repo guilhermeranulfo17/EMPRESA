@@ -18,8 +18,8 @@ export function TrocarUsuaria({ compacto = false }: { compacto?: boolean }) {
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          'flex items-center gap-3 rounded-[12px] text-left transition-colors outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-ring',
-          compacto ? 'p-1' : 'w-full border border-border bg-surface p-2.5',
+          'flex items-center gap-3 rounded-[16px] text-left transition-colors outline-none hover:bg-surface-3 focus-visible:ring-2 focus-visible:ring-ring',
+          compacto ? 'p-1' : 'w-full bg-surface-2 p-2.5',
         )}
         aria-label={`Usando como ${usuariaAtual.nome}. Trocar usuária`}
       >

@@ -17,7 +17,7 @@ export default function Assistentes() {
       <CabecalhoPagina titulo="Assistentes" subtitulo="Eles cuidam do trabalho repetitivo para vocês focarem nas conversas." />
 
       <p className="mt-5 flex items-start gap-2.5 rounded-[12px] border border-border bg-surface px-4 py-3 text-sm text-muted-foreground">
-        <ShieldAlert className="mt-0.5 size-4 shrink-0 text-[#FACC15]" aria-hidden />
+        <ShieldAlert className="mt-0.5 size-4 shrink-0 text-warning-ink" aria-hidden />
         <span>
           Use um número de WhatsApp exclusivo para prospecção. Nesta versão, os assistentes ainda não enviam mensagens de verdade.
         </span>

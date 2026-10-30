@@ -109,7 +109,7 @@ export function NovaEmpresaDialog() {
               className={erro ? 'border-danger' : undefined}
             />
             {erro && (
-              <p id="ne-nome-erro" className="text-[13px] text-[#F87171]">
+              <p id="ne-nome-erro" className="text-[13px] text-danger-ink">
                 Escreva o nome da empresa.
               </p>
             )}
@@ -209,7 +209,7 @@ export function NovaEmpresaDialog() {
                   className={
                     f.quando === id
                       ? 'h-11 rounded-[12px] border border-primary bg-primary/12 text-sm font-semibold text-white'
-                      : 'h-11 rounded-[12px] border border-border bg-[#101010] text-sm font-semibold text-muted-foreground hover:text-foreground'
+                      : 'h-11 rounded-[12px] border border-transparent bg-surface-2 text-sm font-semibold text-muted-foreground hover:text-foreground'
                   }
                 >
                   {nome}

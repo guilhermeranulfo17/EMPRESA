@@ -26,7 +26,7 @@ export function CabecalhoAssistente({
           <span
             className={cn(
               'grid size-16 place-items-center rounded-[18px] border font-display text-2xl font-black transition-colors',
-              ativo ? 'border-primary/40 bg-[#2a1407] text-primary' : 'border-border bg-surface-2 text-[#6b6b6b]',
+              ativo ? 'border-primary/40 bg-primary/10 text-primary' : 'border-transparent bg-surface-2 text-muted-foreground',
             )}
             aria-hidden
           >
@@ -50,7 +50,7 @@ export function CabecalhoAssistente({
       </div>
       <div className="flex items-center gap-4 sm:flex-col sm:items-end sm:gap-2">
         <div className="flex items-center gap-3">
-          <label htmlFor={idSwitch} className={cn('text-sm font-semibold', ativo ? 'text-[#4ADE80]' : 'text-muted-foreground')}>
+          <label htmlFor={idSwitch} className={cn('text-sm font-semibold', ativo ? 'text-success-ink' : 'text-muted-foreground')}>
             {ativo ? 'Ativo' : 'Pausado'}
           </label>
           <Switch id={idSwitch} checked={ativo} onCheckedChange={onAtivo} />
@@ -89,8 +89,8 @@ export function Opcoes<T extends string | number>({
             className={cn(
               'h-10 min-w-12 rounded-[10px] border px-3.5 text-sm font-semibold transition-all',
               marcado(o.id)
-                ? 'border-primary bg-primary/12 text-white'
-                : 'border-border bg-[#101010] text-muted-foreground hover:border-[#3a3a3a] hover:text-foreground',
+                ? 'border-primary bg-primary/10 text-primary-ink'
+                : 'border-transparent bg-surface-2 text-muted-foreground hover:border-border-strong hover:text-foreground',
             )}
           >
             {o.nome}

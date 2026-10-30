@@ -13,7 +13,7 @@ export function BarraFiltros({ filtros, onChange }: { filtros: Filtros; onChange
   return (
     <div className="flex flex-col gap-2.5 lg:flex-row lg:items-center">
       <div className="relative flex-1 lg:max-w-sm">
-        <Search className="pointer-events-none absolute top-1/2 left-3.5 size-[18px] -translate-y-1/2 text-[#6b6b6b]" aria-hidden />
+        <Search className="pointer-events-none absolute top-1/2 left-3.5 size-[18px] -translate-y-1/2 text-muted-foreground" aria-hidden />
         <label htmlFor="busca-funil" className="sr-only">
           Buscar empresa, pessoa ou cidade
         </label>

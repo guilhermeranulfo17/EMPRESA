@@ -58,8 +58,8 @@ export function EscolhaProximoContato({
               className={cn(
                 'h-11 rounded-[12px] border text-sm font-semibold transition-all',
                 ativo
-                  ? 'border-primary bg-primary/12 text-white shadow-[0_0_0_1px_rgba(255,90,0,0.4)]'
-                  : 'border-border bg-[#101010] text-muted-foreground hover:border-[#3a3a3a] hover:text-foreground',
+                  ? 'border-primary bg-primary/10 text-primary-ink shadow-[0_0_0_1px_rgba(255,90,0,0.4)]'
+                  : 'border-transparent bg-surface-2 text-muted-foreground hover:border-border-strong hover:text-foreground',
               )}
             >
               {op.nome}

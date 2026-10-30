@@ -9,7 +9,7 @@ import { TrocarUsuaria } from './TrocarUsuaria'
 
 export function TopoCelular() {
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border/70 bg-[#0a0a0a]/85 px-4 backdrop-blur-md lg:hidden">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border/70 bg-background/85 px-4 backdrop-blur-md lg:hidden">
       <Logo />
       <TrocarUsuaria compacto />
     </header>
@@ -22,7 +22,7 @@ export function NavegacaoCelular() {
   return (
     <nav
       aria-label="Menu principal"
-      className="pb-safe fixed inset-x-0 bottom-0 z-30 border-t border-border bg-[#0d0d0d]/95 backdrop-blur-md lg:hidden"
+      className="pb-safe fixed inset-x-0 bottom-0 z-30 border-t border-border bg-surface/95 backdrop-blur-md lg:hidden"
     >
       <ul className="mx-auto grid max-w-lg grid-cols-5">
         {ITENS_NAV.map(({ para, curto, icone: Icone }) => (
@@ -33,7 +33,7 @@ export function NavegacaoCelular() {
               className={({ isActive }) =>
                 cn(
                   'relative flex h-[66px] flex-col items-center justify-center gap-1 text-[11px] font-semibold transition-colors outline-none focus-visible:bg-surface-2',
-                  isActive ? 'text-foreground' : 'text-[#8a8a8a]',
+                  isActive ? 'text-foreground' : 'text-muted-foreground',
                 )
               }
             >

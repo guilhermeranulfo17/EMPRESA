@@ -26,7 +26,7 @@ export const ETAPAS_ATIVAS: EtapaId[] = ['nova', 'primeiro_contato', 'qualificac
 
 /** Cor discreta de cada etapa (um pontinho no cabeçalho da coluna). */
 export const COR_ETAPA: Record<EtapaId, string> = {
-  nova: '#A3A3A3',
+  nova: '#B8B0A5',
   primeiro_contato: '#3B82F6',
   qualificacao: '#8B9CF7',
   apresentacao: '#EAB308',
@@ -48,12 +48,12 @@ export const SERVICO_POR_ID = Object.fromEntries(SERVICOS.map((s) => [s.id, s]))
 
 /** Tag colorida de cada serviço: fundo bem leve + texto na cor. */
 export const COR_SERVICO: Record<ServicoId, { texto: string; fundo: string; borda: string }> = {
-  recrutamento: { texto: '#FF8A4C', fundo: 'rgba(255,90,0,0.10)', borda: 'rgba(255,90,0,0.28)' },
-  temporaria: { texto: '#60A5FA', fundo: 'rgba(59,130,246,0.10)', borda: 'rgba(59,130,246,0.28)' },
-  consultoria_cargos: { texto: '#4ADE80', fundo: 'rgba(34,197,94,0.10)', borda: 'rgba(34,197,94,0.26)' },
-  consultoria_clima: { texto: '#4ADE80', fundo: 'rgba(34,197,94,0.10)', borda: 'rgba(34,197,94,0.26)' },
-  consultoria_desempenho: { texto: '#4ADE80', fundo: 'rgba(34,197,94,0.10)', borda: 'rgba(34,197,94,0.26)' },
-  treinamentos: { texto: '#FACC15', fundo: 'rgba(234,179,8,0.10)', borda: 'rgba(234,179,8,0.26)' },
+  recrutamento: { texto: '#C24600', fundo: 'rgba(255,90,0,0.09)', borda: 'transparent' },
+  temporaria: { texto: '#1D4ED8', fundo: 'rgba(59,130,246,0.09)', borda: 'transparent' },
+  consultoria_cargos: { texto: '#15803D', fundo: 'rgba(34,197,94,0.11)', borda: 'transparent' },
+  consultoria_clima: { texto: '#15803D', fundo: 'rgba(34,197,94,0.11)', borda: 'transparent' },
+  consultoria_desempenho: { texto: '#15803D', fundo: 'rgba(34,197,94,0.11)', borda: 'transparent' },
+  treinamentos: { texto: '#A16207', fundo: 'rgba(234,179,8,0.14)', borda: 'transparent' },
 }
 
 export const SEGMENTOS: Segmento[] = [

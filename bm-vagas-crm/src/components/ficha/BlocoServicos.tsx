@@ -25,7 +25,7 @@ export function BlocoServicos({ empresa }: { empresa: Empresa }) {
           const itens = SERVICOS.filter((s) => s.grupo === grupo)
           return (
             <div key={grupo}>
-              {itens.length > 1 && <p className="mb-1.5 text-xs font-medium text-[#7a7a7a]">{grupo}</p>}
+              {itens.length > 1 && <p className="mb-1.5 text-xs font-medium text-muted-foreground">{grupo}</p>}
               <div className="flex flex-wrap gap-2">
                 {itens.map((s) => {
                   const ativo = empresa.servicos.includes(s.id)
@@ -38,7 +38,7 @@ export function BlocoServicos({ empresa }: { empresa: Empresa }) {
                       onClick={() => alternar(s.id)}
                       className={cn(
                         'inline-flex min-h-10 items-center gap-1.5 rounded-full border px-3.5 text-sm font-semibold transition-all',
-                        !ativo && 'border-border bg-transparent text-muted-foreground hover:border-[#3a3a3a] hover:text-foreground',
+                        !ativo && 'border-border bg-transparent text-muted-foreground hover:border-border-strong hover:text-foreground',
                       )}
                       style={ativo ? { color: cor.texto, backgroundColor: cor.fundo, borderColor: cor.borda } : undefined}
                     >

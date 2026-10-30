@@ -2,6 +2,7 @@ import type { LucideIcon } from 'lucide-react'
 import { CalendarCheck, FileText, MessagesSquare, Trophy } from 'lucide-react'
 import { Bar, BarChart, ResponsiveContainer } from 'recharts'
 import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
 import { formatarMoedaCurta } from '@/lib/formatar'
 import type { indicadores } from '@/lib/selecoes'
 
@@ -29,18 +30,26 @@ function Indicador({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.05 * i, duration: 0.3 }}
-      className="surface relative flex min-h-[112px] flex-col justify-between overflow-hidden p-4 sm:p-5"
+      className={cn(
+        'relative flex min-h-[132px] flex-col justify-between overflow-hidden rounded-[var(--radius)] p-5',
+        destaque ? 'bg-primary text-white shadow-[0_18px_40px_-20px_rgba(255,90,0,0.7)]' : 'surface',
+      )}
     >
-      <div className="flex items-center gap-2 text-[13px] font-medium text-muted-foreground">
-        <Icone className="size-4" aria-hidden />
-        <span>{rotulo}</span>
+      <div className="flex items-center gap-2.5">
+        <span
+          className={cn(
+            'grid size-9 place-items-center rounded-[12px]',
+            destaque ? 'bg-white/20 text-white' : 'bg-surface-2 text-ink-2',
+          )}
+        >
+          <Icone className="size-[18px]" aria-hidden />
+        </span>
+        <span className={cn('text-[13px] font-medium', destaque ? 'text-white/85' : 'text-muted-foreground')}>{rotulo}</span>
       </div>
-      <div className="mt-2 flex items-end justify-between gap-2">
+      <div className="mt-3 flex items-end justify-between gap-2">
         <div>
-          <p className={`font-display text-[34px] leading-none font-bold tabular ${destaque ? 'text-primary' : 'text-foreground'}`}>
-            {valor}
-          </p>
-          {detalhe && <p className="mt-1.5 text-xs text-[#7a7a7a]">{detalhe}</p>}
+          <p className="font-display text-[36px] leading-none font-bold tabular">{valor}</p>
+          {detalhe && <p className={cn('mt-1.5 text-xs', destaque ? 'text-white/80' : 'text-muted-foreground')}>{detalhe}</p>}
         </div>
         {extra}
       </div>
@@ -56,12 +65,13 @@ export function Indicadores({ dados }: { dados: Dados }) {
         icone={MessagesSquare}
         rotulo="Contatos na semana"
         valor={dados.contatosSemana}
+        detalhe="Ligações e mensagens"
         destaque
         extra={
           <div className="h-10 w-20" aria-hidden>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={dados.contatosPorDia} barCategoryGap={3}>
-                <Bar dataKey="total" fill="#FF5A00" radius={[3, 3, 0, 0]} isAnimationActive />
+                <Bar dataKey="total" fill="rgba(255,255,255,0.85)" radius={[3, 3, 3, 3]} isAnimationActive />
               </BarChart>
             </ResponsiveContainer>
           </div>

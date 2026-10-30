@@ -52,12 +52,12 @@ export function RegistroRapido({ empresa }: { empresa: Empresa }) {
   }
 
   return (
-    <div className="border-t border-border bg-[#121212] px-5 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[0_-20px_40px_-20px_rgba(0,0,0,0.8)] sm:px-7">
+    <div className="border-t border-border bg-surface px-5 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[0_-20px_40px_-20px_rgba(60,40,20,0.08)] sm:px-7">
       <button
         type="button"
         onClick={() => setAberto((v) => !v)}
         aria-expanded={aberto}
-        className="flex h-12 w-full items-center gap-2 rounded-[12px] border border-border bg-surface-2 px-4 text-[15px] font-semibold text-foreground sm:hidden"
+        className="flex h-12 w-full items-center gap-2 rounded-[12px] border border-transparent bg-surface-2 px-4 text-[15px] font-semibold text-foreground sm:hidden"
       >
         <MessageSquarePlus className="size-5 text-primary" />
         Registrar conversa
@@ -97,8 +97,8 @@ export function RegistroRapido({ empresa }: { empresa: Empresa }) {
               className={cn(
                 'h-9 rounded-full border px-3 text-[13px] font-semibold transition-colors',
                 dias === p.dias
-                  ? 'border-primary bg-primary/12 text-white'
-                  : 'border-border text-muted-foreground hover:border-[#3a3a3a] hover:text-foreground',
+                  ? 'border-primary bg-primary/10 text-primary-ink'
+                  : 'border-border text-muted-foreground hover:border-border-strong hover:text-foreground',
               )}
             >
               {p.nome}

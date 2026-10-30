@@ -68,7 +68,7 @@ export function FichaEmpresa() {
         {empresa && (
           <>
             {/* Cabeçalho */}
-            <div className="border-b border-border bg-[#121212] px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-5 sm:px-7 sm:pt-6">
+            <div className="border-b border-border bg-surface px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-5 sm:px-7 sm:pt-6">
               <div className="flex items-start gap-3">
                 <Button variant="ghost" size="icon-sm" onClick={fechar} aria-label="Voltar" className="-ml-2 sm:hidden">
                   <ArrowLeft />
@@ -93,7 +93,7 @@ export function FichaEmpresa() {
 
               <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-[1.3fr_1fr_1fr]">
                 <div className="col-span-2 flex flex-col gap-1.5 sm:col-span-1">
-                  <label htmlFor="ficha-etapa" className="text-xs font-medium text-[#7a7a7a]">
+                  <label htmlFor="ficha-etapa" className="text-xs font-medium text-muted-foreground">
                     Etapa
                   </label>
                   <Select value={empresa.etapaId ?? ''} onValueChange={(v) => trocarEtapa(v as EtapaId)}>
@@ -113,7 +113,7 @@ export function FichaEmpresa() {
                   </Select>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="ficha-resp" className="text-xs font-medium text-[#7a7a7a]">
+                  <label htmlFor="ficha-resp" className="text-xs font-medium text-muted-foreground">
                     Responsável
                   </label>
                   <Select value={empresa.responsavelId} onValueChange={(v) => trocarResponsavel(v as UsuariaId)}>
@@ -130,11 +130,11 @@ export function FichaEmpresa() {
                   </Select>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="ficha-valor" className="text-xs font-medium text-[#7a7a7a]">
+                  <label htmlFor="ficha-valor" className="text-xs font-medium text-muted-foreground">
                     Valor estimado
                   </label>
                   <div className="relative">
-                    <span className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-sm text-[#7a7a7a]">R$</span>
+                    <span className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-sm text-muted-foreground">R$</span>
                     <Input
                       id="ficha-valor"
                       inputMode="numeric"
@@ -152,15 +152,15 @@ export function FichaEmpresa() {
             {/* Conteúdo */}
             <div className="scrollbar-thin flex-1 overflow-y-auto px-5 py-6 sm:px-7">
               <div className="flex flex-col gap-5">
-                <div className="flex flex-wrap items-center gap-3 rounded-[14px] border border-border bg-surface-2 p-4">
+                <div className="flex flex-wrap items-center gap-3 rounded-[14px] border border-transparent bg-surface-2 p-4">
                   <span
-                    className={`grid size-10 place-items-center rounded-full ${atrasado ? 'bg-danger/15 text-[#F87171]' : 'bg-primary/12 text-primary'}`}
+                    className={`grid size-10 place-items-center rounded-full ${atrasado ? 'bg-danger/15 text-danger-ink' : 'bg-primary/12 text-primary'}`}
                   >
                     <CalendarClock className="size-5" />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-medium text-[#7a7a7a]">Próximo contato</p>
-                    <p className={`font-semibold ${atrasado ? 'text-[#F87171]' : 'text-foreground'}`}>
+                    <p className="text-xs font-medium text-muted-foreground">Próximo contato</p>
+                    <p className={`font-semibold ${atrasado ? 'text-danger-ink' : 'text-foreground'}`}>
                       {empresa.proximoContato ? textoProximoContato(empresa.proximoContato) : 'Sem data marcada'}
                     </p>
                     <p className="line-clamp-2 text-sm text-muted-foreground">{empresa.proximaAcao}</p>

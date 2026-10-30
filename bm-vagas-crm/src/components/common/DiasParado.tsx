@@ -19,8 +19,8 @@ export function DiasParado({ desde, className }: { desde: string | null; classNa
       className={cn(
         'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold tabular',
         nivel === 'normal' && 'text-muted-foreground',
-        nivel === 'amarelo' && 'bg-warning/10 text-[#FACC15]',
-        nivel === 'vermelho' && 'bg-danger/12 text-[#F87171]',
+        nivel === 'amarelo' && 'bg-warning/10 text-warning-ink',
+        nivel === 'vermelho' && 'bg-danger/12 text-danger-ink',
         className,
       )}
       title={`Parada nesta etapa há ${texto.toLowerCase()}`}

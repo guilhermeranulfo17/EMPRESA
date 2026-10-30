@@ -24,7 +24,7 @@ export function EstadoVazio({
     >
       <div className="relative mb-5">
         <div className="absolute inset-0 rounded-full bg-primary/10 blur-xl" />
-        <div className="relative grid size-16 place-items-center rounded-[18px] border border-border bg-surface-2 text-muted-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+        <div className="relative grid size-16 place-items-center rounded-[18px] border border-transparent bg-surface-2 text-muted-foreground ">
           <Icone className="size-7" strokeWidth={1.6} />
         </div>
       </div>

@@ -8,35 +8,45 @@
  * usarem por nome (bg-surface, text-muted-foreground, text-brand...).
  */
 :root {
-  --radius: 14px;
+  /* Claro e minimalista: fundo off-white, cards brancos, laranja só nos destaques. */
+  --radius: 18px;
 
-  --background: #0a0a0a;
-  --foreground: #ffffff;
-  --surface: #141414;
-  --surface-2: #1c1c1c;
-  --surface-3: #232323;
-  --card: #141414;
-  --card-foreground: #ffffff;
-  --popover: #1c1c1c;
-  --popover-foreground: #ffffff;
+  --background: #f2f0ec;
+  --foreground: #1a1714;
+  --surface: #ffffff;
+  --surface-2: #f7f5f2;
+  --surface-3: #eeebe6;
+  --card: #ffffff;
+  --card-foreground: #1a1714;
+  --popover: #ffffff;
+  --popover-foreground: #1a1714;
   --primary: #ff5a00;
   --primary-hover: #ff7a2e;
+  --primary-ink: #c24600;
   --primary-foreground: #ffffff;
-  --secondary: #1c1c1c;
-  --secondary-foreground: #ffffff;
-  --muted: #1c1c1c;
-  --muted-foreground: #a3a3a3;
-  --accent: #232323;
-  --accent-foreground: #ffffff;
-  --destructive: #ef4444;
-  --border: #262626;
-  --input: #2e2e2e;
+  --secondary: #f7f5f2;
+  --secondary-foreground: #1a1714;
+  --muted: #f7f5f2;
+  --muted-foreground: #756f67;
+  --subtle: #a39c92;
+  --ink-2: #3d3832;
+  --accent: #eeebe6;
+  --accent-foreground: #1a1714;
+  --destructive: #dc2626;
+  --border: #ebe7e1;
+  --border-strong: #dcd6cd;
+  --input: #e6e1da;
+  --track: #dcd6cd;
   --ring: #ff5a00;
 
   --success: #22c55e;
   --warning: #eab308;
   --danger: #ef4444;
   --info: #3b82f6;
+  --success-ink: #15803d;
+  --warning-ink: #a16207;
+  --danger-ink: #dc2626;
+  --info-ink: #1d4ed8;
 }
 
 @theme inline {
@@ -60,6 +70,15 @@
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-ink: var(--primary-ink);
+  --color-subtle: var(--subtle);
+  --color-ink-2: var(--ink-2);
+  --color-border-strong: var(--border-strong);
+  --color-track: var(--track);
+  --color-success-ink: var(--success-ink);
+  --color-warning-ink: var(--warning-ink);
+  --color-danger-ink: var(--danger-ink);
+  --color-info-ink: var(--info-ink);
   --color-brand: var(--primary);
   --color-brand-hover: var(--primary-hover);
   --color-secondary: var(--secondary);
@@ -77,8 +96,8 @@
   --color-danger: var(--danger);
   --color-info: var(--info);
 
-  --shadow-soft: 0 1px 0 0 rgb(255 255 255 / 0.03) inset, 0 8px 24px -12px rgb(0 0 0 / 0.6);
-  --shadow-lift: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 18px 40px -18px rgb(0 0 0 / 0.85);
+  --shadow-soft: 0 1px 2px rgb(60 40 20 / 0.03);
+  --shadow-lift: 0 14px 34px -16px rgb(60 40 20 / 0.16);
 }
 
 @layer base {
@@ -86,26 +105,19 @@
     @apply border-border;
   }
   html {
-    color-scheme: dark;
+    color-scheme: light;
     -webkit-tap-highlight-color: transparent;
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
     min-height: 100dvh;
-    /*
-     * Metal escovado: linhas horizontais finíssimas + ruído leve, por cima do #0A0A0A.
-     */
-    background-color: #0a0a0a;
-    background-image:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9 0.012' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"),
-      repeating-linear-gradient(0deg, rgb(255 255 255 / 0.012) 0px, rgb(255 255 255 / 0.012) 1px, transparent 1px, transparent 3px);
-    background-attachment: fixed;
+    background-color: var(--background);
   }
   h1, h2, h3, h4 {
     @apply font-display tracking-tight;
   }
   ::selection {
-    background: rgb(255 90 0 / 0.35);
+    background: rgb(255 90 0 / 0.2);
   }
   :focus-visible {
     outline: 2px solid var(--ring);
@@ -125,7 +137,7 @@
   }
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: #2e2e2e transparent;
+    scrollbar-color: #d6d0c7 transparent;
   }
   .scrollbar-none {
     scrollbar-width: none;
@@ -139,7 +151,7 @@
   /* Superfície padrão de card: #141414 com borda #262626 e sombra suave. */
   .surface {
     background-color: var(--surface);
-    border: 1px solid var(--border);
+    border: 1px solid transparent;
     border-radius: var(--radius);
     box-shadow: var(--shadow-soft);
   }

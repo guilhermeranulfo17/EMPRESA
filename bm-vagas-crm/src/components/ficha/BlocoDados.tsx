@@ -121,7 +121,7 @@ export function BlocoDados({ empresa }: { empresa: Empresa }) {
           <div className="col-span-2">
             <Dado rotulo="Site">
               {site && (
-                <a href={site} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[#FF8A4C] hover:underline">
+                <a href={site} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-primary-ink hover:underline">
                   {empresa.site}
                   <ExternalLink className="size-3.5" />
                 </a>

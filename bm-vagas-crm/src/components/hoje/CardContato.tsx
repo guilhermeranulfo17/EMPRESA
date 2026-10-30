@@ -47,12 +47,10 @@ export const CardContato = forwardRef<HTMLElement, Props>(function CardContato({
       exit={{ opacity: 0, x: 40, scale: 0.97, transition: { duration: 0.25 } }}
       transition={{ type: 'spring', stiffness: 380, damping: 34 }}
       className={cn(
-        'surface group relative overflow-hidden transition-[border-color,box-shadow] duration-200 hover:border-[#333] hover:shadow-[var(--shadow-lift)]',
-        atrasado && 'border-danger/30',
+        'surface group relative overflow-hidden transition-[border-color,box-shadow] duration-200 hover:shadow-[var(--shadow-lift)]',
       )}
       aria-label={`${empresa.nome}${atrasado ? ', atrasado' : ''}`}
     >
-      {atrasado && <span className="absolute inset-y-0 left-0 w-[3px] bg-danger" aria-hidden />}
 
       <div className="p-5 sm:p-6">
         {/* Cabeçalho */}
@@ -70,7 +68,7 @@ export const CardContato = forwardRef<HTMLElement, Props>(function CardContato({
                   Para hoje
                 </Badge>
               )}
-              <span className="text-xs font-medium text-[#7a7a7a]">{nomeEtapa(config, empresa.etapaId)}</span>
+              <span className="text-xs font-medium text-muted-foreground">{nomeEtapa(config, empresa.etapaId)}</span>
             </div>
             <button
               type="button"
@@ -92,13 +90,13 @@ export const CardContato = forwardRef<HTMLElement, Props>(function CardContato({
 
         {/* Pessoa + histórico */}
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <div className="rounded-[12px] bg-[#101010] px-4 py-3">
-            <p className="text-[11px] font-semibold tracking-wider text-[#6b6b6b] uppercase">Falar com</p>
+          <div className="rounded-[14px] bg-surface-2 px-4 py-3">
+            <p className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">Falar com</p>
             <p className="mt-0.5 font-semibold text-foreground">{empresa.decisor.nome}</p>
             <p className="text-sm text-muted-foreground">{empresa.decisor.cargo}</p>
           </div>
-          <div className="rounded-[12px] bg-[#101010] px-4 py-3">
-            <p className="text-[11px] font-semibold tracking-wider text-[#6b6b6b] uppercase">Último contato</p>
+          <div className="rounded-[14px] bg-surface-2 px-4 py-3">
+            <p className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">Último contato</p>
             <p className="mt-0.5 font-semibold text-foreground">
               {ultimo ? `${tempoRelativo(ultimo.data)[0].toUpperCase()}${tempoRelativo(ultimo.data).slice(1)}, ${NOME_TIPO_INTERACAO[ultimo.tipo]}` : 'Ainda não houve'}
             </p>
@@ -122,7 +120,7 @@ export const CardContato = forwardRef<HTMLElement, Props>(function CardContato({
         </div>
 
         {/* Mensagem sugerida */}
-        <div className="mt-4 rounded-[12px] border border-border bg-[#0f0f0f]">
+        <div className="mt-4 rounded-[14px] bg-surface-2">
           <button
             type="button"
             onClick={() => setVerMensagem((v) => !v)}
@@ -139,13 +137,13 @@ export const CardContato = forwardRef<HTMLElement, Props>(function CardContato({
             transition={{ duration: 0.22 }}
             className="overflow-hidden"
           >
-            <p className="px-4 pb-4 text-[15px] leading-relaxed text-[#d4d4d4]">{mensagem}</p>
+            <p className="px-4 pb-4 text-[15px] leading-relaxed text-ink-2">{mensagem}</p>
           </motion.div>
         </div>
       </div>
 
       {/* Ações */}
-      <div className="grid grid-cols-2 gap-2 border-t border-border bg-[#111]/60 p-3 sm:flex sm:flex-wrap sm:items-center sm:p-4">
+      <div className="grid grid-cols-2 gap-2 px-3 pb-4 sm:flex sm:flex-wrap sm:items-center sm:px-6 sm:pb-6">
         <Button variant="secondary" onClick={copiar} className="sm:flex-none">
           <Copy />
           Copiar mensagem

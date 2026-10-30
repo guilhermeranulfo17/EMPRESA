@@ -51,7 +51,7 @@ export default function Hoje() {
         </h1>
         {atrasados > 0 && (
           <p className="mt-2 text-[15px] text-muted-foreground">
-            Comecem pelos <span className="font-semibold text-[#F87171]">{atrasados} atrasados</span>, que estão no topo da lista.
+            Comecem pelos <span className="font-semibold text-danger-ink">{atrasados} atrasados</span>, que estão no topo da lista.
           </p>
         )}
       </header>

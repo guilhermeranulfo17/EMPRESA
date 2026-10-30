@@ -98,7 +98,7 @@ export function RegistrarContatoDialog({
                 key={r}
                 type="button"
                 onClick={() => setTexto((t) => (t ? `${t}. ${r}` : r))}
-                className="rounded-full border border-border bg-surface-2 px-3 py-1.5 text-[13px] font-medium text-muted-foreground transition-colors hover:border-[#3a3a3a] hover:text-foreground"
+                className="rounded-full border border-transparent bg-surface-2 px-3 py-1.5 text-[13px] font-medium text-muted-foreground transition-colors hover:border-border-strong hover:text-foreground"
               >
                 {r}
               </button>

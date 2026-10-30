@@ -117,13 +117,13 @@ export function CardLivia({ livia }: { livia: AssistenteLivia }) {
               />
             </Campo>
             <div className="mt-2 flex flex-wrap items-center gap-1.5">
-              <span className="text-[13px] text-[#7a7a7a]">Inserir:</span>
+              <span className="text-[13px] text-muted-foreground">Inserir:</span>
               {VARIAVEIS.map((x) => (
                 <button
                   key={x.v}
                   type="button"
                   onClick={() => inserir(x.v)}
-                  className="rounded-full border border-primary/30 bg-primary/[0.08] px-3 py-1 font-mono text-[13px] text-[#FF8A4C] transition-colors hover:bg-primary/15"
+                  className="rounded-full bg-primary/[0.08] px-3 py-1 font-mono text-[13px] text-primary-ink transition-colors hover:bg-primary/15"
                   aria-label={`Inserir ${x.nome}`}
                 >
                   {x.v}
@@ -135,7 +135,7 @@ export function CardLivia({ livia }: { livia: AssistenteLivia }) {
             <Button size="lg" onClick={salvar} disabled={!alterado}>
               <Save /> Salvar ajustes
             </Button>
-            {alterado && <span className="text-sm text-[#FACC15]">Você tem alterações não salvas</span>}
+            {alterado && <span className="text-sm text-warning-ink">Você tem alterações não salvas</span>}
           </div>
         </div>
 
@@ -157,16 +157,16 @@ export function CardLivia({ livia }: { livia: AssistenteLivia }) {
             <p className="mb-2.5 flex items-center gap-2 text-[13px] font-medium text-muted-foreground">
               <Send className="size-3.5" /> Últimos disparos
             </p>
-            <div className="h-24 rounded-[12px] border border-border bg-[#101010] px-2 pt-2" aria-hidden>
+            <div className="h-24 rounded-[14px] bg-surface-2 px-2 pt-2" aria-hidden>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={[...livia.historico].reverse().map((h) => ({ dia: dataCurta(h.data), Enviadas: h.enviadas, Respostas: h.respostas }))}>
-                  <XAxis dataKey="dia" tick={{ fill: '#6b6b6b', fontSize: 11 }} axisLine={false} tickLine={false} />
+                  <XAxis dataKey="dia" tick={{ fill: '#756f67', fontSize: 11 }} axisLine={false} tickLine={false} />
                   <Tooltip
-                    cursor={{ fill: 'rgba(255,255,255,0.04)' }}
-                    contentStyle={{ background: '#1C1C1C', border: '1px solid #2e2e2e', borderRadius: 10, fontSize: 12 }}
-                    labelStyle={{ color: '#A3A3A3' }}
+                    cursor={{ fill: 'rgba(60,40,20,0.04)' }}
+                    contentStyle={{ background: '#fff', border: '1px solid #ebe7e1', borderRadius: 12, fontSize: 12 }}
+                    labelStyle={{ color: '#756f67' }}
                   />
-                  <Bar dataKey="Enviadas" fill="#3a3a3a" radius={[3, 3, 0, 0]} />
+                  <Bar dataKey="Enviadas" fill="#E6E1DA" radius={[3, 3, 0, 0]} />
                   <Bar dataKey="Respostas" fill="#FF5A00" radius={[3, 3, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
@@ -174,7 +174,7 @@ export function CardLivia({ livia }: { livia: AssistenteLivia }) {
             <ul className="mt-2 divide-y divide-border">
               {livia.historico.slice(0, 4).map((h) => (
                 <li key={h.id} className="flex items-center justify-between py-2.5 text-sm">
-                  <span className="text-[#d4d4d4]">{diaSemanaEData(h.data)}</span>
+                  <span className="text-ink-2">{diaSemanaEData(h.data)}</span>
                   <span className="text-muted-foreground tabular">
                     {h.enviadas} enviadas · <span className="font-semibold text-primary">{h.respostas} respostas</span>
                   </span>

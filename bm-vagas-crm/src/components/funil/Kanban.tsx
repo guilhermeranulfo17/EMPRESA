@@ -66,19 +66,19 @@ function Coluna({ etapa, empresas }: { etapa: Etapa; empresas: Empresa[] }) {
       aria-label={`${etapa.nome}: ${empresas.length} empresas`}
       className="flex w-[84vw] max-w-[310px] shrink-0 snap-start flex-col sm:w-[300px]"
     >
-      <header className="mb-3 flex items-center gap-2.5 rounded-[14px] border border-border bg-surface px-4 py-3">
+      <header className="mb-2 flex items-center gap-2.5 px-2 py-2">
         <span className="size-2.5 rounded-full" style={{ backgroundColor: COR_ETAPA[etapa.id] }} aria-hidden />
         <h2 className="min-w-0 flex-1 truncate font-display text-[15px] font-bold">{etapa.nome}</h2>
-        <span className="grid h-6 min-w-6 place-items-center rounded-full bg-surface-3 px-1.5 text-xs font-bold text-muted-foreground tabular">
+        <span className="grid h-6 min-w-6 place-items-center rounded-full bg-surface px-1.5 text-xs font-bold text-muted-foreground tabular">
           {empresas.length}
         </span>
-        <span className="font-display text-[13px] font-semibold text-[#d4d4d4] tabular">{formatarMoedaCurta(total)}</span>
+        <span className="font-display text-[13px] font-semibold text-ink-2 tabular">{formatarMoedaCurta(total)}</span>
       </header>
       <div
         ref={setNodeRef}
         className={cn(
-          'flex min-h-[220px] flex-1 flex-col gap-2.5 rounded-[16px] border border-dashed border-transparent p-1.5 transition-colors duration-200',
-          isOver && 'border-primary/50 bg-primary/[0.04]',
+          'flex min-h-[220px] flex-1 flex-col gap-2.5 rounded-[20px] border border-dashed border-transparent bg-surface-3/40 p-2 transition-colors duration-200',
+          isOver && 'border-primary/50 bg-primary/[0.05]',
         )}
       >
         <AnimatePresence initial={false}>
@@ -87,13 +87,13 @@ function Coluna({ etapa, empresas }: { etapa: Etapa; empresas: Empresa[] }) {
           ))}
         </AnimatePresence>
         {empresas.length === 0 && !isOver && (
-          <p className="px-3 py-8 text-center text-[13px] text-[#6b6b6b]">Arraste uma empresa para cá</p>
+          <p className="px-3 py-8 text-center text-[13px] text-muted-foreground">Arraste uma empresa para cá</p>
         )}
         {etapa.id === 'nova' && (
           <button
             type="button"
             onClick={() => abrirNovaEmpresa('nova')}
-            className="flex h-11 items-center justify-center gap-2 rounded-[12px] border border-dashed border-[#2e2e2e] text-sm font-semibold text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+            className="flex h-11 items-center justify-center gap-2 rounded-full border border-dashed border-border-strong text-sm font-semibold text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
           >
             <Plus className="size-4" /> Nova empresa
           </button>

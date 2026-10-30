@@ -39,8 +39,8 @@ export function SeletorTipo({
               'flex flex-col items-center justify-center gap-1 rounded-[12px] border font-semibold transition-all',
               compacto ? 'h-12 text-[11px]' : 'h-16 text-xs',
               ativo
-                ? 'border-primary bg-primary/12 text-white'
-                : 'border-border bg-[#101010] text-muted-foreground hover:border-[#3a3a3a] hover:text-foreground',
+                ? 'border-primary bg-primary/10 text-primary-ink'
+                : 'border-transparent bg-surface-2 text-muted-foreground hover:border-border-strong hover:text-foreground',
             )}
           >
             <Icone className={cn(compacto ? 'size-4' : 'size-5', ativo && 'text-primary')} />

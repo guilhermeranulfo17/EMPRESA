@@ -39,7 +39,7 @@ export function RotinaDoDia() {
           <span className={cn(feitos === ITENS.length && 'text-success')}>{feitos}</span>/{ITENS.length}
         </span>
       </div>
-      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#202020]">
+      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-surface-3">
         <motion.div
           className="h-full rounded-full bg-primary"
           initial={false}
@@ -62,7 +62,7 @@ export function RotinaDoDia() {
                 <span
                   className={cn(
                     'mt-0.5 grid size-6 shrink-0 place-items-center rounded-[8px] border transition-all duration-200',
-                    feito ? 'border-success bg-success text-black' : 'border-[#3a3a3a] bg-[#101010]',
+                    feito ? 'border-success bg-success text-white' : 'border-border-strong bg-surface-2',
                   )}
                 >
                   <motion.span initial={false} animate={{ scale: feito ? 1 : 0 }} transition={{ type: 'spring', stiffness: 600, damping: 25 }}>
@@ -70,10 +70,10 @@ export function RotinaDoDia() {
                   </motion.span>
                 </span>
                 <span className="min-w-0">
-                  <span className={cn('block text-[15px] font-semibold transition-colors', feito ? 'text-[#6b6b6b] line-through' : 'text-foreground')}>
+                  <span className={cn('block text-[15px] font-semibold transition-colors', feito ? 'text-muted-foreground line-through' : 'text-foreground')}>
                     {item.titulo}
                   </span>
-                  <span className="block text-[13px] text-[#7a7a7a]">{item.dica}</span>
+                  <span className="block text-[13px] text-muted-foreground">{item.dica}</span>
                 </span>
               </button>
             </li>

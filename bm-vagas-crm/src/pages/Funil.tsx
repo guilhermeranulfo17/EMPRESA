@@ -94,7 +94,7 @@ export default function Funil() {
         size="icon"
         onClick={() => abrirNovaEmpresa()}
         aria-label="Nova empresa"
-        className="fixed right-4 bottom-[88px] z-20 size-14 rounded-full shadow-[0_12px_30px_-6px_rgba(255,90,0,0.7)] sm:hidden"
+        className="fixed right-4 bottom-[88px] z-20 size-14 rounded-full shadow-[0_12px_30px_-6px_rgba(255,90,0,0.28)] sm:hidden"
       >
         <Plus className="size-6" />
       </Button>

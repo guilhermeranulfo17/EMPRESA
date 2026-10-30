@@ -74,14 +74,14 @@ export function CardRafael({ rafael }: { rafael: AssistenteRafael }) {
             <label htmlFor="rafael-cidade" className="mb-2 block text-[13px] font-medium text-muted-foreground">
               Cidades específicas (opcional)
             </label>
-            <div className="flex flex-wrap items-center gap-1.5 rounded-[12px] border border-input bg-[#101010] p-1.5 focus-within:border-primary/70 focus-within:ring-2 focus-within:ring-primary/25">
+            <div className="flex flex-wrap items-center gap-1.5 rounded-[12px] border border-input bg-surface-2 p-1.5 focus-within:border-primary/70 focus-within:ring-2 focus-within:ring-primary/25">
               {cfg.cidades.map((c) => (
                 <span key={c} className="inline-flex h-8 items-center gap-1 rounded-[8px] bg-surface-3 pr-1 pl-2.5 text-sm">
                   {c}
                   <button
                     type="button"
                     onClick={() => setCfg({ ...cfg, cidades: cfg.cidades.filter((x) => x !== c) })}
-                    className="grid size-6 place-items-center rounded-[6px] text-muted-foreground hover:bg-[#333] hover:text-foreground"
+                    className="grid size-6 place-items-center rounded-[6px] text-muted-foreground hover:bg-surface-3 hover:text-foreground"
                     aria-label={`Remover ${c}`}
                   >
                     <X className="size-3.5" />
@@ -120,7 +120,7 @@ export function CardRafael({ rafael }: { rafael: AssistenteRafael }) {
             <Button size="lg" onClick={salvar} disabled={!alterado}>
               <Save /> Salvar ajustes
             </Button>
-            {alterado && <span className="text-sm text-[#FACC15]">Você tem alterações não salvas</span>}
+            {alterado && <span className="text-sm text-warning-ink">Você tem alterações não salvas</span>}
           </div>
         </div>
 
@@ -147,7 +147,7 @@ export function CardRafael({ rafael }: { rafael: AssistenteRafael }) {
             <ul className="divide-y divide-border">
               {rafael.historico.slice(1).map((h) => (
                 <li key={h.id} className="flex items-center justify-between py-2.5 text-sm">
-                  <span className="text-[#d4d4d4]">{diaSemanaEData(h.data)}</span>
+                  <span className="text-ink-2">{diaSemanaEData(h.data)}</span>
                   <span className="text-muted-foreground tabular">
                     <span className="font-semibold text-foreground">{h.encontradas}</span> empresas · {h.estados.join(', ')}
                   </span>

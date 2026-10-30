@@ -164,14 +164,14 @@ export function ImportarPlanilhaDialog({ aberto, onOpenChange }: { aberto: boole
                 <span
                   className={cn(
                     'grid size-6 place-items-center rounded-full border text-[11px]',
-                    i < atual && 'border-success bg-success text-black',
+                    i < atual && 'border-success bg-success text-white',
                     i === atual && 'border-primary bg-primary text-white',
-                    i > atual && 'border-border text-[#6b6b6b]',
+                    i > atual && 'border-border text-muted-foreground',
                   )}
                 >
                   {i + 1}
                 </span>
-                <span className={i <= atual ? 'text-foreground' : 'text-[#6b6b6b]'}>{['Arquivo', 'Conferir', 'Pronto'][i]}</span>
+                <span className={i <= atual ? 'text-foreground' : 'text-muted-foreground'}>{['Arquivo', 'Conferir', 'Pronto'][i]}</span>
                 {i < 2 && <span className="h-px flex-1 bg-border" />}
               </li>
             )
@@ -192,7 +192,7 @@ export function ImportarPlanilhaDialog({ aberto, onOpenChange }: { aberto: boole
                 onDrop={soltar}
                 className={cn(
                   'flex w-full flex-col items-center justify-center rounded-[16px] border-2 border-dashed px-6 py-14 text-center transition-all',
-                  arrastando ? 'scale-[1.01] border-primary bg-primary/[0.06]' : 'border-[#2e2e2e] bg-[#101010] hover:border-[#444]',
+                  arrastando ? 'scale-[1.01] border-primary bg-primary/[0.06]' : 'border-border-strong bg-surface-2 hover:border-border-strong',
                 )}
               >
                 <motion.span
@@ -236,8 +236,8 @@ export function ImportarPlanilhaDialog({ aberto, onOpenChange }: { aberto: boole
                 <p className="mb-2.5 text-sm font-semibold text-foreground">Qual coluna da planilha é cada informação?</p>
                 <div className="grid gap-2.5 sm:grid-cols-2">
                   {CAMPOS.map((c) => (
-                    <div key={c.id} className="flex items-center gap-3 rounded-[12px] border border-border bg-[#101010] py-1.5 pr-1.5 pl-3.5">
-                      <label htmlFor={`map-${c.id}`} className="min-w-0 flex-1 truncate text-sm text-[#d4d4d4]">
+                    <div key={c.id} className="flex items-center gap-3 rounded-[12px] border border-transparent bg-surface-2 py-1.5 pr-1.5 pl-3.5">
+                      <label htmlFor={`map-${c.id}`} className="min-w-0 flex-1 truncate text-sm text-ink-2">
                         {c.nome}
                         {c.obrigatorio && <span className="text-primary"> *</span>}
                       </label>
@@ -266,7 +266,7 @@ export function ImportarPlanilhaDialog({ aberto, onOpenChange }: { aberto: boole
                 <p className="mb-2.5 text-sm font-semibold text-foreground">Pré-visualização (primeiras 5 linhas)</p>
                 <div className="scrollbar-thin overflow-x-auto rounded-[12px] border border-border">
                   <table className="w-full text-left text-[13px]">
-                    <thead className="bg-surface-2 text-[#7a7a7a]">
+                    <thead className="bg-surface-2 text-muted-foreground">
                       <tr>
                         {CAMPOS.filter((c) => mapa[c.id]).map((c) => (
                           <th key={c.id} className="px-3 py-2 font-semibold whitespace-nowrap">
@@ -279,8 +279,8 @@ export function ImportarPlanilhaDialog({ aberto, onOpenChange }: { aberto: boole
                       {convertidas.slice(0, 5).map((l, i) => (
                         <tr key={i} className="border-t border-border">
                           {CAMPOS.filter((c) => mapa[c.id]).map((c) => (
-                            <td key={c.id} className="max-w-[200px] truncate px-3 py-2 whitespace-nowrap text-[#d4d4d4]">
-                              {l[c.id] || <span className="text-[#555]">—</span>}
+                            <td key={c.id} className="max-w-[200px] truncate px-3 py-2 whitespace-nowrap text-ink-2">
+                              {l[c.id] || <span className="text-subtle">—</span>}
                             </td>
                           ))}
                         </tr>
@@ -306,7 +306,7 @@ export function ImportarPlanilhaDialog({ aberto, onOpenChange }: { aberto: boole
                       onClick={() => setDestino(id)}
                       className={cn(
                         'rounded-[12px] border p-3.5 text-left transition-colors',
-                        destino === id ? 'border-primary bg-primary/[0.08]' : 'border-border bg-[#101010] hover:border-[#3a3a3a]',
+                        destino === id ? 'border-primary bg-primary/[0.08]' : 'border-transparent bg-surface-2 hover:border-border-strong',
                       )}
                     >
                       <span className="block text-sm font-semibold text-foreground">{titulo}</span>
@@ -324,16 +324,16 @@ export function ImportarPlanilhaDialog({ aberto, onOpenChange }: { aberto: boole
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-                className="grid size-16 place-items-center rounded-full bg-success text-black"
+                className="grid size-16 place-items-center rounded-full bg-success text-white"
               >
                 <CheckCircle2 className="size-8" />
               </motion.span>
               <div className="mt-6 grid w-full max-w-md grid-cols-2 gap-3">
-                <div className="rounded-[14px] border border-border bg-surface-2 p-4">
+                <div className="rounded-[14px] border border-transparent bg-surface-2 p-4">
                   <p className="font-display text-4xl font-bold text-primary tabular">{resultado.importadas}</p>
                   <p className="mt-1 text-sm text-muted-foreground">importadas</p>
                 </div>
-                <div className="rounded-[14px] border border-border bg-surface-2 p-4">
+                <div className="rounded-[14px] border border-transparent bg-surface-2 p-4">
                   <p className="font-display text-4xl font-bold text-foreground tabular">{resultado.duplicadas}</p>
                   <p className="mt-1 text-sm text-muted-foreground">repetidas ignoradas</p>
                 </div>
