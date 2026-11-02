@@ -1,0 +1,138 @@
+{
+  "origem": "estimado",
+  "duracao": 83.44,
+  "frases": [
+    {
+      "cena": "gancho",
+      "texto": "Dono de buffet: quantas vezes hoje você já respondeu a mesma pergunta no WhatsApp?",
+      "inicio": 0,
+      "fim": 4.87
+    },
+    {
+      "cena": "gancho",
+      "texto": "Quanto fica pra sessenta pessoas?",
+      "inicio": 5.22,
+      "fim": 7.19
+    },
+    {
+      "cena": "gancho",
+      "texto": "E no sábado?",
+      "inicio": 7.54,
+      "fim": 8.25
+    },
+    {
+      "cena": "gancho",
+      "texto": "E com a mesa temática?",
+      "inicio": 8.6,
+      "fim": 9.91
+    },
+    {
+      "cena": "agitacao",
+      "texto": "Cada resposta é uma conta feita na mão.",
+      "inicio": 10.61,
+      "fim": 12.92
+    },
+    {
+      "cena": "agitacao",
+      "texto": "Enquanto você calcula, o cliente pergunta em outro buffet.",
+      "inicio": 13.27,
+      "fim": 16.72
+    },
+    {
+      "cena": "agitacao",
+      "texto": "A proposta enviada fica sem retorno.",
+      "inicio": 17.07,
+      "fim": 19.21
+    },
+    {
+      "cena": "agitacao",
+      "texto": "E a data, o contrato e o sinal ficam espalhados entre o caderno, uma pasta e o extrato do banco.",
+      "inicio": 19.56,
+      "fim": 25.27
+    },
+    {
+      "cena": "virada",
+      "texto": "O problema não é falta de cliente.",
+      "inicio": 25.97,
+      "fim": 27.99
+    },
+    {
+      "cena": "virada",
+      "texto": "É não ter um caminho do orçamento até a festa fechada.",
+      "inicio": 28.34,
+      "fim": 31.55
+    },
+    {
+      "cena": "orcamento",
+      "texto": "Com o Orkestra, o seu cliente monta o orçamento sozinho, no link do seu buffet.",
+      "inicio": 32.25,
+      "fim": 36.94
+    },
+    {
+      "cena": "orcamento",
+      "texto": "Ele escolhe a data, os convidados e o pacote, e vê o valor calculado com as suas regras: dia da semana, turno, idade das crianças e adicionais.",
+      "inicio": 37.29,
+      "fim": 45.79
+    },
+    {
+      "cena": "negociacao",
+      "texto": "Você recebe o contato com tudo o que ele escolheu.",
+      "inicio": 46.49,
+      "fim": 49.46
+    },
+    {
+      "cena": "negociacao",
+      "texto": "Manda a proposta com a sua marca e vê quando ela foi aberta.",
+      "inicio": 49.81,
+      "fim": 53.38
+    },
+    {
+      "cena": "negociacao",
+      "texto": "O Orkestra mostra quem chamar e deixa a mensagem pronta.",
+      "inicio": 53.73,
+      "fim": 57.06
+    },
+    {
+      "cena": "negociacao",
+      "texto": "Quem envia é você.",
+      "inicio": 57.41,
+      "fim": 58.48
+    },
+    {
+      "cena": "fechamento",
+      "texto": "Quando o cliente decide, a pré-reserva segura a data com prazo, o contrato sai do orçamento aceito, e cada parcela da festa fica anotada.",
+      "inicio": 59.18,
+      "fim": 67.32
+    },
+    {
+      "cena": "fechamento",
+      "texto": "Você sabe exatamente quanto falta receber.",
+      "inicio": 67.67,
+      "fim": 70.17
+    },
+    {
+      "cena": "oferta",
+      "texto": "Você pode testar tudo isso por catorze dias, de graça e sem cartão.",
+      "inicio": 70.87,
+      "fim": 74.85
+    },
+    {
+      "cena": "oferta",
+      "texto": "Gostou, escolhe o plano.",
+      "inicio": 75.2,
+      "fim": 76.62
+    },
+    {
+      "cena": "oferta",
+      "texto": "Não gostou, cancela quando quiser.",
+      "inicio": 76.97,
+      "fim": 79
+    },
+    {
+      "cena": "chamada",
+      "texto": "Clique em testar grátis e coloque os seus pacotes no link hoje.",
+      "inicio": 79.7,
+      "fim": 83.44
+    }
+  ]
+}
