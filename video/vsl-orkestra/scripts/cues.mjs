@@ -17,7 +17,8 @@ ids.forEach((cena, i) => {
   const ini = inicioCena(cena, i);
   const fs = da(cena);
   // transição entre cenas (menos na primeira)
-  if (i > 0) som(ini + 0.2, 'whoosh-medium-soft', 2);
+  // (a chamada usa o riser no lugar do whoosh)
+  if (i > 0 && cena !== 'chamada') som(ini + 0.2, 'whoosh-medium-soft', 2);
   switch (cena) {
     case 'gancho':
       // perguntas chegando no WhatsApp
@@ -28,26 +29,27 @@ ids.forEach((cena, i) => {
       fs.forEach((f) => som(f.inicio + 0.25, 'notification-failure-minor', 4));
       break;
     case 'virada':
-      som(fs[0].inicio + 1.2, 'writing-pen-draw', 4); // risco no "falta de cliente"
-      som(fs[1].inicio + 0.3, 'impact-medium-hard', 3); // "É falta de caminho."
+      som(fs[1].inicio - 0.2, 'writing-pen-draw', 4); // risco no "falta de cliente" (virada.tsx: de - 6)
+      som(fs[1].inicio + 0.35, 'impact-medium-hard', 3); // "É falta de caminho." surgindo
       break;
     case 'orcamento':
-      som(fs[1].inicio + 1.0, 'data-tick', 4); // total contando
+      som(fs[1].inicio + 1.5, 'data-tick', 4); // total termina de contar (orcamento.tsx: segunda + 45)
       break;
     case 'negociacao':
       som(fs[0].inicio + 0.3, 'pop-small-in', 5); // cartão do lead
       som(fs[2].inicio + 0.4, 'notification-message-out-soft', 5); // mensagem pronta
       break;
     case 'fechamento':
-      som(fs[0].inicio + 3.0, 'click-toggle-on-soft', 5); // Reservado
+      // Reservado: fechamento.tsx liga em f0 + passo * 0.6, passo = (f1 - f0) / 3
+      som(fs[0].inicio + (fs[1].inicio - fs[0].inicio) * 0.2 + 0.1, 'click-toggle-on-soft', 5);
       som(fs[1].inicio + 0.3, 'notification-success-soft', 4); // falta receber
       break;
     case 'oferta':
-      som(fs[0].inicio + 0.6, 'shimmer-medium-soft', 2); // 14 dias
+      som(fs[0].inicio + 0.3, 'shimmer-medium-soft', 2); // 14 dias
       break;
     case 'chamada':
-      som(fs[0].inicio + 0.3, 'riser-1s-soft', 0); // chega com a logo (sfx.py desconta o sync)
-      som(fs[0].inicio + 1.2, 'click-button-soft', 5); // botão
+      som(fs[0].inicio + 0.15, 'riser-1s-soft', 0); // chega com a logo (sfx.py desconta o sync)
+      som(fs[0].inicio + 0.45, 'click-button-soft', 5); // botão (surgir 8 frames depois da logo)
       break;
   }
 });
