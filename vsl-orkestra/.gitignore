@@ -6,3 +6,4 @@ out/
 public/audio/_tmp/
 public/audio/trilha.wav
 __pycache__/
+!public/marca/*.png
