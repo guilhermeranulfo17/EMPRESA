@@ -2,8 +2,12 @@
 
 ## Edição de vídeos
 
-Quando o usuário mandar um vídeo para editar, use a skill `/editar-video` (efeitos visuais, trilha original e
-efeitos sonoros, com conferência no final).
+**Formato padrão dos Reels/Shorts (aprovado em 03/11/2026):** tela dividida, com motion graphics em cima ilustrando o
+que o Gui fala, frase por frase, e ele embaixo, com legenda na divisão. Use a skill `reels-split-motion` sempre que ele
+mandar um vídeo falado para virar Reels/Shorts.
+
+Para o formato antigo (vídeo vertical inteiro com efeitos por cima), use a skill `/editar-video` (efeitos visuais,
+trilha original e efeitos sonoros, com conferência no final). Use só quando ele pedir esse formato.
 
 ## Efeitos sonoros em vídeos
 
