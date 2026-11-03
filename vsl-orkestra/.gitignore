@@ -3,3 +3,6 @@
 node_modules/
 out/
 .env
+public/audio/_tmp/
+public/audio/trilha.wav
+__pycache__/

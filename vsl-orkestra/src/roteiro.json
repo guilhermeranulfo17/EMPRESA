@@ -1,0 +1,574 @@
+{
+  "fps": 30,
+  "duracao": 55.0,
+  "cenas": {
+    "gancho": [
+      0,
+      8.05
+    ],
+    "dor": [
+      8.05,
+      15.15
+    ],
+    "mecanismo": [
+      15.15,
+      20.9
+    ],
+    "demo": [
+      20.3,
+      36.35
+    ],
+    "painel": [
+      35.9,
+      45.35
+    ],
+    "oferta": [
+      44.95,
+      55.0
+    ]
+  },
+  "demo": {
+    "shots": [
+      {
+        "src": "A01-vitrine.png",
+        "at": 20.3
+      },
+      {
+        "src": "A02-tipo.png",
+        "at": 22.72
+      },
+      {
+        "src": "A03-tipo-escolhido.png",
+        "at": 24.08
+      },
+      {
+        "src": "A25-pacotes.png",
+        "at": 25.22
+      },
+      {
+        "src": "A26-pacote-super.png",
+        "at": 25.76
+      },
+      {
+        "src": "A08-adultos-0.png",
+        "at": 26.04
+      },
+      {
+        "src": "A09-adultos-5.png",
+        "at": 26.14
+      },
+      {
+        "src": "A10-adultos-10.png",
+        "at": 26.24
+      },
+      {
+        "src": "A11-adultos-15.png",
+        "at": 26.34
+      },
+      {
+        "src": "A12-adultos-20.png",
+        "at": 26.44
+      },
+      {
+        "src": "A13-adultos-25.png",
+        "at": 26.54
+      },
+      {
+        "src": "A14-adultos-30.png",
+        "at": 26.64
+      },
+      {
+        "src": "A15-adultos-35.png",
+        "at": 26.74
+      },
+      {
+        "src": "A16-adultos-40.png",
+        "at": 26.84
+      },
+      {
+        "src": "A17-criancas-5.png",
+        "at": 26.94
+      },
+      {
+        "src": "A18-convidados-50.png",
+        "at": 27.04
+      },
+      {
+        "src": "A27-extras.png",
+        "at": 27.18
+      },
+      {
+        "src": "A28-extras-mesa.png",
+        "at": 28.0
+      },
+      {
+        "src": "A29-proposta-total.png",
+        "at": 29.38
+      },
+      {
+        "src": "A30-proposta-inteira.png",
+        "at": 31.2,
+        "alturaCss": 2345
+      },
+      {
+        "src": "A32-proposta-reservar.png",
+        "at": 34.9
+      },
+      {
+        "src": "A33-pre-reserva-confirmada.png",
+        "at": 35.4
+      }
+    ],
+    "camera": [
+      {
+        "at": 20.3,
+        "fy": 430,
+        "zoom": 1,
+        "dur": 0.01
+      },
+      {
+        "at": 21.95,
+        "fy": 640,
+        "zoom": 1,
+        "dur": 0.45
+      },
+      {
+        "at": 22.72,
+        "fy": 235,
+        "zoom": 1,
+        "dur": 0.01
+      },
+      {
+        "at": 25.22,
+        "fy": 420,
+        "zoom": 1,
+        "dur": 0.01
+      },
+      {
+        "at": 26.04,
+        "fy": 470,
+        "zoom": 1,
+        "dur": 0.01
+      },
+      {
+        "at": 27.18,
+        "fy": 290,
+        "zoom": 1,
+        "dur": 0.01
+      },
+      {
+        "at": 29.38,
+        "fy": 300,
+        "zoom": 1,
+        "dur": 0.01
+      },
+      {
+        "at": 29.62,
+        "fy": 292,
+        "zoom": 1.05,
+        "dur": 0.6,
+        "fx": 196
+      },
+      {
+        "at": 31.3,
+        "fy": 950,
+        "zoom": 1,
+        "dur": 0.7
+      },
+      {
+        "at": 33.3,
+        "fy": 1225,
+        "zoom": 1,
+        "dur": 0.55
+      },
+      {
+        "at": 34.9,
+        "fy": 520,
+        "zoom": 1,
+        "dur": 0.01
+      },
+      {
+        "at": 35.4,
+        "fy": 540,
+        "zoom": 1,
+        "dur": 0.01
+      }
+    ],
+    "taps": [
+      {
+        "at": 22.55,
+        "x": 160,
+        "y": 808
+      },
+      {
+        "at": 23.95,
+        "x": 195,
+        "y": 185
+      },
+      {
+        "at": 25.62,
+        "x": 195,
+        "y": 407
+      },
+      {
+        "at": 26.1,
+        "x": 350,
+        "y": 422,
+        "rapido": true
+      },
+      {
+        "at": 26.3,
+        "x": 350,
+        "y": 422,
+        "rapido": true
+      },
+      {
+        "at": 26.5,
+        "x": 350,
+        "y": 422,
+        "rapido": true
+      },
+      {
+        "at": 26.7,
+        "x": 350,
+        "y": 422,
+        "rapido": true
+      },
+      {
+        "at": 26.9,
+        "x": 350,
+        "y": 552,
+        "rapido": true
+      },
+      {
+        "at": 27.85,
+        "x": 177,
+        "y": 185
+      },
+      {
+        "at": 35.25,
+        "x": 195,
+        "y": 544
+      }
+    ],
+    "destaques": [
+      {
+        "de": 29.85,
+        "ate": 31.15,
+        "x": 24,
+        "y": 222,
+        "w": 348,
+        "h": 142
+      },
+      {
+        "de": 31.95,
+        "ate": 33.25,
+        "x": 18,
+        "y": 922,
+        "w": 354,
+        "h": 66
+      },
+      {
+        "de": 33.85,
+        "ate": 34.85,
+        "x": 10,
+        "y": 1212,
+        "w": 370,
+        "h": 40
+      }
+    ]
+  },
+  "painel": {
+    "shots": [
+      {
+        "src": "B01-caixa-leads.png",
+        "at": 35.9
+      },
+      {
+        "src": "B02-aviso-mariana.png",
+        "at": 37.0
+      },
+      {
+        "src": "B03-ficha.png",
+        "at": 38.02
+      },
+      {
+        "src": "B05-ficha-orcamento.png",
+        "at": 39.38
+      },
+      {
+        "src": "B07-mensagem-pronta.png",
+        "at": 42.08
+      },
+      {
+        "src": "B09-agenda.png",
+        "at": 43.55
+      }
+    ],
+    "camera": [
+      {
+        "at": 35.9,
+        "fy": 470,
+        "zoom": 1,
+        "dur": 0.01
+      },
+      {
+        "at": 36.35,
+        "fy": 235,
+        "zoom": 1,
+        "dur": 0.4
+      },
+      {
+        "at": 38.02,
+        "fy": 330,
+        "zoom": 1,
+        "dur": 0.01
+      },
+      {
+        "at": 39.38,
+        "fy": 236,
+        "zoom": 1.12,
+        "dur": 0.01
+      },
+      {
+        "at": 41.5,
+        "fy": 620,
+        "zoom": 1,
+        "dur": 0.32
+      },
+      {
+        "at": 42.08,
+        "fy": 640,
+        "zoom": 1,
+        "dur": 0.01
+      },
+      {
+        "at": 43.55,
+        "fy": 480,
+        "zoom": 1,
+        "dur": 0.01
+      }
+    ],
+    "taps": [
+      {
+        "at": 36.88,
+        "x": 296,
+        "y": 32
+      },
+      {
+        "at": 37.88,
+        "x": 187,
+        "y": 140
+      },
+      {
+        "at": 41.95,
+        "x": 70,
+        "y": 754
+      },
+      {
+        "at": 43.15,
+        "x": 195,
+        "y": 803
+      }
+    ],
+    "destaques": [
+      {
+        "de": 35.95,
+        "ate": 36.4,
+        "x": 16,
+        "y": 395,
+        "w": 358,
+        "h": 180
+      },
+      {
+        "de": 39.6,
+        "ate": 40.2,
+        "x": 26,
+        "y": 118,
+        "w": 344,
+        "h": 50
+      },
+      {
+        "de": 40.24,
+        "ate": 41.05,
+        "x": 22,
+        "y": 178,
+        "w": 350,
+        "h": 42
+      },
+      {
+        "de": 41.1,
+        "ate": 41.55,
+        "x": 22,
+        "y": 326,
+        "w": 350,
+        "h": 32
+      },
+      {
+        "de": 43.9,
+        "ate": 45.0,
+        "x": 16,
+        "y": 422,
+        "w": 358,
+        "h": 182
+      }
+    ]
+  },
+  "sfx": [
+    {
+      "at": 1.21,
+      "id": "pop-small-in",
+      "gain": 3
+    },
+    {
+      "at": 3.9,
+      "id": "notification-message-in-soft",
+      "gain": 8
+    },
+    {
+      "at": 5.85,
+      "id": "pop-small-in",
+      "gain": 3
+    },
+    {
+      "at": 8.15,
+      "id": "whoosh-medium-soft",
+      "gain": 2
+    },
+    {
+      "at": 10.15,
+      "id": "notification-message-in-soft",
+      "gain": 8
+    },
+    {
+      "at": 10.75,
+      "id": "notification-message-in-soft",
+      "gain": 8
+    },
+    {
+      "at": 11.35,
+      "id": "notification-message-in-soft",
+      "gain": 8
+    },
+    {
+      "at": 12.45,
+      "id": "impact-medium-soft",
+      "gain": 3
+    },
+    {
+      "at": 15.4,
+      "id": "shimmer-medium-bright",
+      "gain": 5
+    },
+    {
+      "at": 20.45,
+      "id": "whoosh-medium-soft",
+      "gain": 2
+    },
+    {
+      "at": 22.55,
+      "id": "click-tap-medium",
+      "gain": 2
+    },
+    {
+      "at": 23.95,
+      "id": "click-tap-medium",
+      "gain": 2
+    },
+    {
+      "at": 25.62,
+      "id": "click-tap-medium",
+      "gain": 2
+    },
+    {
+      "at": 26.1,
+      "id": "click-tap-soft",
+      "gain": 3
+    },
+    {
+      "at": 26.5,
+      "id": "click-tap-soft",
+      "gain": 3
+    },
+    {
+      "at": 26.9,
+      "id": "click-tap-soft",
+      "gain": 3
+    },
+    {
+      "at": 27.85,
+      "id": "click-tap-medium",
+      "gain": 2
+    },
+    {
+      "at": 29.85,
+      "id": "shimmer-short-soft",
+      "gain": 6
+    },
+    {
+      "at": 35.25,
+      "id": "click-tap-medium",
+      "gain": 2
+    },
+    {
+      "at": 35.45,
+      "id": "tone-ding-mid",
+      "gain": 9
+    },
+    {
+      "at": 36.05,
+      "id": "whoosh-medium-soft",
+      "gain": 2
+    },
+    {
+      "at": 36.88,
+      "id": "click-tap-medium",
+      "gain": 2
+    },
+    {
+      "at": 37.88,
+      "id": "click-tap-medium",
+      "gain": 2
+    },
+    {
+      "at": 41.95,
+      "id": "click-tap-medium",
+      "gain": 2
+    },
+    {
+      "at": 43.15,
+      "id": "click-tap-medium",
+      "gain": 2
+    },
+    {
+      "at": 45.1,
+      "id": "whoosh-medium-soft",
+      "gain": 2
+    },
+    {
+      "at": 45.45,
+      "id": "pop-small-in",
+      "gain": 3
+    },
+    {
+      "at": 46.9,
+      "id": "pop-small-in",
+      "gain": 3
+    },
+    {
+      "at": 47.6,
+      "id": "pop-small-in",
+      "gain": 3
+    },
+    {
+      "at": 49.95,
+      "id": "notification-message-out-soft",
+      "gain": 7
+    },
+    {
+      "at": 52.95,
+      "id": "sting-warm-short",
+      "gain": 3
+    }
+  ]
+}
