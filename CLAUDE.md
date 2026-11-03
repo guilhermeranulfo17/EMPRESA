@@ -1,5 +1,12 @@
 # Instruções para o Claude neste projeto
 
+## Conteúdo
+O mapa de tudo o que é conteúdo do Gui está em `conteudo/README.md`: perfis, formato dos vídeos, como gravar, rotinas
+automáticas e publicação no Metricool. Leia esse arquivo antes de qualquer tarefa de conteúdo.
+
+O texto da pauta diária de vendas está em `conteudo/vendas/agente-pauta.md` e precisa ficar igual ao do agendamento
+"Pauta guisilva.vendas". Se mudar um, mude o outro.
+
 ## Edição de vídeos
 
 **Formato padrão dos Reels/Shorts (aprovado em 03/11/2026):** tela dividida, com motion graphics em cima ilustrando o
