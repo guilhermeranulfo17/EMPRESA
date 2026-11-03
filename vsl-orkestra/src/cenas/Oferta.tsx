@@ -1,6 +1,6 @@
 import { AbsoluteFill, Easing, interpolate, spring, useCurrentFrame } from "remotion";
 import { COR, FPS, MANROPE } from "../tema";
-import { Logotipo, Simbolo } from "../comp/Logo";
+import { Logo } from "../comp/Logo";
 
 const lim = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const sai = Easing.bezier(0.16, 1, 0.3, 1);
@@ -185,24 +185,25 @@ export const Oferta: React.FC<{ inicio: number; buffetName: string }> = ({ inici
         </div>
       </div>
 
-      <div
+      {/* cartão final: a versão limão do logo (fundo limão, nome em preto) */}
+      <AbsoluteFill
         style={{
-          position: "absolute",
-          top: 640,
-          width: "100%",
+          backgroundColor: COR.limao,
+          clipPath: `circle(${interpolate(t, [T.logo, T.logo + 0.6], [0, 120], { ...lim, easing: Easing.bezier(0.65, 0, 0.35, 1) })}% at 50% 50%)`,
           display: "flex",
-          flexDirection: "column",
           alignItems: "center",
-          gap: 54,
-          opacity: Math.min(1, logo * 1.2),
-          scale: `${0.86 + 0.14 * logo}`,
+          justifyContent: "center",
         }}
       >
-        <div style={{ filter: "drop-shadow(0 0 60px rgba(178,247,89,0.35))" }}>
-          <Simbolo tamanho={220} />
+        <div
+          style={{
+            opacity: interpolate(t, [T.logo + 0.3, T.logo + 0.6], [0, 1], lim),
+            scale: `${0.92 + 0.08 * logo}`,
+          }}
+        >
+          <Logo largura={760} cor="preto" />
         </div>
-        <Logotipo largura={680} />
-      </div>
+      </AbsoluteFill>
     </AbsoluteFill>
   );
 };

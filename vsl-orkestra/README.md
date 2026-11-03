@@ -14,6 +14,7 @@ pro Buffet Alegria"). Sem `--props`, sai "seu buffet". A narração não muda (�
 
 ## Peças
 
+- `public/marca/orkestra-branco.png` e `orkestra-preto.png`: o logo oficial (arquivos enviados pelo dono), recortados.
 - `public/capturas/`: as telas (Playwright, 390x844 a 3x), refeitas com `scripts/capturar.cjs`.
 - `public/audio/narracao.mp3`: `narracao-v1.mp3` até 44,4 s + `frase-final-v2.mp3` (a frase da cortesia),
   emendadas por `scripts/emendar.sh`. Narração do ElevenLabs (voz "José Ferreira - Conversa (WhatsApp)",

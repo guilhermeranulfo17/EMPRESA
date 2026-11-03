@@ -1,6 +1,6 @@
 import { AbsoluteFill, Easing, interpolate, spring, useCurrentFrame } from "remotion";
 import { COR, FPS, MANROPE } from "../tema";
-import { Logotipo, Simbolo } from "../comp/Logo";
+import { Logo } from "../comp/Logo";
 
 const lim = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const sai = Easing.bezier(0.16, 1, 0.3, 1);
@@ -9,8 +9,9 @@ const sai = Easing.bezier(0.16, 1, 0.3, 1);
 export const Mecanismo: React.FC<{ inicio: number }> = ({ inicio }) => {
   const frame = useCurrentFrame();
   const t = inicio + frame / FPS;
-  const sim = spring({ frame: Math.round((t - 15.3) * FPS), fps: FPS, config: { damping: 12, stiffness: 120 } });
-  const nome = interpolate(t, [15.55, 16.1], [0, 1], { ...lim, easing: sai });
+  // "O Orkestra" (15,44 s): o logo entra da esquerda para a direita, com um brilho limão por trás
+  const nome = interpolate(t, [15.35, 16.05], [0, 1], { ...lim, easing: sai });
+  const sobe = spring({ frame: Math.round((t - 15.35) * FPS), fps: FPS, config: { damping: 16, stiffness: 110 } });
   const frase = interpolate(t, [18.2, 18.7], [0, 1], { ...lim, easing: sai });
   const sozinho = interpolate(t, [19.7, 20.0], [0, 1], { ...lim, easing: sai });
   const saida = interpolate(t, [20.25, 20.75], [0, 1], { ...lim, easing: Easing.bezier(0.5, 0, 0.75, 0) });
@@ -20,7 +21,7 @@ export const Mecanismo: React.FC<{ inicio: number }> = ({ inicio }) => {
       <div
         style={{
           position: "absolute",
-          top: interpolate(frase, [0, 1], [620, 470]) - saida * 120,
+          top: interpolate(frase, [0, 1], [700, 560]) - saida * 120,
           width: "100%",
           display: "flex",
           flexDirection: "column",
@@ -28,11 +29,14 @@ export const Mecanismo: React.FC<{ inicio: number }> = ({ inicio }) => {
           gap: 48,
         }}
       >
-        <div style={{ scale: `${sim}`, rotate: `${(1 - sim) * -14}deg`, filter: `drop-shadow(0 0 ${60 * sim}px rgba(178,247,89,0.35))` }}>
-          <Simbolo tamanho={200} />
-        </div>
-        <div style={{ clipPath: `inset(0 ${(1 - nome) * 100}% 0 0)`, opacity: nome }}>
-          <Logotipo largura={640} />
+        <div
+          style={{
+            clipPath: `inset(-40px ${(1 - nome) * 100}% -40px -40px)`,
+            translate: `0px ${(1 - sobe) * 30}px`,
+            filter: `drop-shadow(0 0 ${46 * nome}px rgba(178,247,89,0.35))`,
+          }}
+        >
+          <Logo largura={780} />
         </div>
       </div>
       <div
