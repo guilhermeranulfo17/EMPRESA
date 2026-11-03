@@ -1,0 +1,378 @@
+{
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "escala": 3,
+  "capturas": [
+    {
+      "arquivo": "A01-vitrine.png",
+      "nome": "vitrine",
+      "toque": {
+        "x": 160,
+        "y": 808
+      }
+    },
+    {
+      "arquivo": "A02-tipo.png",
+      "nome": "tipo",
+      "toque": {
+        "x": 195,
+        "y": 185
+      }
+    },
+    {
+      "arquivo": "A03-tipo-escolhido.png",
+      "nome": "tipo-escolhido",
+      "toque": {
+        "x": 195,
+        "y": 808
+      }
+    },
+    {
+      "arquivo": "A04-data-novembro.png",
+      "nome": "data-novembro",
+      "toque": {
+        "x": 350,
+        "y": 179
+      }
+    },
+    {
+      "arquivo": "A05-data-dezembro.png",
+      "nome": "data-dezembro",
+      "toque": {
+        "x": 350,
+        "y": 263
+      }
+    },
+    {
+      "arquivo": "A06-data-05-12.png",
+      "nome": "data-05-12",
+      "toque": {
+        "x": 195,
+        "y": 700
+      }
+    },
+    {
+      "arquivo": "A07-turno-tarde.png",
+      "nome": "turno-tarde",
+      "toque": null
+    },
+    {
+      "arquivo": "A08-adultos-0.png",
+      "nome": "adultos-0",
+      "toque": {
+        "x": 350,
+        "y": 422
+      }
+    },
+    {
+      "arquivo": "A09-adultos-5.png",
+      "nome": "adultos-5",
+      "toque": {
+        "x": 350,
+        "y": 422
+      }
+    },
+    {
+      "arquivo": "A10-adultos-10.png",
+      "nome": "adultos-10",
+      "toque": {
+        "x": 350,
+        "y": 422
+      }
+    },
+    {
+      "arquivo": "A11-adultos-15.png",
+      "nome": "adultos-15",
+      "toque": {
+        "x": 350,
+        "y": 422
+      }
+    },
+    {
+      "arquivo": "A12-adultos-20.png",
+      "nome": "adultos-20",
+      "toque": {
+        "x": 350,
+        "y": 422
+      }
+    },
+    {
+      "arquivo": "A13-adultos-25.png",
+      "nome": "adultos-25",
+      "toque": {
+        "x": 350,
+        "y": 422
+      }
+    },
+    {
+      "arquivo": "A14-adultos-30.png",
+      "nome": "adultos-30",
+      "toque": {
+        "x": 350,
+        "y": 422
+      }
+    },
+    {
+      "arquivo": "A15-adultos-35.png",
+      "nome": "adultos-35",
+      "toque": {
+        "x": 350,
+        "y": 422
+      }
+    },
+    {
+      "arquivo": "A16-adultos-40.png",
+      "nome": "adultos-40",
+      "toque": {
+        "x": 350,
+        "y": 552
+      }
+    },
+    {
+      "arquivo": "A17-criancas-5.png",
+      "nome": "criancas-5",
+      "toque": {
+        "x": 350,
+        "y": 552
+      }
+    },
+    {
+      "arquivo": "A18-convidados-50.png",
+      "nome": "convidados-50",
+      "toque": {
+        "x": 195,
+        "y": 808
+      }
+    },
+    {
+      "arquivo": "A19-contato.png",
+      "nome": "contato",
+      "toque": {
+        "x": 195,
+        "y": 307
+      }
+    },
+    {
+      "arquivo": "A20-nome-mar.png",
+      "nome": "nome-mar",
+      "toque": null
+    },
+    {
+      "arquivo": "A21-nome-mariana.png",
+      "nome": "nome-mariana",
+      "toque": {
+        "x": 195,
+        "y": 399
+      }
+    },
+    {
+      "arquivo": "A22-whats-parcial.png",
+      "nome": "whats-parcial",
+      "toque": null
+    },
+    {
+      "arquivo": "A23-whats-completo.png",
+      "nome": "whats-completo",
+      "toque": {
+        "x": 28,
+        "y": 453
+      }
+    },
+    {
+      "arquivo": "A24-consentimento.png",
+      "nome": "consentimento",
+      "toque": {
+        "x": 195,
+        "y": 808
+      }
+    },
+    {
+      "arquivo": "A25-pacotes.png",
+      "nome": "pacotes",
+      "toque": {
+        "x": 195,
+        "y": 407
+      }
+    },
+    {
+      "arquivo": "A26-pacote-super.png",
+      "nome": "pacote-super",
+      "toque": {
+        "x": 195,
+        "y": 808
+      }
+    },
+    {
+      "arquivo": "A27-extras.png",
+      "nome": "extras",
+      "toque": {
+        "x": 177,
+        "y": 185
+      }
+    },
+    {
+      "arquivo": "A28-extras-mesa.png",
+      "nome": "extras-mesa",
+      "toque": {
+        "x": 195,
+        "y": 808
+      }
+    },
+    {
+      "arquivo": "A29-proposta-total.png",
+      "nome": "proposta-total",
+      "toque": null
+    },
+    {
+      "arquivo": "A30-proposta-inteira.png",
+      "nome": "proposta-inteira",
+      "paginaInteira": true,
+      "altura": 2345,
+      "ancoras": {
+        "total": {
+          "y": 236,
+          "h": 16,
+          "x": 36,
+          "w": 155
+        },
+        "investimento": {
+          "y": 798,
+          "h": 20,
+          "x": 16,
+          "w": 358
+        },
+        "ajusteSabado": {
+          "y": 940,
+          "h": 24,
+          "x": 33,
+          "w": 226
+        },
+        "condicoes": {
+          "y": 1194,
+          "h": 20,
+          "x": 16,
+          "w": 358
+        },
+        "sinal": {
+          "y": 1222,
+          "h": 20,
+          "x": 16,
+          "w": 358
+        },
+        "reservar": {
+          "y": 1952,
+          "h": 48,
+          "x": 16,
+          "w": 358
+        }
+      }
+    },
+    {
+      "arquivo": "A31-proposta-investimento.png",
+      "nome": "proposta-investimento",
+      "toque": null
+    },
+    {
+      "arquivo": "A32-proposta-reservar.png",
+      "nome": "proposta-reservar",
+      "toque": {
+        "x": 195,
+        "y": 544
+      }
+    },
+    {
+      "arquivo": "A33-pre-reserva-confirmada.png",
+      "nome": "pre-reserva-confirmada",
+      "toque": null
+    },
+    {
+      "arquivo": "B01-caixa-leads.png",
+      "nome": "caixa-leads",
+      "toque": {
+        "x": 296,
+        "y": 32
+      }
+    },
+    {
+      "arquivo": "B02-aviso-mariana.png",
+      "nome": "aviso-mariana",
+      "toque": {
+        "x": 187,
+        "y": 140
+      }
+    },
+    {
+      "arquivo": "B03-ficha.png",
+      "nome": "ficha",
+      "toque": null
+    },
+    {
+      "arquivo": "B04-ficha-inteira.png",
+      "nome": "ficha-inteira",
+      "paginaInteira": true,
+      "altura": 2010,
+      "ancoras": {
+        "preReserva": {
+          "y": 497,
+          "h": 32,
+          "x": 29,
+          "w": 174
+        },
+        "orcamento": {
+          "y": 755,
+          "h": 24,
+          "x": 29,
+          "w": 59
+        },
+        "total": {
+          "y": 989,
+          "h": 24,
+          "x": 29,
+          "w": 39
+        }
+      }
+    },
+    {
+      "arquivo": "B05-ficha-orcamento.png",
+      "nome": "ficha-orcamento",
+      "toque": null
+    },
+    {
+      "arquivo": "B06-ficha-topo.png",
+      "nome": "ficha-topo",
+      "toque": {
+        "x": 66,
+        "y": 750
+      }
+    },
+    {
+      "arquivo": "B07-mensagem-pronta.png",
+      "nome": "mensagem-pronta",
+      "toque": {
+        "x": 195,
+        "y": 803
+      }
+    },
+    {
+      "arquivo": "B08-proposta-pdf.png",
+      "nome": "proposta-pdf",
+      "pdf": true,
+      "toque": null
+    },
+    {
+      "arquivo": "B09-agenda.png",
+      "nome": "agenda",
+      "toque": {
+        "x": 103,
+        "y": 441
+      }
+    },
+    {
+      "arquivo": "B10-agenda-05-12.png",
+      "nome": "agenda-05-12",
+      "toque": null
+    }
+  ]
+}

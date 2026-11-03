@@ -1,0 +1,5 @@
+# capturas do sistema (dados fictícios) ficam no repositório para re-renderizar
+!public/capturas/*.png
+node_modules/
+out/
+.env
