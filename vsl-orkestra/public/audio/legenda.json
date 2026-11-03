@@ -805,171 +805,150 @@
   "confidence": 1
  },
  {
-  "text": "Você",
-  "startMs": 44680,
-  "endMs": 45046,
-  "timestampMs": 44680,
-  "confidence": 1
- },
- {
-  "text": "testa",
-  "startMs": 45046,
-  "endMs": 45412,
-  "timestampMs": 45046,
-  "confidence": 1
- },
- {
-  "text": "catorze",
-  "startMs": 45412,
-  "endMs": 45961,
-  "timestampMs": 45412,
-  "confidence": 1
- },
- {
-  "text": "dias",
-  "startMs": 45961,
-  "endMs": 46144,
-  "timestampMs": 45961,
-  "confidence": 1
- },
- {
-  "text": "de",
-  "startMs": 46144,
-  "endMs": 46327,
-  "timestampMs": 46144,
-  "confidence": 1
- },
- {
-  "text": "graça,",
-  "startMs": 46327,
-  "endMs": 46693,
-  "timestampMs": 46327,
-  "confidence": 1
- },
- {
-  "text": "sem",
-  "startMs": 46858,
-  "endMs": 47041,
-  "timestampMs": 46858,
-  "confidence": 1
- },
- {
-  "text": "cartão,",
-  "startMs": 47041,
-  "endMs": 47407,
-  "timestampMs": 47041,
-  "confidence": 1
- },
- {
-  "text": "com",
-  "startMs": 47572,
-  "endMs": 47755,
-  "timestampMs": 47572,
-  "confidence": 1
- },
- {
-  "text": "os",
-  "startMs": 47755,
-  "endMs": 47938,
-  "timestampMs": 47755,
-  "confidence": 1
- },
- {
-  "text": "seus",
-  "startMs": 47938,
-  "endMs": 48121,
-  "timestampMs": 47938,
-  "confidence": 1
- },
- {
-  "text": "pacotes.",
-  "startMs": 48121,
-  "endMs": 48670,
-  "timestampMs": 48121,
-  "confidence": 1
- },
- {
   "text": "Me",
-  "startMs": 49480,
-  "endMs": 49600,
-  "timestampMs": 49480,
+  "startMs": 44850,
+  "endMs": 45005,
+  "timestampMs": 44850,
   "confidence": 1
  },
  {
   "text": "responde",
-  "startMs": 49600,
-  "endMs": 49960,
-  "timestampMs": 49600,
+  "startMs": 45005,
+  "endMs": 45471,
+  "timestampMs": 45005,
   "confidence": 1
  },
  {
   "text": "'quero'",
-  "startMs": 49960,
-  "endMs": 50200,
-  "timestampMs": 49960,
+  "startMs": 45471,
+  "endMs": 45781,
+  "timestampMs": 45471,
   "confidence": 1
  },
  {
   "text": "aqui",
-  "startMs": 50350,
-  "endMs": 50689,
-  "timestampMs": 50350,
+  "startMs": 45781,
+  "endMs": 46092,
+  "timestampMs": 45781,
   "confidence": 1
  },
  {
   "text": "que",
-  "startMs": 50689,
-  "endMs": 50858,
-  "timestampMs": 50689,
+  "startMs": 46092,
+  "endMs": 46247,
+  "timestampMs": 46092,
   "confidence": 1
  },
  {
   "text": "eu",
-  "startMs": 50858,
-  "endMs": 51027,
-  "timestampMs": 50858,
+  "startMs": 46247,
+  "endMs": 46402,
+  "timestampMs": 46247,
   "confidence": 1
  },
  {
-  "text": "monto",
-  "startMs": 51027,
-  "endMs": 51366,
-  "timestampMs": 51027,
+  "text": "libero",
+  "startMs": 46402,
+  "endMs": 46868,
+  "timestampMs": 46402,
   "confidence": 1
  },
  {
-  "text": "a",
-  "startMs": 51366,
-  "endMs": 51535,
-  "timestampMs": 51366,
+  "text": "duas",
+  "startMs": 46868,
+  "endMs": 47023,
+  "timestampMs": 46868,
   "confidence": 1
  },
  {
-  "text": "página",
-  "startMs": 51535,
-  "endMs": 52043,
-  "timestampMs": 51535,
+  "text": "semanas",
+  "startMs": 47023,
+  "endMs": 47488,
+  "timestampMs": 47023,
   "confidence": 1
  },
  {
-  "text": "do",
-  "startMs": 52043,
-  "endMs": 52212,
-  "timestampMs": 52043,
+  "text": "de",
+  "startMs": 47488,
+  "endMs": 47644,
+  "timestampMs": 47488,
+  "confidence": 1
+ },
+ {
+  "text": "cortesia",
+  "startMs": 47644,
+  "endMs": 48109,
+  "timestampMs": 47644,
+  "confidence": 1
+ },
+ {
+  "text": "pro",
+  "startMs": 48109,
+  "endMs": 48264,
+  "timestampMs": 48109,
   "confidence": 1
  },
  {
   "text": "seu",
-  "startMs": 52212,
-  "endMs": 52381,
-  "timestampMs": 52212,
+  "startMs": 48264,
+  "endMs": 48420,
+  "timestampMs": 48264,
   "confidence": 1
  },
  {
   "text": "buffet.",
-  "startMs": 52381,
-  "endMs": 52720,
-  "timestampMs": 52381,
+  "startMs": 48420,
+  "endMs": 48730,
+  "timestampMs": 48420,
+  "confidence": 1
+ },
+ {
+  "text": "Sem",
+  "startMs": 49450,
+  "endMs": 49709,
+  "timestampMs": 49450,
+  "confidence": 1
+ },
+ {
+  "text": "cartão,",
+  "startMs": 49709,
+  "endMs": 50227,
+  "timestampMs": 49709,
+  "confidence": 1
+ },
+ {
+  "text": "já",
+  "startMs": 50590,
+  "endMs": 50773,
+  "timestampMs": 50590,
+  "confidence": 1
+ },
+ {
+  "text": "com",
+  "startMs": 50773,
+  "endMs": 50956,
+  "timestampMs": 50773,
+  "confidence": 1
+ },
+ {
+  "text": "os",
+  "startMs": 50956,
+  "endMs": 51139,
+  "timestampMs": 50956,
+  "confidence": 1
+ },
+ {
+  "text": "seus",
+  "startMs": 51139,
+  "endMs": 51321,
+  "timestampMs": 51139,
+  "confidence": 1
+ },
+ {
+  "text": "pacotes.",
+  "startMs": 51321,
+  "endMs": 51870,
+  "timestampMs": 51321,
   "confidence": 1
  }
 ]

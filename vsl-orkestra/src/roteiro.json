@@ -1,6 +1,6 @@
 {
   "fps": 30,
-  "duracao": 55.0,
+  "duracao": 54.6,
   "cenas": {
     "gancho": [
       0,
@@ -20,11 +20,11 @@
     ],
     "painel": [
       35.9,
-      45.35
+      45.0
     ],
     "oferta": [
-      44.95,
-      55.0
+      44.6,
+      54.6
     ]
   },
   "demo": {
@@ -406,7 +406,7 @@
       },
       {
         "de": 43.9,
-        "ate": 45.0,
+        "ate": 44.5,
         "x": 16,
         "y": 422,
         "w": 358,
@@ -541,32 +541,37 @@
       "gain": 2
     },
     {
-      "at": 45.1,
+      "at": 44.7,
       "id": "whoosh-medium-soft",
       "gain": 2
     },
     {
-      "at": 45.45,
+      "at": 44.9,
       "id": "pop-small-in",
       "gain": 3
     },
     {
-      "at": 46.9,
-      "id": "pop-small-in",
-      "gain": 3
-    },
-    {
-      "at": 47.6,
-      "id": "pop-small-in",
-      "gain": 3
-    },
-    {
-      "at": 49.95,
+      "at": 45.95,
       "id": "notification-message-out-soft",
       "gain": 7
     },
     {
-      "at": 52.95,
+      "at": 46.87,
+      "id": "pop-small-in",
+      "gain": 3
+    },
+    {
+      "at": 49.45,
+      "id": "pop-small-in",
+      "gain": 3
+    },
+    {
+      "at": 50.59,
+      "id": "pop-small-in",
+      "gain": 3
+    },
+    {
+      "at": 52.15,
       "id": "sting-warm-short",
       "gain": 3
     }

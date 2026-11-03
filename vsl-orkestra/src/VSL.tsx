@@ -54,14 +54,14 @@ export const VSL: React.FC<z.infer<typeof esquemaVSL>> = ({ buffetName }) => {
           dados={roteiro.painel as DadosCard}
           inicio={C.painel[0]}
           entrada={{ at: C.painel[0], de: "direita" }}
-          saida={{ at: 44.95, para: "encolhe" }}
+          saida={{ at: 44.6, para: "encolhe" }}
         />
       </Sequence>
       <Sequence name="Oferta" {...faixa(C.oferta)}>
         <Oferta inicio={C.oferta[0]} buffetName={buffetName} />
       </Sequence>
 
-      <Legenda esconderDe={52.9} />
+      <Legenda esconderDe={52.1} />
     </AbsoluteFill>
   );
 };

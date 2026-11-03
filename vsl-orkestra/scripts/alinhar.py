@@ -22,9 +22,10 @@ TRECHOS = [  # (texto exato do roteiro, início s, fim s)
     ("Do seu lado, o pedido chega com tudo preenchido:", 35.91, 39.08),
     ("data, pacote e valor.", 39.60, 41.56),
     ("Você só conversa com quem já quer fechar.", 42.04, 43.83),
-    ("Você testa catorze dias de graça, sem cartão, com os seus pacotes.", 44.68, 48.67),
-    ("Me responde 'quero'", 49.48, 50.20),
-    ("aqui que eu monto a página do seu buffet.", 50.35, 52.72),
+    # frase final v2 (public/audio/frase-final-v2.mp3), emendada aos 44,75 s por scripts/emendar.sh
+    ("Me responde 'quero' aqui que eu libero duas semanas de cortesia pro seu buffet.", 44.85, 48.73),
+    ("Sem cartão,", 49.45, 50.46),
+    ("já com os seus pacotes.", 50.59, 51.87),
 ]
 
 def silabas(p):

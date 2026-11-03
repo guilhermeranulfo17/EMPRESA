@@ -3,7 +3,7 @@ Fá maior, 104 BPM, I-V-vi-IV. Estrutura guiada pelo roteiro (src/roteiro.json):
   0 a 8 s     pad suave + pluck esparso (gancho, noite)
   8 a 15 s    só o pad, mais contido (a dor)
   15,3 s      a batida entra com o logo (kick leve, palmas, chimbal, baixo)
-  45 s        a batida afina (oferta) e um acorde final abre no logo (52,9 s)
+  44,6 s      a batida afina (oferta) e um acorde final abre no logo (52,15 s)
 uso: python trilha_leve.py SAIDA.wav"""
 import json, os, sys, wave
 import numpy as np
@@ -19,7 +19,7 @@ rng = np.random.default_rng(11)
 mix = np.zeros((N, 2))
 t_all = np.arange(N) / SR
 
-BATIDA_ENTRA, BATIDA_LEVE, FINAL = 15.3, 44.95, 52.9
+BATIDA_ENTRA, BATIDA_LEVE, FINAL = 15.3, 44.6, 52.15
 
 
 def add(sig, at, pan=0.0, gain=1.0):
