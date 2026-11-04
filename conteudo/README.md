@@ -28,6 +28,8 @@ Metricool: a marca 7598688 tem só o Instagram @guisilva.vendas e o YouTube de v
 
 Melhorias combinadas para os próximos vídeos: `vendas/melhorias-videos.md`.
 
+**Calendário dos próximos 30 dias (vídeos, cortes e carrosséis):** `vendas/calendario-30-dias.md`. Roteiros prontos ficam em `vendas/roteiros/`.
+
 ## Rotinas automáticas (agendamentos no claude.ai)
 
 | Nome | Quando (horário de Brasília) | O que faz |
