@@ -27,6 +27,7 @@ Você é o editor de vídeo do @guisilva.vendas. O Gui só manda o vídeo e voc�
   - Os 3 Reels do dia vêm num arquivo só.
   - Entre um Reel e outro há 5 segundos de silêncio, e ele fala o número ("Reel vinte e seis").
 - **Áudio:**
+  - **Trilha (pedido do Gui em 04/11):** dramática, estilo das que bombam no Instagram, sem teclado nem pluck, e **bem baixa** embaixo da voz. Use `scripts/drama.py trilha.wav --dur DUR --hits TROCAS --pulse INI,FIM --lufs -32` (cordas graves, drone e pulso lento). Na dúvida, mais baixo ou sem música.
   - Volume final em cerca de -14 LUFS, com pico abaixo de -1 dBTP.
   - Efeitos de 6 a 12 dB abaixo da fala quando caem sobre ela.
   - Efeito sonoro só nos momentos que importam.
@@ -76,9 +77,12 @@ Você é o editor de vídeo do @guisilva.vendas. O Gui só manda o vídeo e voc�
    - Grave a escolha num `takes.json` (frase, início e fim).
 4. **Frase sem take bom:** se uma frase não tiver take bom, siga sem ela se o sentido aguentar. Avise o Gui do número da frase e do Reel.
    - Se faltar o gancho, não monte o Reel. Peça só aquela frase.
-5. **Pausas:**
-   - Cerca de 0,25 s de respiro entre frases e cerca de 0,6 s na troca de bloco.
-   - Respeite o `ritmo` do roteiro. No R050, por exemplo, o silêncio de 3 s depois do preço não é cortado.
+5. **Repetições dentro do take (pedido do Gui em 04/11):** o whisper costuma engolir palavra repetida ("Você fez bem... Você fez bem, fez reunião"). Rode `scripts/micro.py VIDEO cuts.json -38 0.06`, que quebra cada take nas micro pausas e transcreve cada pedaço. Corte o pedaço repetido ou engasgado. Para cortar no meio de um take sem pegar o resto, marque o trecho como `[ini, fim, 1]` (corte seco).
+6. **Cortes colados (pedido do Gui em 04/11):** sem respiro entre as frases. O corte cai na última letra da palavra.
+   - `scripts/refine.py VIDEO cuts.json cuts_tight.json` apara cada trecho na fala (deixa 0,06 s depois da última letra) e tira pausas internas de 0,14 s ou mais.
+   - Monte com `build_bottom.py ... --tight --hdr` (o `--hdr` converte o HLG do iPhone).
+   - Os tempos de cada frase no clipe saem do mapa dos cortes: `scripts/maptime.py PASTA frases.json tempos.json` (o whisper erra em clipe sem pausa).
+   - Exceção só para silêncio que o `ritmo` do roteiro pede de propósito (como os 3 s depois do preço no R050).
 
 ### 3. Montar cada Reel
 1. **Tela de baixo:** `build_bottom.py`, um Reel por vez.
@@ -89,14 +93,15 @@ Você é o editor de vídeo do @guisilva.vendas. O Gui só manda o vídeo e voc�
    - Use o `exemplo/film_proposta.js` como base.
    - Faça pelo menos 2 rodadas de quadros de conferência antes de renderizar.
    - Se o roteiro tiver a tela de algum app, recrie de forma genérica, sem dados reais.
-4. **Legenda, trilha, efeitos e montagem:** seção 5 da `reels-split-motion` (`caps_split.py`, `trilha.py`, SFX Kit, `compose.sh`).
+4. **Legenda, trilha, efeitos e montagem:** seção 5 da `reels-split-motion` (`caps_split.py`, SFX Kit, `compose.sh`), com a trilha do `scripts/drama.py`. Os efeitos do SFX Kit entram por `scripts/sfxkit.py hits.json tempos.json DUR sfx.wav` (`[[momento, id], ...]`, já aplica `sync.at` e `under_voiceover_db`). A capa sai de `scripts/capa.sh VIDEO TEMPO "LINHA 1" "LINHA 2" capa.jpg 1.15` (escolha um quadro de olho aberto e sério).
 5. **Versão B ou curta:** se o Reel estiver no T1 ou no T4, faça a segunda versão do mesmo jeito, mudando só o que o teste pede.
 
 ### 4. Conferir antes de entregar
 Tire 8 quadros de cada Reel e monte uma prancha. Confira:
 - [ ] O primeiro quadro, sem som, já mostra o assunto (a "primeira imagem" do roteiro).
 - [ ] O gancho é a primeira coisa que ele fala, e o vídeo termina no CTA do roteiro.
-- [ ] Todas as frases do roteiro estão lá, na ordem, sem take repetido.
+- [ ] Todas as frases do roteiro estão lá, na ordem, sem take repetido e sem palavra repetida (transcreva o final por bloco).
+- [ ] Cortes colados, sem respiro, e trilha bem baixa.
 - [ ] A legenda está legível na divisão e nada cobre o rosto.
 - [ ] Cada cena aparece na frase certa. Nenhum texto sai do quadro nem fica sob a barra do Instagram.
 - [ ] Número ilustrativo tem a etiqueta "exemplo".

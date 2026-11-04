@@ -3,10 +3,13 @@ usage: build_bottom.py SRC cuts.json NAME OUTDIR [--cx 0.49] [--cy 0.53] [--crop
   cuts.json: {"NAME": [[start, end], ...]}  (source seconds, one stretch of speech per pair)
   --cx/--cy: face centre as a fraction of the source frame (check with a still first)
   --crop-h:  source pixels of height to keep (smaller = closer). Width follows the 9:8 panel.
+  --hdr:     tone-map HLG (iPhone) to SDR; --tight: cut exactly at the given times (refine.py output)
 Writes OUTDIR/NAME_bottom.mp4 and NAME_bottom_map.json."""
 import argparse, json, subprocess
 ap = argparse.ArgumentParser(); ap.add_argument('src'); ap.add_argument('cuts'); ap.add_argument('name'); ap.add_argument('out')
 ap.add_argument('--cx', type=float, default=0.49); ap.add_argument('--cy', type=float, default=0.53); ap.add_argument('--crop-h', type=int, default=1700)
+ap.add_argument('--hdr', action='store_true', help='tone-map iPhone HLG to SDR after the crop')
+ap.add_argument('--tight', action='store_true', help='no padding around pieces (use with refine.py cuts)')
 A = ap.parse_args()
 probe = json.loads(subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height:stream_side_data=rotation',
                                    '-of', 'json', A.src], capture_output=True, text=True).stdout)['streams'][0]
@@ -15,11 +18,12 @@ rot = abs(int(next((d.get('rotation', 0) for d in probe.get('side_data_list', []
 if rot in (90, 270): w, h = h, w
 ch = min(A.crop_h, h); cw = min(w, int(ch * 1080 / 960) // 2 * 2)
 x = int(min(max(0, A.cx * w - cw / 2), w - cw)) // 2 * 2; y = int(min(max(0, A.cy * h - ch * 0.45), h - ch)) // 2 * 2
-vf = f"crop={cw}:{ch}:{x}:{y},scale=1080:960:flags=lanczos,eq=contrast=1.04:saturation=1.1,fps=30,format=yuv420p,setsar=1"
-rng = json.load(open(A.cuts))[A.name]; PRE, POST = 0.06, 0.14; pieces = []
+TM = "zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,format=yuv420p," if A.hdr else ""
+vf = f"crop={cw}:{ch}:{x}:{y},{TM}scale=1080:960:flags=lanczos,eq=contrast=1.04:saturation=1.1,fps=30,format=yuv420p,setsar=1"
+rng = json.load(open(A.cuts))[A.name]; PRE, POST = (0.0, 0.0) if A.tight else (0.06, 0.14); pieces = []
 for s, e in rng:
     s, e = max(0, s - PRE), e + POST
-    if pieces and s - pieces[-1][1] < 0.12: pieces[-1][1] = e
+    if pieces and s - pieces[-1][1] < (0.02 if A.tight else 0.12): pieces[-1][1] = e
     else: pieces.append([s, e])
 args = ['ffmpeg', '-v', 'error', '-y']
 for s, e in pieces: args += ['-ss', f'{s:.3f}', '-t', f'{e - s:.3f}', '-i', A.src]
