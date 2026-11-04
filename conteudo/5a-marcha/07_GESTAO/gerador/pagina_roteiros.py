@@ -5,7 +5,7 @@ OUT, DST = sys.argv[1], sys.argv[2]
 R = {}
 for f in sorted(glob.glob(os.path.join(OUT, '07_GESTAO/gerador/reels_*.py'))):
     for r in runpy.run_path(f)['REELS']: R[r['n']] = r
-cal = list(csv.DictReader(open(os.path.join(OUT, '04_CALENDARIO/calendario_90_dias.csv'))))
+cal = list(csv.DictReader(open(os.path.join(OUT, '04_CALENDARIO/calendario_30_dias.csv'))))
 cars = {l['data']: l for l in cal if l['formato'] == 'Carrossel'}
 GRAV = {'frente': 'Câmera frontal', 'simulacao': 'Simulação (troca de papel)', 'tela': 'Fala + tela gravada à parte', 'quadro': 'Câmera frontal com quadro animado'}
 sess = {}
@@ -18,7 +18,7 @@ for l in cal:
     c = cars.get(l['data'])
     g = l['gravar_em']
     sess.setdefault(g, {'id': 'd' + g[:2] + g[3:5] + g[8:10], 'ate': g, 'dia': l['dia_semana'] if g == l['data'] else '', 'reels': []})['reels'].append({
-        'n': l['numero'], 'pub': l['data'], 'dia': l['dia_semana'], 'tema': r['tema'], 'serie': l['serie'], 'tipo': l['tipo'],
+        'n': l['numero'], 'pub': l['data'], 'hora': l['horario'], 'dia': l['dia_semana'], 'tema': r['tema'], 'serie': l['serie'], 'tipo': l['tipo'],
         'grav': GRAV[r['grav']], 'gA': r['gA'], 'gB': r['gB'], 'falas': falas, 'cenas': r['cenas'], 'capa': r['capa'],
         'leg': r['leg'] + '\n\n' + r['tags'], 'pend': r.get('pend', ''), 'obs': l['observacao'],
         'car': (c['numero'] + ' · ' + c['tema']) if c else '', 'pilar': l['pilar'], 'obj': r['obj'], 'porque': r['porque'],

@@ -1,14 +1,31 @@
-data,carrossel,uuid_metricool,id_metricool_atual,situacao
-04/11/2026,C001,4522415091694847376,416270534,antigo em rascunho; trocar pela arte nova assim que estiver no Drive
-06/11/2026,C006,-1001120826673510909,416270708,antigo em rascunho; trocar pela arte nova
-07/11/2026,C009,-5671199119993059678,416270782,antigo em rascunho; trocar pela arte nova
-08/11/2026,C018,5727431686393578269,416270859,antigo em rascunho; trocar pela arte nova
-09/11/2026,C003,-7645620504305908295,416270936,antigo em rascunho; trocar pela arte nova
-10/11/2026,C026,-3894684932318868492,416271008,antigo em rascunho; trocar pela arte nova
-11/11/2026,C002,4747179914170222452,416271103,antigo em rascunho; trocar pela arte nova
-12/11/2026,C007,-3397455058987169148,416271145,antigo em rascunho; trocar pela arte nova
-14/11/2026,C010,-6594504353165543,416271261,antigo em rascunho; trocar pela arte nova
-15/11/2026,C019,-1096528549638550458,416271287,antigo em rascunho; trocar pela arte nova
-16/11/2026,C004,-1002163276266057850,416277409,antigo em rascunho; trocar pela arte nova
-17/11/2026,C027,-4801414921405250291,416277812,antigo em rascunho; trocar pela arte nova
-18/11/2026,C005,-3916600653409924065,416277883,antigo em rascunho; trocar pela arte nova
+data,carrossel,pasta_no_drive,uuid_metricool,id_metricool_atual,situacao
+04/11/2026,C001,20261104_04nov_C001,4522415091694847376,416270534,carrossel antigo em rascunho; trocar pela arte nova e tirar do rascunho
+05/11/2026,C006,20261105_05nov_C006,,,criar post novo (ou postar na mão se o limite do plano acabar)
+06/11/2026,C009,20261106_06nov_C009,-1001120826673510909,416270708,carrossel antigo em rascunho; trocar pela arte nova e tirar do rascunho
+07/11/2026,C018,20261107_07nov_C018,-5671199119993059678,416270782,carrossel antigo em rascunho; trocar pela arte nova e tirar do rascunho
+08/11/2026,C003,20261108_08nov_C003,5727431686393578269,416270859,carrossel antigo em rascunho; trocar pela arte nova e tirar do rascunho
+09/11/2026,C026,20261109_09nov_C026,-7645620504305908295,416270936,carrossel antigo em rascunho; trocar pela arte nova e tirar do rascunho
+10/11/2026,C002,20261110_10nov_C002,-3894684932318868492,416271008,carrossel antigo em rascunho; trocar pela arte nova e tirar do rascunho
+11/11/2026,C007,20261111_11nov_C007,4747179914170222452,416271103,carrossel antigo em rascunho; trocar pela arte nova e tirar do rascunho
+12/11/2026,C010,20261112_12nov_C010,-3397455058987169148,416271145,carrossel antigo em rascunho; trocar pela arte nova e tirar do rascunho
+13/11/2026,C019,20261113_13nov_C019,,,criar post novo (ou postar na mão se o limite do plano acabar)
+14/11/2026,C004,20261114_14nov_C004,-6594504353165543,416271261,carrossel antigo em rascunho; trocar pela arte nova e tirar do rascunho
+15/11/2026,C027,20261115_15nov_C027,-1096528549638550458,416271287,carrossel antigo em rascunho; trocar pela arte nova e tirar do rascunho
+16/11/2026,C005,20261116_16nov_C005,-1002163276266057850,416277409,carrossel antigo em rascunho; trocar pela arte nova e tirar do rascunho
+17/11/2026,C008,20261117_17nov_C008,-4801414921405250291,416277812,carrossel antigo em rascunho; trocar pela arte nova e tirar do rascunho
+18/11/2026,C015,20261118_18nov_C015,-3916600653409924065,416277883,carrossel antigo em rascunho; trocar pela arte nova e tirar do rascunho
+19/11/2026,C020,20261119_19nov_C020,,,criar post novo (ou postar na mão se o limite do plano acabar)
+20/11/2026,C023,20261120_20nov_C023,,,criar post novo (ou postar na mão se o limite do plano acabar)
+21/11/2026,C028,20261121_21nov_C028,,,criar post novo (ou postar na mão se o limite do plano acabar)
+22/11/2026,C011,20261122_22nov_C011,,,criar post novo (ou postar na mão se o limite do plano acabar)
+23/11/2026,C013,20261123_23nov_C013,,,criar post novo (ou postar na mão se o limite do plano acabar)
+24/11/2026,C016,20261124_24nov_C016,,,criar post novo (ou postar na mão se o limite do plano acabar)
+25/11/2026,C021,20261125_25nov_C021,,,criar post novo (ou postar na mão se o limite do plano acabar)
+26/11/2026,C024,20261126_26nov_C024,,,criar post novo (ou postar na mão se o limite do plano acabar)
+27/11/2026,C029,20261127_27nov_C029,,,criar post novo (ou postar na mão se o limite do plano acabar)
+28/11/2026,C012,20261128_28nov_C012,,,criar post novo (ou postar na mão se o limite do plano acabar)
+29/11/2026,C014,20261129_29nov_C014,,,criar post novo (ou postar na mão se o limite do plano acabar)
+30/11/2026,C017,20261130_30nov_C017,,,criar post novo (ou postar na mão se o limite do plano acabar)
+01/12/2026,C022,20261201_01dez_C022,,,criar post novo (ou postar na mão se o limite do plano acabar)
+02/12/2026,C025,20261202_02dez_C025,,,criar post novo (ou postar na mão se o limite do plano acabar)
+03/12/2026,C030,20261203_03dez_C030,,,criar post novo (ou postar na mão se o limite do plano acabar)

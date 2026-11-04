@@ -3,8 +3,8 @@ uso: python3 -I painel.py PASTA_5A_MARCHA
 As colunas de taxa ficam vazias: calcule na planilha com as fórmulas de 05_PERFORMANCE/indicadores.md."""
 import csv, datetime as dt, os, sys
 OUT = sys.argv[1]
-cal = list(csv.DictReader(open(os.path.join(OUT, '04_CALENDARIO', 'calendario_90_dias.csv'))))
-COLS = ['dia', 'numero', 'formato', 'serie', 'tipo', 'data_publicacao', 'janela', 'data_coleta', 'versao_gancho', 'familia_gancho', 'trial_reel',
+cal = list(csv.DictReader(open(os.path.join(OUT, '04_CALENDARIO', 'calendario_30_dias.csv'))))
+COLS = ['dia', 'numero', 'formato', 'serie', 'tipo', 'data_publicacao', 'horario', 'janela', 'data_coleta', 'versao_gancho', 'familia_gancho', 'trial_reel',
         'alcance', 'alcance_nao_seguidores', 'visualizacoes', 'taxa_retencao_3s', 'tempo_medio_assistido_s', 'duracao_s', 'conclusao_carrossel',
         'curtidas', 'comentarios', 'comentarios_qualificados', 'envios', 'salvamentos', 'visitas_perfil', 'novos_seguidores',
         'dms_qualificadas', 'cliques_link', 'envios_por_alcance_pct', 'salvamentos_por_alcance_pct', 'curtidas_por_alcance_pct',
@@ -24,7 +24,7 @@ with open(os.path.join(OUT, '05_PERFORMANCE', 'painel.csv'), 'w', newline='') as
         for v, trial, dp in versoes:
             for j, k in JAN:
                 row = {c: '' for c in COLS}
-                row.update(dia=l['dia'], numero=l['numero'], formato=l['formato'], serie=l['serie'], tipo=l['tipo'], data_publicacao=dp.strftime('%d/%m/%Y'),
+                row.update(dia=l['dia'], numero=l['numero'], formato=l['formato'], serie=l['serie'], tipo=l['tipo'], data_publicacao=dp.strftime('%d/%m/%Y'), horario=l['horario'] if trial == '' else '',
                            janela=j, data_coleta=(dp + dt.timedelta(days=k)).strftime('%d/%m/%Y'), versao_gancho=v, trial_reel=trial)
                 w.writerow(row); n += 1
 print('linhas', n)

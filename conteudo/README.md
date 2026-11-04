@@ -17,17 +17,18 @@ Metricool: a marca 7598688 tem só o Instagram @guisilva.vendas e o YouTube de v
 Todo o conteúdo anterior foi substituído pela 5ª Marcha. O material antigo (calendário de 30 dias, vídeo longo diário
 com 3 cortes, roteiros de 04 e 05/11, melhorias do formato antigo) está em `vendas/arquivo/` e não vale mais.
 
-- **O que sai:** 1 Reel por dia (R001 a R090, de 04/11/2026 a 01/02/2027) e 30 carrosséis às 19h (C001 a C030).
-  O calendário está em `5a-marcha/04_CALENDARIO/calendario_90_dias.csv`.
+- **O que sai:** 3 Reels por dia às 12h, 15h e 18h (R001 a R090) e 1 carrossel por dia às 19h (C001 a C030), em 30 dias, de 04/11 a 03/12/2026.
+  O calendário está em `5a-marcha/04_CALENDARIO/calendario_30_dias.csv`.
 - **Roteiros para gravar:** página https://claude.ai/artifact/TKiqP9pnFGPLCAFS7cPgGK (cópia em `5a-marcha/04_CALENDARIO/roteiros.html`),
-  por dia de gravação (`5a-marcha/04_CALENDARIO/dias_gravacao.csv`). Um Reel por dia, gravado de manhã no dia em que sai.
+  por dia de gravação (`5a-marcha/04_CALENDARIO/dias_gravacao.csv`). 3 Reels por dia, gravados de manhã no dia em que saem.
 - **Como gravar:** frase por frase, na horizontal, meio corpo. Guia em `5a-marcha/06_PRODUCAO/guia-gravacao-edicao.md`.
+- **Editor de vídeo:** numa conversa separada, com o prompt mestre de `5a-marcha/06_PRODUCAO/prompt-editor.md` e a skill `editor-5a-marcha`. O Gui só manda o vídeo.
 - **Edição:** formato split (motion em cima, o Gui embaixo, legenda na divisão) pela skill `reels-split-motion`.
   Para o formato antigo (vertical inteiro com efeitos por cima), use `/editar-video`, só quando ele pedir.
 - **Carrosséis:** mesmo design dos anteriores (post estilo Twitter, 1080x1350, foto do Gui, Inter; fundo claro em dia
-  ímpar e escuro em dia par). Gerados por `5a-marcha/07_GESTAO/gerador/carrossel_json.py` + `carrossel_render.js`:
-  `python3 -I carrossel_json.py <gerador> <calendario.csv> <pasta_json>` e `node carrossel_render.js <pasta_json> <saida>`
-  (o `carrossel_render.js` usa o `avatar.jpg` da mesma pasta). Os PNGs não vão para o git: ficam em
+  ímpar e escuro em dia par). Gerados por `5a-marcha/07_GESTAO/gerador/carrossel_json.py` + `carrossel_render.cjs`:
+  `python3 -I carrossel_json.py <gerador> <calendario.csv> <pasta_json>` e `node carrossel_render.cjs <pasta_json> <saida>`
+  (o `carrossel_render.cjs` usa o `avatar.jpg` da mesma pasta). Os PNGs não vão para o git: ficam em
   `5a-marcha/03_CARROSSEIS/zips/` e o Gui sobe no Drive.
 - **Agendamentos no Metricool:** `5a-marcha/07_GESTAO/metricool_carrosseis.csv` liga cada data ao post (uuid). Os 13
   carrosséis antigos de 04 a 18/11 estão em rascunho até a arte nova entrar no lugar.
@@ -49,8 +50,7 @@ com 3 cortes, roteiros de 04 e 05/11, melhorias do formato antigo) está em `ven
 - **Horários:** Reel no melhor horário do dia (`getBestTimeToPostByNetwork`), até o teste T5; carrossel às 19h.
 - **Cada Reel vai para dois lugares:** Reels no Instagram e Short no YouTube.
 - **Plano do Metricool:** se continuar no plano grátis, o limite é de 20 posts por mês, contados pela data de publicação.
-  Com 1 Reel por dia (Instagram + YouTube) e os carrosséis, o volume da 5ª Marcha passa disso: ou o Gui muda de plano,
-  ou parte dos posts sai na mão.
+  Com 3 Reels por dia (Instagram + YouTube) e os carrosséis, o volume da 5ª Marcha passa disso: o que passar do limite o Gui posta na mão (decidido em 04/11).
 - **Vídeo grande:** o conector do Drive só baixa e sobe arquivos de até 10 MB. O Gui salva o MP4 no Drive e o link vai no Metricool.
 - **Imagens dos carrosséis:** o Gui sobe as pastas na pasta do Drive "Carrosseis guisilva.vendas - Novembro"
   (id 1X1y45Y9E5sYM4GXrLxyLS0ap5MiQik0t, aberta por link como Leitor). Use a URL `https://drive.google.com/uc?export=download&id=ID`.

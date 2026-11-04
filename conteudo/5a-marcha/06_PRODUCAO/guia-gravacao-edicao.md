@@ -11,9 +11,9 @@
    - Entre um Reel e outro, fique 5 segundos em silêncio e diga o número dele ("Reel vinte e três").
 5. **Ganchos:** grave o A e o B seguidos.
 6. **Simulação (formato B):** grave primeiro todas as falas do vendedor, olhando para a lente, e depois as do cliente, com o rosto levemente virado para a direita.
-7. **Um por dia:** o roteiro do dia chega por volta das 7h e o Reel é gravado de manhã. Nos dias antes da FIRE e dos feriados, grava 3 a 5 seguidos (ver `04_CALENDARIO/calendario.md`). Dá para se adiantar e gravar vários de uma vez.
+7. **3 por dia:** o roteiro dos 3 Reels do dia chega por volta das 7h. Grave os 3 num arquivo só, de 20 a 30 minutos. De 15 a 18/11 são 6 por dia, por causa da FIRE.
 
-## Edição (Claude, pela skill `reels-split-motion`)
+## Edição (conversa separada, skill `editor-5a-marcha`, que usa a `reels-split-motion`)
 
 - **Formato split:**
   - em cima, o motion (1080x960), com fundo escuro, um único destaque amarelo e a fonte Archivo Black;

@@ -5,7 +5,7 @@ OUT, DST = sys.argv[1], sys.argv[2]
 R = {}
 for f in sorted(glob.glob(os.path.join(OUT, '07_GESTAO/gerador/reels_*.py'))):
     for r in runpy.run_path(f)['REELS']: R[r['n']] = r
-cal = [l for l in csv.DictReader(open(os.path.join(OUT, '04_CALENDARIO/calendario_90_dias.csv'))) if l['formato'] == 'Reel']
+cal = [l for l in csv.DictReader(open(os.path.join(OUT, '04_CALENDARIO/calendario_30_dias.csv'))) if l['formato'] == 'Reel']
 L = ['5ª MARCHA · ROTEIROS DOS REELS NA ORDEM DE PUBLICAÇÃO', 'Cada fala entre barras é uma frase: grave uma por vez, olhando para a lente.', '']
 for l in cal:
     r = R[int(l['numero'][1:])]

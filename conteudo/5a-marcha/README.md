@@ -1,6 +1,6 @@
 # 5ª MARCHA · Laboratório de conteúdo
 
-Planejamento de 90 dias para o @guisilva.vendas (Instagram e YouTube Shorts): 90 Reels e 30 carrosséis completos, calendário, painel de resultados e guias de produção.
+Planejamento de 30 dias para o @guisilva.vendas (Instagram e YouTube Shorts), de 04/11 a 03/12/2026: 90 Reels (3 por dia) e 30 carrosséis (1 por dia) completos, calendário, painel de resultados e guias de produção.
 
 ## Mapa
 
@@ -10,7 +10,7 @@ Planejamento de 90 dias para o @guisilva.vendas (Instagram e YouTube Shorts): 90
 | `01_PESQUISA/` | `pesquisa.md` (achados com nível de confiança e limitações) e `fontes.csv` (F01 a F27, com link e data) |
 | `02_REELS/` | R001 a R090, um arquivo por Reel, no modelo completo: identificação, estratégia de atenção, roteiro com fala literal, direção de produção, publicação e critérios de qualidade |
 | `03_CARROSSEIS/` | C001 a C030, com capa A e B, texto exato e visual de cada slide, design, legenda, CTA e métrica |
-| `04_CALENDARIO/` | `calendario.md` (como ler), `calendario_90_dias.csv` (editável), `dias_gravacao.csv` e `roteiros.html` (cópia da página de roteiros) |
+| `04_CALENDARIO/` | `calendario.md` (como ler), `calendario_30_dias.csv` (editável), `dias_gravacao.csv` e `roteiros.html` (cópia da página de roteiros) |
 | `05_PERFORMANCE/` | `indicadores.md` (fórmulas e rotina de 72h, 7d e 30d), `painel.csv` e `testes_ab.csv` |
 | `06_PRODUCAO/` | `guia-do-reel.md`, `biblioteca-de-ganchos.md` e `guia-gravacao-edicao.md` (com o checklist de publicação) |
 | `07_GESTAO/` | `indice_reels.csv`, `indice_carrosseis.csv`, `pendencias.md`, `historico.md` e o `gerador/` |

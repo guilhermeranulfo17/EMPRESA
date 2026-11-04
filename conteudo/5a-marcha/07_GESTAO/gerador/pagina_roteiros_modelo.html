@@ -45,7 +45,7 @@ button{font:600 14px var(--body);background:var(--fg);color:var(--bg);border:0;b
 </style>
 <div class="wrap">
 <h1>Roteiros 5ª Marcha</h1>
-<p class="sub">90 Reels, de 04/11/2026 a 01/02/2027, um por dia. Cada dia abre com o vídeo que você grava de manhã. O mesmo roteiro chega às 7h no celular.</p>
+<p class="sub">90 Reels em 30 dias, de 04/11 a 03/12/2026: 3 por dia (12h, 15h e 18h). Cada dia abre com os vídeos que você grava de manhã. O mesmo roteiro chega às 7h no celular.</p>
 <div class="how">Celular na horizontal, altura dos olhos, meio corpo. Uma frase por vez: olha pra lente, respira e fala. Errou? Pausa e repete a frase inteira. Entre um Reel e outro, 5 segundos em silêncio e fala o número dele.</div>
 <div class="pick"><label for="dia">Ir para o dia</label> <select id="dia"></select></div>
 <div id="list"></div>
@@ -60,7 +60,7 @@ let atual=S.find(s=>d(s.ate)>=hoje)||S[S.length-1];
 const sel=document.getElementById('dia');
 sel.innerHTML=S.map(s=>`<option value="${s.id}" ${s===atual?'selected':''}>${s.ate.slice(0,5)}${s===atual?' (hoje ou próximo)':''} · ${s.reels.map(r=>r.n).join(' ')}</option>`).join('');
 const F=(l,v)=>v?`<div class="lbl">${l}</div><div>${esc(v)}</div>`:'';
-function reel(r,open){let k=0;return `<details class="reel" ${open?'open':''}><summary><div class="meta"><b>${r.n}</b> · publica ${r.pub} (${r.dia}) · ${esc(r.serie)} · ${esc(r.pilar)}</div><div class="tema">${esc(r.tema)}</div><div class="meta">${esc(r.tipo)} · ${esc(r.grav)} · objetivo: ${esc(r.obj)}</div></summary><div class="inner">
+function reel(r,open){let k=0;return `<details class="reel" ${open?'open':''}><summary><div class="meta"><b>${r.n}</b> · publica ${r.pub} (${r.dia}) às ${r.hora} · ${esc(r.serie)} · ${esc(r.pilar)}</div><div class="tema">${esc(r.tema)}</div><div class="meta">${esc(r.tipo)} · ${esc(r.grav)} · objetivo: ${esc(r.obj)}</div></summary><div class="inner">
 <div class="lbl">Gancho A (grave este)</div><div class="gancho">${esc(r.gA)}</div>
 <div class="lbl">Gancho B (grave também, para teste)</div><div>${esc(r.gB)}</div>
 ${F('Por que funciona',r.porque)}${F('Primeira imagem (sem áudio)',r.img1)}
@@ -74,7 +74,7 @@ ${F('Fontes',r.fontes)}${F('Ponto de atenção',r.atencao)}
 ${r.car?`<div class="lbl">Carrossel do dia (19h)</div><div>${esc(r.car)}</div>`:''}
 </div></details>`}
 function show(id){const s=S.find(x=>x.id===id)||atual;
-document.getElementById('list').innerHTML=`<section id="${s.id}"><div class="sess"><h2>Gravar em ${s.ate.slice(0,5)}</h2><span>${s.reels.length>1?s.reels.length+' Reels: hoje você grava também os dos dias sem gravação':'1 Reel'}</span>${s===atual?'<span class="tag">hoje</span>':''}</div>`+s.reels.map((r,i)=>reel(r,i===0)).join('')+`</section>`;}
+document.getElementById('list').innerHTML=`<section id="${s.id}"><div class="sess"><h2>Gravar em ${s.ate.slice(0,5)}</h2><span>${s.reels.length>3?s.reels.length+' Reels: hoje você grava também os 3 de um dia da FIRE':s.reels.length+' Reels'}</span>${s===atual?'<span class="tag">hoje</span>':''}</div>`+s.reels.map((r,i)=>reel(r,i===0)).join('')+`</section>`;}
 sel.addEventListener('change',()=>{show(sel.value);try{history.replaceState(null,'','#'+sel.value)}catch(e){}});
 const h=location.hash.slice(1);if(h&&S.find(x=>x.id===h)){sel.value=h;show(h)}else show(atual.id);
 document.addEventListener('click',e=>{const b=e.target.closest('[data-copy]');if(!b)return;const el=document.getElementById(b.dataset.copy);

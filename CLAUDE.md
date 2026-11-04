@@ -13,6 +13,10 @@ O texto da pauta diária de vendas está em `conteudo/vendas/agente-pauta.md` e 
 que o Gui fala, frase por frase, e ele embaixo, com legenda na divisão. Use a skill `reels-split-motion` sempre que ele
 mandar um vídeo falado para virar Reels/Shorts.
 
+**Vídeos da 5ª Marcha (desde 04/11/2026):** quando ele mandar o vídeo gravado do dia (3 Reels num arquivo só), use a
+skill `editor-5a-marcha`, que separa os Reels, escolhe os takes e monta tudo no formato split. O prompt para abrir uma
+conversa só de edição está em `conteudo/5a-marcha/06_PRODUCAO/prompt-editor.md`.
+
 Para o formato antigo (vídeo vertical inteiro com efeitos por cima), use a skill `/editar-video` (efeitos visuais,
 trilha original e efeitos sonoros, com conferência no final). Use só quando ele pedir esse formato.
 
