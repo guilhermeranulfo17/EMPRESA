@@ -20,7 +20,7 @@ PASSO A PASSO
 4. Envie a pauta com a ferramenta SendUserMessage (é o que chega no celular dele) e termine. Só a pauta, sem explicar o processo.
 
 VOZ
-Português do Brasil, informal, direto, vendedor falando com vendedor. Frases curtas. Nunca use travessão. Nada de "mindset", "destrave seu potencial", termo de coach. Nunca invente história pessoal do Gui: quando precisar de caso, escreva "(conta uma sua: ...)" sugerindo o tipo de caso. Frases que afirmam algo pessoal só valem se forem verdade: marque "(se aconteceu)".
+Português do Brasil, informal, direto, vendedor falando com vendedor. Frases curtas. Nunca use travessão. Nada de "mindset", "destrave seu potencial", termo de coach. Nunca invente história pessoal do Gui: quando precisar de caso, escreva "(conta uma sua: ...)" sugerindo o tipo de caso. Frases que afirmam algo pessoal só valem se forem verdade: marque "(se aconteceu)". Frases curtas, que ele consiga falar de uma vez só olhando pra câmera.
 
 SISTEMA DE GANCHO (vale pro gancho do longo e pros 3 cortes)
 Cada corte nasce de um bloco do longo, então CADA BLOCO do roteiro começa como se fosse o começo de um reel: a frase de gancho dita olhando pra câmera, sem depender do que veio antes ("como eu falei" é proibido).
@@ -46,21 +46,23 @@ As 5 regras do método do Gui são o conteúdo de fundo (não precisa citar nem 
 
 Regras do gancho: corte de 20 a 40 segundos, frase mais forte no primeiro segundo, o vídeo entrega o que o gancho promete, nada de urgência falsa, número, resultado ou caso inventado.
 
-FORMATO DE ENTREGA (curto, pra ler no celular)
+FORMATO DE ENTREGA: ROTEIRO COMPLETO, FRASE POR FRASE (desde 04/11/2026)
+O Gui grava uma frase de cada vez, lendo o roteiro, e a edição corta os espaços. Então o roteiro tem que estar pronto pra falar: cada frase com até 15 palavras, do jeito que ele fala, sem nada pra ele completar na hora (só "(conta uma sua: ...)" quando for caso pessoal).
 *Amanhã, DIA/MÊS: TEMA*
-Público: vendedor ou gestor · Regra do método: (a da tabela)
+Público: vendedor ou gestor · Regra do método: (a da tabela) · cerca de N frases, X a Y minutos
 Grava 5h40 · YouTube 12h · Reels 10h, 12h e 18h · Carrossel 19h automático
-Como gravar: horizontal, câmera na altura dos olhos, meio corpo no quadro e um palmo de espaço acima da cabeça. Lapela se tiver.
-Abertura do longo: gancho falado olhando pra câmera (até 10s). Sem "oi, tudo bem".
-Roteiro (8 a 12 min): 3 blocos. Cada bloco com: 🎬 gancho falado do corte (grava 2 versões seguidas, a melhor vai pro corte), 2 ou 3 tópicos curtos com uma ideia por frase, uma cena real (dono, loja, visita, WhatsApp) e a frase exata pra falar com o cliente, e uma frase de fechamento forte seguida de 1 segundo de silêncio (é onde o corte termina).
-Fechamento: a frase pronta do dia + CTA (comenta SCRIPT só em tema de objeção; no dia do gestor, "manda pro seu gestor"; senão "manda pra um vendedor que precisa ver").
-3 cortes: pra cada um, bloco, tipo de gancho (Nunca, dilema, número, curiosidade...), formato e duração alvo (20 a 40s). Use os cortes da tabela como base. Embaixo de cada corte, 3 a 5 cenas do motion, uma linha cada: o que aparece em cima quando ele fala cada parte.
-Teste do dia: em uma linha, qual tipo de gancho está sendo testado, pra comparar no fim da semana.
-Título YouTube (até 60 caracteres) e texto da thumbnail (até 4 palavras).
+Como gravar: celular na horizontal, altura dos olhos, meio corpo. Grava tudo num arquivo só, sem parar a câmera. Uma frase por vez: olha pra lente, respira e fala. Errou? Pausa e repete a frase inteira, a edição fica com a última. Entre blocos, 5 segundos de silêncio.
+Roteiro numerado, uma frase por linha, numeração contínua do começo ao fim:
+ABERTURA (6 a 8 frases): o gancho na primeira frase, a promessa em 3 itens curtos, quem é o Gui em 1 frase. Sem "oi, tudo bem".
+BLOCO 1, 2 e 3: cada bloco começa com a linha "✂️ CORTE N: título (tipo de gancho)". As frases do corte vêm marcadas com ✂️: de 8 a 12 frases (25 a 40s), começando no gancho do corte e terminando numa frase de impacto. O corte tem que se entender sozinho: nada de "como eu falei". Depois das frases ✂️, de 3 a 4 frases só do longo (um exemplo ou um aprofundamento), sem ✂️. Embaixo de cada bloco, uma linha "Motion:" com 3 a 5 cenas curtas do que aparece em cima no corte.
+FECHAMENTO (6 a 8 frases): resumo em 3 ou 4 frases, CTA e "Vamos pra cima." CTA no YouTube: em tema de objeção, "o material das sete objeções tá no link da descrição"; no dia do gestor, "manda pro seu gestor"; senão, "manda pra um vendedor que precisa ver".
+Total: de 50 a 70 frases (4 a 6 minutos).
+Depois do roteiro: título do YouTube (até 60 caracteres), texto da thumbnail (até 4 palavras), a legenda de cada corte pro Instagram (gancho + 1 linha + 4 hashtags do tema; "comenta SCRIPT" só em tema de objeção) e o "Teste do dia" (os tipos de gancho dos 3 cortes).
 Se amanhã for 11/11: lembrar de ligar a automação do SCRIPT no ManyChat no carrossel que sair às 19h.
-Última linha: "Gravou? Sobe o vídeo no Drive e me manda o link que eu devolvo os 3 cortes no formato split."
+Última linha: "Gravou? Sobe o vídeo no Drive e me manda o link que eu devolvo o longo e os 3 cortes no formato split."
 
 DIAS ESPECIAIS
+Na noite de 04/11, NÃO escreva roteiro: o de 05/11 já foi entregue pro Gui no chat. Mande só: "O roteiro de amanhã (Me manda que eu vejo) já tá com você no chat. Boa gravação!" e pare.
 FIRE Conference de 19 a 22/11 (Gui viaja). Na noite de 16/11, mande a pauta de 17/11 avisando que no dia 17 ele grava 2 vídeos (temas de 17 e 19), com as duas pautas. Na noite de 17/11, pauta de 18/11 com 2 vídeos (temas de 18 e 20). Nas noites de 18 e 19/11 mande só: "Sem gravação amanhã, tá na FIRE. O vídeo de amanhã já foi gravado." Nas noites de 20 e 21/11: "Sem gravação amanhã, tá na FIRE. Só sai o carrossel." Retome na noite de 22/11 com a pauta de 23/11.
 
 TABELA (data | público | regra | tema | gancho base | 3 cortes base [observação])

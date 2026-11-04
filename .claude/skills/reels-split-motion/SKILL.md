@@ -44,6 +44,20 @@ Trabalhe sempre no scratchpad: uma pasta para o vídeo e uma pasta `motion/` par
      - entre 25 e 45 segundos.
 4. Escrever `cuts.json` com os trechos de fala de cada corte, em segundos do vídeo original.
 
+## 1b. Gravação frase por frase (padrão desde 04/11/2026)
+O Gui grava lendo um roteiro numerado (`conteudo/vendas/roteiros/AAAA-MM-DD-*.md`, ou a pauta diária). Ele fala uma frase de cada vez e, quando erra, repete a frase inteira.
+Vários takes da mesma frase podem estar no vídeo.
+1. **Transcrever o vídeo inteiro:** use `transcribe.py` e, depois, `transcribe_medium.py` em cada trecho de fala.
+2. **Casar cada frase do roteiro com o take certo:** compare cada trecho com as frases do roteiro por semelhança de texto (palavras em comum; `difflib` serve).
+   - Fique com o **último take completo** de cada frase.
+   - Descarte takes cortados no meio, "pera", recomeços e o que não estiver no roteiro.
+3. **Montar o longo:** as frases na ordem do roteiro, com cerca de 0,25s de respiro entre elas e cerca de 0,6s na troca de bloco.
+   - Alterne o enquadramento (aberto e 1,15x) a cada bloco ou a cada 2 ou 3 frases.
+   - Ponha o título de seção em cada bloco e o volume em cerca de -14 LUFS.
+   - Para a montagem, junte os pedaços e leia a duração real de cada um com `ffprobe`. Somando os tempos planejados, os títulos e capítulos atrasam.
+4. **Montar os cortes:** cada corte é a sequência das frases ✂️ do bloco, já com as pausas tiradas. Vai para a tela de baixo (seção 2) e para o motion (seções 3 e 4). As linhas "Motion:" do roteiro são o ponto de partida das cenas.
+5. **Avisar o Gui:** se faltar take bom de alguma frase, diga qual número e siga sem ela, se o sentido aguentar.
+
 ## 2. Tela de baixo (o Gui)
 1. `python3 SK/scripts/build_bottom.py VIDEO cuts.json NOME pasta --cx 0.49 --cy 0.53 --crop-h 1700`
    - `--cx` e `--cy` são o centro do rosto, medido num quadro.
