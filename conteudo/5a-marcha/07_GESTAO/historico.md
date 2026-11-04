@@ -14,6 +14,7 @@
 | 04/11/2026 | Calendário com rodízio das 9 séries, primeiro com D01 em 23/11/2026 | Começar depois da FIRE, sem série repetida em dias seguidos |
 | 04/11/2026 | D01 antecipado para hoje, 04/11/2026. Carrosséis da 5ª Marcha só a partir de 19/11; gravação fora da FIRE | Pedido do Gui. Os carrosséis das 19h até 18/11 já estavam agendados |
 | 04/11/2026 | Todo o conteúdo anterior substituído pela 5ª Marcha. Carrosséis no design antigo (post estilo Twitter). Os 13 antigos de 04 a 18/11 foram para rascunho; pauta diária reescrita; lembrete do SCRIPT de 11/11 desligado; material antigo em `conteudo/vendas/arquivo/` | Pedido do Gui |
+| 04/11/2026 | Gravação diária: o roteiro completo dos vídeos do dia chega por volta das 7h; nos dias antes da FIRE e dos feriados, grava os seguintes junto | Pedido do Gui |
 | 04/11/2026 | 5 testes A/B, um de cada vez, com Trial Reels quando possível | Mudar uma variável por teste para a decisão ser confiável |
 
 ## Próximos experimentos (depois do ciclo de 90 dias)

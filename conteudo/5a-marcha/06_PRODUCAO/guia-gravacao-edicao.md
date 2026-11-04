@@ -11,7 +11,7 @@
    - Entre um Reel e outro, fique 5 segundos em silêncio e diga o número dele ("Reel vinte e três").
 5. **Ganchos:** grave o A e o B seguidos.
 6. **Simulação (formato B):** grave primeiro todas as falas do vendedor, olhando para a lente, e depois as do cliente, com o rosto levemente virado para a direita.
-7. **Em lote:** dá para gravar de 4 a 6 Reels por sessão, de 40 a 60 minutos. O calendário já agrupa as gravações.
+7. **Um por dia:** o roteiro do dia chega por volta das 7h e o Reel é gravado de manhã. Nos dias antes da FIRE e dos feriados, grava 3 a 5 seguidos (ver `04_CALENDARIO/calendario.md`). Dá para se adiantar e gravar vários de uma vez.
 
 ## Edição (Claude, pela skill `reels-split-motion`)
 

@@ -6,8 +6,8 @@ Regras:
 - Até 18/11, os carrosséis da 5ª Marcha entram no lugar dos 13 carrosséis antigos que estavam agendados às 19h no Metricool.
 - A partir de 19/11, às terças, quintas e sábados, até completar 30. Rodízio pelas séries A a F.
 - Design igual ao dos carrosséis antigos (post estilo Twitter); fundo claro em dia ímpar e escuro em dia par.
-- FIRE (19 a 22/11) e feriados de fim de ano (24, 25, 31/12 e 01/01): nenhuma sessão de gravação; a que cairia ali passa para o dia anterior livre.
-- Sessões de gravação: 5 Reels seguidos por sessão; gravar até 4 dias antes do primeiro Reel da sessão (nunca antes de hoje).
+- Gravação diária (pedido do Gui em 04/11): cada Reel é gravado de manhã no próprio dia em que sai. O roteiro chega às 7h.
+- FIRE (19 a 22/11) e feriados de fim de ano (24, 25, 31/12 e 01/01): nada de gravar; o Reel desses dias é gravado no dia anterior livre (18/11, 23/12 e 30/12).
 """
 import csv, datetime as dt, runpy, sys, glob, os
 from collections import OrderedDict
@@ -62,18 +62,16 @@ for i in range(90):
     d = D01 + dt.timedelta(days=i)
     semana = i // 7 + 1
     n = ordem_r[i]; r = R[n]
-    sessao = i // 5 + 1
-    primeiro = D01 + dt.timedelta(days=(sessao - 1) * 5)
-    gravar = max(HOJE, primeiro - dt.timedelta(days=4))
+    gravar = d
     while gravar in FIRE or gravar in SEM_GRAVAR: gravar -= dt.timedelta(days=1)
     obs = []
     if d in FERIADOS: obs.append(f'{FERIADOS[d]}: alcance pode cair; manter o post agendado e não usar este dia para teste A/B')
-    if d in FIRE: obs.append('Gui na FIRE: Reel gravado antes e já agendado')
+    if gravar != d: obs.append(f"Gravado antes, em {gravar.strftime('%d/%m')} ({'FIRE' if d in FIRE else 'feriado'}), e já agendado")
     if r.get('pend'): obs.append('Pendência: ' + r['pend'])
     linhas.append(dict(dia=f'D{i+1:02d}', data=d.strftime('%d/%m/%Y'), dia_semana=DIAS[d.weekday()], semana=semana, formato='Reel',
                        numero=f'R{n:03d}', serie=SERIE[r['serie']], pilar=MARCHA[r['marcha']], tipo=FMT[r['fmt']], tema=r['tema'],
                        objetivo=r['obj'], gancho=r['gA'], cta=r['cta'], metrica=r['metrica'],
-                       sessao_gravacao=f'G{sessao:02d}', gravar_ate=gravar.strftime('%d/%m/%Y'),
+                       gravar_em=gravar.strftime('%d/%m/%Y'),
                        status='roteiro pronto', resultado='', observacao=' | '.join(obs)))
     carrossel = d in JA_AGENDADOS or (d >= INICIO_CARROSSEL and d.weekday() in (1, 3, 5))
     if carrossel and ci < 30:
@@ -86,17 +84,18 @@ for i in range(90):
         linhas.append(dict(dia=f'D{i+1:02d}', data=d.strftime('%d/%m/%Y'), dia_semana=DIAS[d.weekday()], semana=semana, formato='Carrossel',
                            numero=f"C{c['n']:03d}", serie=CSER[c['serie']], pilar='', tipo=f"{len(c['s'])} slides", tema=c['tema'],
                            objetivo=c['obj'], gancho=c['capaA'], cta=c['cta'], metrica=c['metrica'],
-                           sessao_gravacao='', gravar_ate='', status='texto pronto', resultado='', observacao=' | '.join(o)))
+                           gravar_em='', status='texto pronto', resultado='', observacao=' | '.join(o)))
 assert ci == 30, ci
 os.makedirs(os.path.join(OUT, '04_CALENDARIO'), exist_ok=True)
 with open(os.path.join(OUT, '04_CALENDARIO', 'calendario_90_dias.csv'), 'w', newline='') as fh:
     w = csv.DictWriter(fh, fieldnames=list(linhas[0].keys())); w.writeheader(); w.writerows(linhas)
-# sessões de gravação
-with open(os.path.join(OUT, '04_CALENDARIO', 'sessoes_gravacao.csv'), 'w', newline='') as fh:
-    w = csv.writer(fh); w.writerow(['sessao', 'gravar_ate', 'reels', 'tipos_de_gravacao', 'publica_de', 'publica_ate'])
-    rl = [l for l in linhas if l['formato'] == 'Reel']
-    for s in range(18):
-        bloco = rl[s * 5:(s + 1) * 5]
-        tipos = sorted({R[int(b['numero'][1:])]['grav'] for b in bloco})
-        w.writerow([f'G{s+1:02d}', bloco[0]['gravar_ate'], ' '.join(b['numero'] for b in bloco), ', '.join(tipos), bloco[0]['data'], bloco[-1]['data']])
+# dias de gravação
+os.path.exists(os.path.join(OUT, '04_CALENDARIO', 'sessoes_gravacao.csv')) and os.remove(os.path.join(OUT, '04_CALENDARIO', 'sessoes_gravacao.csv'))
+dias = {}
+for l in linhas:
+    if l['formato'] == 'Reel': dias.setdefault(l['gravar_em'], []).append(l)
+with open(os.path.join(OUT, '04_CALENDARIO', 'dias_gravacao.csv'), 'w', newline='') as fh:
+    w = csv.writer(fh); w.writerow(['gravar_em', 'reels', 'publica_em', 'tipos_de_gravacao'])
+    for g, ls in dias.items():
+        w.writerow([g, ' '.join(x['numero'] for x in ls), ' '.join(x['data'][:5] for x in ls), ', '.join(sorted({R[int(x['numero'][1:])]['grav'] for x in ls}))])
 print('linhas', len(linhas), 'ultimo', linhas[-1]['data'])

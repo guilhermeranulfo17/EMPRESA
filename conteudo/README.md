@@ -20,7 +20,7 @@ com 3 cortes, roteiros de 04 e 05/11, melhorias do formato antigo) está em `ven
 - **O que sai:** 1 Reel por dia (R001 a R090, de 04/11/2026 a 01/02/2027) e 30 carrosséis às 19h (C001 a C030).
   O calendário está em `5a-marcha/04_CALENDARIO/calendario_90_dias.csv`.
 - **Roteiros para gravar:** página https://claude.ai/artifact/TKiqP9pnFGPLCAFS7cPgGK (cópia em `5a-marcha/04_CALENDARIO/roteiros.html`),
-  agrupados em 18 sessões de 5 Reels (`5a-marcha/04_CALENDARIO/sessoes_gravacao.csv`).
+  por dia de gravação (`5a-marcha/04_CALENDARIO/dias_gravacao.csv`). Um Reel por dia, gravado de manhã no dia em que sai.
 - **Como gravar:** frase por frase, na horizontal, meio corpo. Guia em `5a-marcha/06_PRODUCAO/guia-gravacao-edicao.md`.
 - **Edição:** formato split (motion em cima, o Gui embaixo, legenda na divisão) pela skill `reels-split-motion`.
   Para o formato antigo (vertical inteiro com efeitos por cima), use `/editar-video`, só quando ele pedir.
@@ -36,7 +36,7 @@ com 3 cortes, roteiros de 04 e 05/11, melhorias do formato antigo) está em `ven
 
 | Nome | Quando (horário de Brasília) | O que faz |
 |---|---|---|
-| Pauta guisilva.vendas | todo dia, 20h38 | Manda o que o Gui precisa para amanhã na 5ª Marcha: a sessão de gravação (com o link dos roteiros) ou o aviso curto do que sai. O texto é igual a `vendas/agente-pauta.md`, gerado por `5a-marcha/07_GESTAO/gerador/pauta_prompt.py`: se mudar um, mude o outro |
+| Pauta guisilva.vendas | todo dia, 6h50 | Manda o roteiro completo dos vídeos que o Gui grava hoje (5ª Marcha), lido da página de roteiros: ganchos A e B, falas frase por frase, motion, produção, capa, legenda e cuidados. O texto é igual a `vendas/agente-pauta.md`, gerado por `5a-marcha/07_GESTAO/gerador/pauta_prompt.py`: se mudar um, mude o outro |
 | Roteiro do longo de amanhã (Gui) | todo dia, 6h50 | Roteiro do longo cristão. **Desatualizado:** ainda lê a "Linha Editorial" antiga e pede 1 longo por dia |
 | Ligar SCRIPT no post de 11/11 | desligado | Era o lembrete do carrossel antigo de 11/11, que saiu da programação |
 | Abordagens diárias Orkestra | dias úteis, 6h04 | 15 leads de buffet por dia, com o link do WhatsApp pronto (vendas do Orkestra) |

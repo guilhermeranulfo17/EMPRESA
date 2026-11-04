@@ -10,7 +10,7 @@ Planejamento de 90 dias para o @guisilva.vendas (Instagram e YouTube Shorts): 90
 | `01_PESQUISA/` | `pesquisa.md` (achados com nível de confiança e limitações) e `fontes.csv` (F01 a F27, com link e data) |
 | `02_REELS/` | R001 a R090, um arquivo por Reel, no modelo completo: identificação, estratégia de atenção, roteiro com fala literal, direção de produção, publicação e critérios de qualidade |
 | `03_CARROSSEIS/` | C001 a C030, com capa A e B, texto exato e visual de cada slide, design, legenda, CTA e métrica |
-| `04_CALENDARIO/` | `calendario.md` (como ler), `calendario_90_dias.csv` (editável) e `sessoes_gravacao.csv` |
+| `04_CALENDARIO/` | `calendario.md` (como ler), `calendario_90_dias.csv` (editável), `dias_gravacao.csv` e `roteiros.html` (cópia da página de roteiros) |
 | `05_PERFORMANCE/` | `indicadores.md` (fórmulas e rotina de 72h, 7d e 30d), `painel.csv` e `testes_ab.csv` |
 | `06_PRODUCAO/` | `guia-do-reel.md`, `biblioteca-de-ganchos.md` e `guia-gravacao-edicao.md` (com o checklist de publicação) |
 | `07_GESTAO/` | `indice_reels.csv`, `indice_carrosseis.csv`, `pendencias.md`, `historico.md` e o `gerador/` |
@@ -23,7 +23,7 @@ Planejamento de 90 dias para o @guisilva.vendas (Instagram e YouTube Shorts): 90
 
 ## Fluxo de um Reel
 
-1. Abrir o `R###.md` do dia da sessão (ver `04_CALENDARIO/sessoes_gravacao.csv`).
+1. O roteiro do dia chega por volta das 7h (e está na página https://claude.ai/artifact/TKiqP9pnFGPLCAFS7cPgGK ou no `R###.md`).
 2. Gravar frase por frase, seguindo o `06_PRODUCAO/guia-gravacao-edicao.md`.
 3. Mandar o vídeo para edição com a skill `reels-split-motion`. A lista "Motion em cima" do roteiro vira o filme de cima.
 4. Conferir o checklist de publicação, agendar no Metricool (Reels + Shorts) com a legenda do roteiro.

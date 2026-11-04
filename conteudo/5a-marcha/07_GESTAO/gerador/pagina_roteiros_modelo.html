@@ -13,9 +13,11 @@ body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--body)}
 h1{font:28px/1.1 var(--display);letter-spacing:.01em;margin:8px 0 4px;text-wrap:balance}
 .sub{color:var(--muted);margin:0 0 16px;font-size:15px}
 .how{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:15px;margin-bottom:16px}
-.nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
-.nav a{font:600 13px/1 var(--body);text-decoration:none;color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-variant-numeric:tabular-nums}
-.nav a.now{background:var(--mark);color:var(--markfg);border-color:var(--mark)}
+.pick{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-weight:600;font-size:14px}
+select{font:600 15px var(--body);background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:8px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:4px 12px;font-size:15px}
+.grid div{min-width:0}
+@media (max-width:480px){.grid{grid-template-columns:minmax(0,1fr)}}
 .sess{margin:28px 0 8px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .sess h2{font:22px/1 var(--display);margin:0}
 .sess span{color:var(--muted);font-size:14px;font-variant-numeric:tabular-nums}
@@ -43,9 +45,9 @@ button{font:600 14px var(--body);background:var(--fg);color:var(--bg);border:0;b
 </style>
 <div class="wrap">
 <h1>Roteiros 5ª Marcha</h1>
-<p class="sub">90 Reels, de 04/11/2026 a 01/02/2027, agrupados por sessão de gravação.</p>
+<p class="sub">90 Reels, de 04/11/2026 a 01/02/2027, um por dia. Cada dia abre com o vídeo que você grava de manhã. O mesmo roteiro chega às 7h no celular.</p>
 <div class="how">Celular na horizontal, altura dos olhos, meio corpo. Uma frase por vez: olha pra lente, respira e fala. Errou? Pausa e repete a frase inteira. Entre um Reel e outro, 5 segundos em silêncio e fala o número dele.</div>
-<nav class="nav" id="nav"></nav>
+<div class="pick"><label for="dia">Ir para o dia</label> <select id="dia"></select></div>
 <div id="list"></div>
 </div>
 <script id="data" type="application/json">__DATA__</script>
@@ -54,19 +56,27 @@ const S=JSON.parse(document.getElementById('data').textContent);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const d=s=>{const[a,b,c]=s.split('/');return new Date(+c,+b-1,+a)};
 const hoje=new Date(new Date().toLocaleString('en-US',{timeZone:'America/Sao_Paulo'}));hoje.setHours(0,0,0,0);
-let atual=S.find(s=>d(s.reels[s.reels.length-1].pub)>=hoje)||S[S.length-1];
-document.getElementById('nav').innerHTML=S.map(s=>`<a href="#${s.id.toLowerCase()}" class="${s===atual?'now':''}">${s.id} · ${s.ate.slice(0,5)}</a>`).join('');
-document.getElementById('list').innerHTML=S.map(s=>`<section id="${s.id.toLowerCase()}"><div class="sess"><h2>${s.id}</h2><span>gravar até ${s.ate} · publica ${s.reels[0].pub.slice(0,5)} a ${s.reels[s.reels.length-1].pub.slice(0,5)}</span>${s===atual?'<span class="tag">próxima</span>':''}</div>`+
-s.reels.map(r=>{let k=0;return `<details class="reel" ${s===atual?'open':''}><summary><div class="meta"><b>${r.n}</b> · publica ${r.pub} (${r.dia}) · ${esc(r.serie)} · ${esc(r.tipo)}</div><div class="tema">${esc(r.tema)}</div><div class="meta">${esc(r.grav)}</div></summary><div class="inner">
-<div class="lbl">Gancho</div><div class="gancho">${esc(r.gA)}</div>
-<div class="lbl">Roteiro, frase por frase</div>${r.falas.map(b=>`<div class="bloco"><div class="h">${esc(b.t)} · ${esc(b.l)}</div><ol class="f" start="${k+1}">${b.f.map(x=>{k++;return `<li>${esc(x)}</li>`}).join('')}</ol></div>`).join('')}
+let atual=S.find(s=>d(s.ate)>=hoje)||S[S.length-1];
+const sel=document.getElementById('dia');
+sel.innerHTML=S.map(s=>`<option value="${s.id}" ${s===atual?'selected':''}>${s.ate.slice(0,5)}${s===atual?' (hoje ou próximo)':''} · ${s.reels.map(r=>r.n).join(' ')}</option>`).join('');
+const F=(l,v)=>v?`<div class="lbl">${l}</div><div>${esc(v)}</div>`:'';
+function reel(r,open){let k=0;return `<details class="reel" ${open?'open':''}><summary><div class="meta"><b>${r.n}</b> · publica ${r.pub} (${r.dia}) · ${esc(r.serie)} · ${esc(r.pilar)}</div><div class="tema">${esc(r.tema)}</div><div class="meta">${esc(r.tipo)} · ${esc(r.grav)} · objetivo: ${esc(r.obj)}</div></summary><div class="inner">
+<div class="lbl">Gancho A (grave este)</div><div class="gancho">${esc(r.gA)}</div>
 <div class="lbl">Gancho B (grave também, para teste)</div><div>${esc(r.gB)}</div>
+${F('Por que funciona',r.porque)}${F('Primeira imagem (sem áudio)',r.img1)}
+<div class="lbl">Roteiro, frase por frase</div>${r.falas.map(b=>`<div class="bloco"><div class="h">${esc(b.t)} · ${esc(b.l)}</div><ol class="f" start="${k+1}">${b.f.map(x=>{k++;return `<li>${esc(x)}</li>`}).join('')}</ol></div>`).join('')}
 ${r.pend?`<div class="pend"><b>Pendência:</b> ${esc(r.pend)}</div>`:''}
-<div class="lbl">Motion em cima</div><ul class="c">${r.cenas.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
-<div class="lbl">Capa</div><div>${esc(r.capa)}</div>
+<div class="lbl">Direção de produção</div><div class="grid"><div><b>Gravação:</b> ${esc(r.grav)}</div><div><b>Cortes:</b> ${esc(r.cortes)}</div>${r.ritmo?`<div><b>Ritmo:</b> ${esc(r.ritmo)}</div>`:''}</div>
+<div class="lbl">Motion em cima (uma cena por frase)</div><ul class="c">${r.cenas.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+<div class="lbl">Publicação</div><div class="grid"><div><b>Capa:</b> ${esc(r.capa)}</div><div><b>CTA:</b> ${esc(r.cta)}</div><div><b>Métrica:</b> ${esc(r.metrica)}</div><div><b>Palavras-chave:</b> ${esc(r.kw)}</div></div>
 <div class="lbl">Legenda</div><div class="leg" id="leg-${r.n}">${esc(r.leg)}</div><button type="button" data-copy="leg-${r.n}">Copiar legenda</button>
+${F('Fontes',r.fontes)}${F('Ponto de atenção',r.atencao)}
 ${r.car?`<div class="lbl">Carrossel do dia (19h)</div><div>${esc(r.car)}</div>`:''}
-</div></details>`}).join('')+`</section>`).join('');
+</div></details>`}
+function show(id){const s=S.find(x=>x.id===id)||atual;
+document.getElementById('list').innerHTML=`<section id="${s.id}"><div class="sess"><h2>Gravar em ${s.ate.slice(0,5)}</h2><span>${s.reels.length>1?s.reels.length+' Reels: hoje você grava também os dos dias sem gravação':'1 Reel'}</span>${s===atual?'<span class="tag">hoje</span>':''}</div>`+s.reels.map((r,i)=>reel(r,i===0)).join('')+`</section>`;}
+sel.addEventListener('change',()=>{show(sel.value);try{history.replaceState(null,'','#'+sel.value)}catch(e){}});
+const h=location.hash.slice(1);if(h&&S.find(x=>x.id===h)){sel.value=h;show(h)}else show(atual.id);
 document.addEventListener('click',e=>{const b=e.target.closest('[data-copy]');if(!b)return;const el=document.getElementById(b.dataset.copy);
 navigator.clipboard.writeText(el.textContent).then(()=>{b.textContent='Copiada'},()=>{const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selecionada, copie'})});
 </script>

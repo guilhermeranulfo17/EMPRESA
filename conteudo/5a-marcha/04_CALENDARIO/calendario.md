@@ -4,8 +4,9 @@
 **Volume:** 90 Reels (1 por dia) e 30 carrosséis às 19h. De 04 a 18/11, os carrosséis da 5ª Marcha entram no lugar dos 13 antigos que estavam agendados no Metricool; a partir de 19/11 saem às terças, quintas e sábados. Design igual ao dos carrosséis antigos (post estilo Twitter), fundo claro em dia ímpar e escuro em dia par.
 
 Arquivos:
-- `calendario_90_dias.csv`: a tabela editável (dia, data, formato, número, série, pilar, tipo, tema, objetivo, gancho, CTA, métrica, sessão de gravação, gravar até, status, resultado, observação). Importe no Google Sheets e edite por lá.
-- `sessoes_gravacao.csv`: 18 sessões de 5 Reels, com a data limite de gravação.
+- `calendario_90_dias.csv`: a tabela editável (dia, data, formato, número, série, pilar, tipo, tema, objetivo, gancho, CTA, métrica, dia de gravação, status, resultado, observação). Importe no Google Sheets e edite por lá.
+- `dias_gravacao.csv`: o que gravar em cada dia (82 dias de gravação).
+- `roteiros.html`: cópia da página de roteiros (https://claude.ai/artifact/TKiqP9pnFGPLCAFS7cPgGK).
 - O gerador está em `07_GESTAO/gerador/calendario.py`. Se mudar a ordem ou a data de início, rode de novo: `python3 -I 07_GESTAO/gerador/calendario.py . 07_GESTAO/gerador` (de dentro de `conteudo/5a-marcha`).
 
 ## Como a ordem foi montada
@@ -31,7 +32,7 @@ A etapa de relação está abaixo da meta nos Reels, porque histórias pessoais 
 |---|---|---|---|---|---|
 | 1 | 04/11 | 10/11 | 7 | 6 | Abertura com R001 e C001 hoje. Começa o teste T1 (gancho) e o T3 (capa) |
 | 2 | 11/11 | 17/11 | 7 | 6 | Primeira revisão grande depois de 10 Reels (13/11). Feriado 15/11 |
-| 3 | 18/11 | 24/11 | 7 | 4 | Sessão G05 (18/11). FIRE de 19 a 22/11: tudo já gravado e agendado. Feriado 20/11 |
+| 3 | 18/11 | 24/11 | 7 | 4 | Em 18/11 você grava 5 Reels (o do dia e os 4 da FIRE). FIRE de 19 a 22/11: tudo já agendado. Feriado 20/11 |
 | 4 | 25/11 | 01/12 | 7 | 3 | Começa o T4 (duração) |
 | 5 | 02/12 | 08/12 | 7 | 3 | Fim do T2 (formato) |
 | 6 | 09/12 | 15/12 | 7 | 3 | R010 (10/12) só vai ao ar se o Gui validar as lições. Fim do T3 |
@@ -45,16 +46,18 @@ A etapa de relação está abaixo da meta nos Reels, porque histórias pessoais 
 
 ## Gravação
 
-Cada sessão grava 5 Reels em sequência, em 40 a 60 minutos, seguindo o `06_PRODUCAO/guia-gravacao-edicao.md`. A data "gravar até" deixa 4 dias para edição e agendamento, menos no começo, que está apertado porque o ciclo começou hoje.
+**Um Reel por dia, gravado de manhã no dia em que sai** (pedido do Gui em 04/11). O roteiro completo chega no celular por volta das 7h (agendamento "Pauta guisilva.vendas") e também está na página https://claude.ai/artifact/TKiqP9pnFGPLCAFS7cPgGK, que abre no dia de hoje.
 
-Ordem recomendada dentro de cada sessão: primeiro os Reels de câmera frontal e quadro (o Gui olha para a lente o tempo todo), depois as simulações (troca de papel), e por último as falas dos Reels de tela. Assim ele só muda de posição uma vez.
+Fluxo do dia: chega o roteiro, o Gui grava frase por frase, sobe no Drive e manda o link no chat; a edição split é feita e o Reel é agendado no Metricool para o fim da tarde (Instagram e YouTube Shorts). O carrossel das 19h já está agendado.
 
-**FIRE (19 a 22/11):** nenhuma gravação nesses dias. A sessão G05 foi puxada para 18/11, e os Reels de 19 a 23/11 saem da G04 (até 15/11). Agende tudo no Metricool antes de viajar.
+**Dias com mais de um Reel para gravar** (porque o dia seguinte não tem gravação):
+- **18/11:** R056 (sai 18/11) e os da FIRE: R003 (19/11), R072 (20/11), R082 (21/11) e R005 (22/11). Agende tudo antes de viajar.
+- **23/12:** R050 (23/12), R060 (24/12) e R066 (25/12).
+- **30/12:** R032 (30/12), R042 (31/12) e R051 (01/01).
 
-**Primeiras sessões:**
-- **G01 (hoje, 04/11):** R001 (vai ao ar hoje), R016, R026, R036, R008. Inclui o gancho B do R026 e do R036 (teste T1).
-- **G02 (até 05/11):** R055, R002, R071, R081, R004.
-- **G03 (até 10/11):** R017, R027, R037, R046, R056. Inclui o gancho B do R017 e do R046.
+Testes que pedem uma versão a mais na gravação: gancho B do R026, R036, R017 e R046 (T1) e a versão curta do R038, R039 e R065 (T4, feita na edição).
+
+Quem quiser se adiantar pode gravar vários de uma vez: a página mostra qualquer dia pelo seletor.
 
 ## Horários
 
@@ -64,4 +67,4 @@ Carrossel às 19h. Para os Reels, até o teste T5, use o melhor horário do dia 
 
 - O calendário de 30 dias (`conteudo/vendas/calendario-30-dias.md`) fica substituído a partir de hoje.
 - Os 13 carrosséis antigos agendados de 04 a 18/11 foram para rascunho no Metricool e recebem a arte e a legenda da 5ª Marcha assim que o Gui subir as imagens no Drive (`07_GESTAO/metricool_carrosseis.csv`).
-- A pauta diária automática ("Pauta guisilva.vendas") passou a mandar a sessão de gravação da 5ª Marcha.
+- A pauta automática ("Pauta guisilva.vendas") agora chega todo dia por volta das 7h com o roteiro completo dos vídeos do dia.

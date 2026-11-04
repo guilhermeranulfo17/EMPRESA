@@ -6,8 +6,8 @@ Itens que dependem do Gui, de uma decisão ou de algo fora deste projeto. Status
 
 | # | Item | Onde | Prazo |
 |---|---|---|---|
-| P01 | Confirmar que as três lições do R010 são dele, do jeito que estão escritas (ou trocar por lições próprias). | `02_REELS/R010.md` | Antes da sessão G08 (gravar até 05/12) |
-| P02 | Confirmar se a frase do gancho B do R020 é mesmo a que mais ajudou nos fechamentos dele. Se não, usar só o gancho A. | `02_REELS/R020.md` | Antes da G08 (05/12) |
+| P01 | Confirmar que as três lições do R010 são dele, do jeito que estão escritas (ou trocar por lições próprias). | `02_REELS/R010.md` | Antes de 10/12 (dia de gravar e publicar o R010) |
+| P02 | Confirmar se a frase do gancho B do R020 é mesmo a que mais ajudou nos fechamentos dele. Se não, usar só o gancho A. | `02_REELS/R020.md` | Antes de 11/12 (dia do R020) |
 | P03 | Histórias pessoais: listar 3 a 5 situações reais (venda perdida, objeção difícil, primeira meta batida, erro que ensinou algo). Elas viram Reels da Série 1 e reforçam a etapa de relação, que está abaixo da meta. Nenhuma história foi inventada. | `04_CALENDARIO/calendario.md` | Quando puder |
 | P04 | Público ampliado para SDR, closer e executivo de contas. Resolvido em 04/11: o Gui mandou substituir todo o conteúdo anterior pela 5ª Marcha. | `00_ESTRATEGIA/estrategia.md` | Resolvido |
 
@@ -15,10 +15,10 @@ Itens que dependem do Gui, de uma decisão ou de algo fora deste projeto. Status
 
 | # | Item | Opções | Recomendação |
 |---|---|---|---|
-| P05 | Cadência. **Resolvido em 04/11:** só a 5ª Marcha, a partir de hoje. A pauta diária foi reescrita para mandar a sessão de gravação; o material antigo foi para `conteudo/vendas/arquivo/`. | | |
+| P05 | Cadência. **Resolvido em 04/11:** só a 5ª Marcha, a partir de hoje, com um Reel gravado por dia. O roteiro do dia chega por volta das 7h; o material antigo foi para `conteudo/vendas/arquivo/`. | | |
 | P06 | Carrosséis antigos de 04 a 18/11. **Em andamento:** os 13 estão em rascunho no Metricool. Assim que o Gui subir as pastas dos zips no Drive, cada post recebe a arte e a legenda da 5ª Marcha (`07_GESTAO/metricool_carrosseis.csv`). Os carrosséis de 19/11 em diante são criados como posts novos. | | Hoje, antes das 19h, para o C001 sair |
-| P07 | Arte dos 30 carrosséis. O texto está pronto; a arte não foi feita. | CarrosseIA, Canva ou a skill `carrossel-guisilva-vendas`. | Fazer em lotes de 5, uma semana antes da publicação. |
-| P08 | Motion dos Reels. Cada roteiro tem a lista "Motion em cima"; o filme é feito na edição de cada Reel pela skill `reels-split-motion`. | | Editar na ordem das sessões de gravação. |
+| P07 | Arte dos 30 carrosséis. **Feita em 04/11** no design antigo (post estilo Twitter); zips em `03_CARROSSEIS/zips/`. Falta o Gui subir no Drive. | | |
+| P08 | Motion dos Reels. Cada roteiro tem a lista "Motion em cima"; o filme é feito na edição de cada Reel pela skill `reels-split-motion`, no dia em que o vídeo chega. | | |
 
 ## Vídeos extras (fora dos 90)
 
