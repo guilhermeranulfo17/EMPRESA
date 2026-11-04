@@ -18,7 +18,7 @@ with open(os.path.join(OUT, '05_PERFORMANCE', 'painel.csv'), 'w', newline='') as
     w = csv.DictWriter(fh, fieldnames=COLS); w.writeheader(); n = 0
     for l in cal:
         d = dt.datetime.strptime(l['data'], '%d/%m/%Y').date()
-        versoes = [('A' if l['formato'] == 'Reel' else ('capa B' if l['numero'] in CAPA_B else 'capa A'), '', d)]
+        versoes = [('A' if l['formato'] == 'Reel' else ('' if not l['numero'] else ('capa B' if l['numero'] in CAPA_B else 'capa A')), '', d)]
         if l['numero'] in TRIAL:
             t, v = TRIAL[l['numero']]; versoes.append((f'{v} ({t})', 'sim', d + dt.timedelta(days=1)))
         for v, trial, dp in versoes:

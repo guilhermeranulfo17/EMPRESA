@@ -88,5 +88,5 @@ O curso só aparece de forma explícita quando houver lista de espera ou lançam
 1. **Formato de gravação:** os Reels seguem o padrão aprovado em 03/11 (split com motion em cima e o Gui embaixo, legenda na divisão) e a gravação frase por frase (aprovada em 04/11).
 2. **Lote 01:** os 10 Reels e os 10 carrosséis do Lote 01 viraram R001 a R010 e C001 a C010. Foram revisados (linguagem mais falada, cenas de motion, legenda completa) sem mudar a ideia central.
 3. **Séries:** as 9 séries do prompt mestre foram mantidas, com 10 Reels cada. Os 10 do Lote 01 foram distribuídos entre as séries 1, 5 e 7, e as outras completam 10.
-4. **Calendário:** começa no D01 sugerido para 23/11/2026, a segunda depois da FIRE. Até lá seguem os vídeos da pauta diária e os carrosséis já agendados.
+4. **Calendário:** começa no D01 = 04/11/2026, a pedido do Gui (a primeira versão sugeria 23/11). Os 13 carrosséis já agendados até 18/11 continuam; os carrosséis da 5ª Marcha entram a partir de 19/11. Na FIRE (19 a 22/11) não há gravação.
 5. **Histórias pessoais:** nenhum roteiro inventa caso do Gui. Os que dependem de experiência real estão marcados com pendência.

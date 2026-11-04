@@ -11,7 +11,8 @@
 | 04/11/2026 | Público ampliado para SDR, closer e executivo de contas | Pedido do prompt mestre. A pauta diária ainda segue o público antigo (pendência P04) |
 | 04/11/2026 | Nenhuma história, número ou resultado inventado. Números ilustrativos com a etiqueta "exemplo" | Regra do prompt mestre |
 | 04/11/2026 | "Carga cognitiva" virou "excesso de informação", com texto cauteloso | A meta-análise F18 mostra efeito médio próximo de zero para excesso de escolha |
-| 04/11/2026 | Calendário com D01 em 23/11/2026 e rodízio das 9 séries | Começar depois da FIRE, sem série repetida em dias seguidos |
+| 04/11/2026 | Calendário com rodízio das 9 séries, primeiro com D01 em 23/11/2026 | Começar depois da FIRE, sem série repetida em dias seguidos |
+| 04/11/2026 | D01 antecipado para hoje, 04/11/2026. Carrosséis da 5ª Marcha só a partir de 19/11; gravação fora da FIRE | Pedido do Gui. Os carrosséis das 19h até 18/11 já estavam agendados |
 | 04/11/2026 | 5 testes A/B, um de cada vez, com Trial Reels quando possível | Mudar uma variável por teste para a decisão ser confiável |
 
 ## Próximos experimentos (depois do ciclo de 90 dias)

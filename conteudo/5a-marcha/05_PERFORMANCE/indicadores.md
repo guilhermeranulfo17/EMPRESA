@@ -37,9 +37,9 @@ Ponto de queda: abra o gráfico de retenção do Reel (F04) e anote em que segun
 2. Separar os 3 conteúdos com mais envios por alcance e os 3 com mais salvamentos por alcance dos últimos 30 dias.
 3. Anotar uma decisão: repetir tema, trocar abertura, encurtar, melhorar exemplo ou encerrar série.
 
-**Primeira revisão grande (depois de 10 publicações, por volta de 02/12/2026):** seguir o critério do Lote 01. A decisão sobre os próximos conteúdos vem desse aprendizado, não do número de visualizações.
+**Primeira revisão grande (depois de 10 publicações, em 13/11/2026):** seguir o critério do Lote 01. A decisão sobre os próximos conteúdos vem desse aprendizado, não do número de visualizações.
 
-**Revisão de ciclo (D90, 20/02/2027):** resultado dos 5 testes, ranking por série e por formato, e o plano do ciclo seguinte.
+**Revisão de ciclo (D90, 01/02/2027):** resultado dos 5 testes, ranking por série e por formato, e o plano do ciclo seguinte.
 
 ## Valores da coluna `decisao`
 

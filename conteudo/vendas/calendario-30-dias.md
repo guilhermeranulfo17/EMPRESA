@@ -1,5 +1,7 @@
 # Calendário de conteúdo: @guisilva.vendas, 04/11 a 03/12/2026
 
+> **Substituído em 04/11/2026** pelo calendário da 5ª Marcha (`conteudo/5a-marcha/04_CALENDARIO/`). Fica aqui só como histórico.
+
 Um lugar só com o que você grava e o que sai em cada dia. Os temas dos vídeos vêm do calendário de 90 dias
 (`agente-pauta.md`). Os carrosséis até 18/11 já estão agendados no Metricool.
 

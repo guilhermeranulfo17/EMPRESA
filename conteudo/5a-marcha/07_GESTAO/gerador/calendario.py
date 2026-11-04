@@ -1,10 +1,12 @@
 """Gera 04_CALENDARIO/calendario_90_dias.csv a partir dos dados dos Reels e carrosséis.
 uso: python3 -I calendario.py PASTA_5A_MARCHA PASTA_GERADOR
 Regras:
-- D01 = 23/11/2026 (segunda). 1 Reel por dia durante 90 dias.
+- D01 = 04/11/2026 (quarta, dia em que o Gui pediu para começar). 1 Reel por dia durante 90 dias.
 - Reels em rodízio pelas 9 séries (1 a 9), cada série na ordem dos números. Assim nenhuma série se repete em dias seguidos.
-- Carrosséis às terças e quintas; também aos sábados nas semanas 1, 4, 7 e 10 (30 no total). Rodízio pelas séries A a F.
-- Sessões de gravação: 5 Reels seguidos por sessão; gravar até 4 dias antes do primeiro Reel da sessão.
+- Até 18/11 os carrosséis das 19h já estavam agendados no Metricool (entram no calendário como "já agendado").
+- Carrosséis da 5ª Marcha a partir de 19/11, às terças, quintas e sábados, até completar 30. Rodízio pelas séries A a F.
+- FIRE (19 a 22/11): nenhuma sessão de gravação nesses dias; a que cairia ali passa para 18/11.
+- Sessões de gravação: 5 Reels seguidos por sessão; gravar até 4 dias antes do primeiro Reel da sessão (nunca antes de hoje).
 """
 import csv, datetime as dt, runpy, sys, glob, os
 from collections import OrderedDict
@@ -23,7 +25,7 @@ SERIE = {1: 'Vida real', 2: 'Psicologia do comprador', 3: 'Prospecção', 4: 'Di
          6: 'Follow-up e fechamento', 7: 'Execução e performance', 8: 'Processos e IA', 9: 'Simulações'}
 CSER = {'A': 'Mentalidade', 'B': 'Psicologia', 'C': 'Diagnóstico e comunicação', 'D': 'Negociação e fechamento',
         'E': 'Metas e performance', 'F': 'Tecnologia e IA'}
-FERIADOS = {dt.date(2026, 12, 24): 'Véspera de Natal', dt.date(2026, 12, 25): 'Natal', dt.date(2026, 12, 31): 'Véspera de Ano Novo',
+FERIADOS = {dt.date(2026, 11, 15): 'Proclamação da República', dt.date(2026, 11, 20): 'Consciência Negra', dt.date(2026, 12, 24): 'Véspera de Natal', dt.date(2026, 12, 25): 'Natal', dt.date(2026, 12, 31): 'Véspera de Ano Novo',
             dt.date(2027, 1, 1): 'Ano Novo', dt.date(2027, 2, 8): 'Carnaval', dt.date(2027, 2, 9): 'Carnaval'}
 
 # fila de Reels: rodízio pelas séries
@@ -39,7 +41,18 @@ while any(cf.values()):
     for s in cf:
         if cf[s]: ordem_c.append(cf[s].pop(0))
 
-D01 = dt.date(2026, 11, 23)
+D01 = dt.date(2026, 11, 4)
+HOJE = dt.date(2026, 11, 4)
+INICIO_CARROSSEL = dt.date(2026, 11, 19)
+FIRE = {dt.date(2026, 11, d) for d in (19, 20, 21, 22)}  # Gui viaja: nada de gravar nesses dias
+JA_AGENDADOS = {  # carrosséis das 19h agendados antes da 5ª Marcha (Metricool, consultado em 04/11/2026)
+    dt.date(2026, 11, 4): 'Já perdeu venda numa reunião que você nem tava?', dt.date(2026, 11, 6): '"Já temos fornecedor" é a melhor resposta (opinião)',
+    dt.date(2026, 11, 7): '"Vamos deixar pra ano que vem" tem um preço', dt.date(2026, 11, 8): 'Desconto de 10% com margem de 30%',
+    dt.date(2026, 11, 9): '4 perguntas antes de passar o preço', dt.date(2026, 11, 10): 'Ninguém compra sistema',
+    dt.date(2026, 11, 11): 'Táticas de comprador profissional (CTA SCRIPT)', dt.date(2026, 11, 12): 'Negociar além do desconto',
+    dt.date(2026, 11, 14): '5 sinais de venda parada na carteira', dt.date(2026, 11, 15): 'Frases que todo vendedor B2B ouve',
+    dt.date(2026, 11, 16): 'Quem vende pra empresa pequena já viveu (humor)', dt.date(2026, 11, 17): 'Cliente visualizou e não respondeu',
+    dt.date(2026, 11, 18): 'Cadência de 14 dias depois da proposta'}
 DIAS = ['seg', 'ter', 'qua', 'qui', 'sex', 'sáb', 'dom']
 linhas = []
 ci = 0
@@ -49,16 +62,22 @@ for i in range(90):
     n = ordem_r[i]; r = R[n]
     sessao = i // 5 + 1
     primeiro = D01 + dt.timedelta(days=(sessao - 1) * 5)
-    gravar = primeiro - dt.timedelta(days=4)
+    gravar = max(HOJE, primeiro - dt.timedelta(days=4))
+    if gravar in FIRE: gravar = dt.date(2026, 11, 18)
     obs = []
     if d in FERIADOS: obs.append(f'{FERIADOS[d]}: alcance pode cair; manter o post agendado e não usar este dia para teste A/B')
+    if d in FIRE: obs.append('Gui na FIRE: Reel gravado antes e já agendado')
     if r.get('pend'): obs.append('Pendência: ' + r['pend'])
     linhas.append(dict(dia=f'D{i+1:02d}', data=d.strftime('%d/%m/%Y'), dia_semana=DIAS[d.weekday()], semana=semana, formato='Reel',
                        numero=f'R{n:03d}', serie=SERIE[r['serie']], pilar=MARCHA[r['marcha']], tipo=FMT[r['fmt']], tema=r['tema'],
                        objetivo=r['obj'], gancho=r['gA'], cta=r['cta'], metrica=r['metrica'],
                        sessao_gravacao=f'G{sessao:02d}', gravar_ate=gravar.strftime('%d/%m/%Y'),
                        status='roteiro pronto', resultado='', observacao=' | '.join(obs)))
-    carrossel = d.weekday() in (1, 3) or (d.weekday() == 5 and semana in (1, 4, 7, 10))
+    if d in JA_AGENDADOS:
+        linhas.append(dict(dia=f'D{i+1:02d}', data=d.strftime('%d/%m/%Y'), dia_semana=DIAS[d.weekday()], semana=semana, formato='Carrossel (já agendado)',
+                           numero='', serie='Anterior à 5ª Marcha', pilar='', tipo='', tema=JA_AGENDADOS[d], objetivo='', gancho='', cta='', metrica='',
+                           sessao_gravacao='', gravar_ate='', status='agendado no Metricool (19h)', resultado='', observacao=''))
+    carrossel = d >= INICIO_CARROSSEL and d.weekday() in (1, 3, 5)
     if carrossel and ci < 30:
         c = C[ordem_c[ci]]; ci += 1
         o = []
