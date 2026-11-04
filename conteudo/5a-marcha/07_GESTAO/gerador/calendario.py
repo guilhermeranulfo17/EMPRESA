@@ -3,9 +3,10 @@ uso: python3 -I calendario.py PASTA_5A_MARCHA PASTA_GERADOR
 Regras:
 - D01 = 04/11/2026 (quarta, dia em que o Gui pediu para começar). 1 Reel por dia durante 90 dias.
 - Reels em rodízio pelas 9 séries (1 a 9), cada série na ordem dos números. Assim nenhuma série se repete em dias seguidos.
-- Até 18/11 os carrosséis das 19h já estavam agendados no Metricool (entram no calendário como "já agendado").
-- Carrosséis da 5ª Marcha a partir de 19/11, às terças, quintas e sábados, até completar 30. Rodízio pelas séries A a F.
-- FIRE (19 a 22/11): nenhuma sessão de gravação nesses dias; a que cairia ali passa para 18/11.
+- Até 18/11, os carrosséis da 5ª Marcha entram no lugar dos 13 carrosséis antigos que estavam agendados às 19h no Metricool.
+- A partir de 19/11, às terças, quintas e sábados, até completar 30. Rodízio pelas séries A a F.
+- Design igual ao dos carrosséis antigos (post estilo Twitter); fundo claro em dia ímpar e escuro em dia par.
+- FIRE (19 a 22/11) e feriados de fim de ano (24, 25, 31/12 e 01/01): nenhuma sessão de gravação; a que cairia ali passa para o dia anterior livre.
 - Sessões de gravação: 5 Reels seguidos por sessão; gravar até 4 dias antes do primeiro Reel da sessão (nunca antes de hoje).
 """
 import csv, datetime as dt, runpy, sys, glob, os
@@ -45,7 +46,8 @@ D01 = dt.date(2026, 11, 4)
 HOJE = dt.date(2026, 11, 4)
 INICIO_CARROSSEL = dt.date(2026, 11, 19)
 FIRE = {dt.date(2026, 11, d) for d in (19, 20, 21, 22)}  # Gui viaja: nada de gravar nesses dias
-JA_AGENDADOS = {  # carrosséis das 19h agendados antes da 5ª Marcha (Metricool, consultado em 04/11/2026)
+SEM_GRAVAR = {dt.date(2026, 12, 24), dt.date(2026, 12, 25), dt.date(2026, 12, 31), dt.date(2027, 1, 1)}  # feriados: a sessão vai para o dia anterior
+JA_AGENDADOS = {  # horários das 19h que já tinham carrossel antigo no Metricool (consultado em 04/11/2026); a 5ª Marcha entra no lugar
     dt.date(2026, 11, 4): 'Já perdeu venda numa reunião que você nem tava?', dt.date(2026, 11, 6): '"Já temos fornecedor" é a melhor resposta (opinião)',
     dt.date(2026, 11, 7): '"Vamos deixar pra ano que vem" tem um preço', dt.date(2026, 11, 8): 'Desconto de 10% com margem de 30%',
     dt.date(2026, 11, 9): '4 perguntas antes de passar o preço', dt.date(2026, 11, 10): 'Ninguém compra sistema',
@@ -63,7 +65,7 @@ for i in range(90):
     sessao = i // 5 + 1
     primeiro = D01 + dt.timedelta(days=(sessao - 1) * 5)
     gravar = max(HOJE, primeiro - dt.timedelta(days=4))
-    if gravar in FIRE: gravar = dt.date(2026, 11, 18)
+    while gravar in FIRE or gravar in SEM_GRAVAR: gravar -= dt.timedelta(days=1)
     obs = []
     if d in FERIADOS: obs.append(f'{FERIADOS[d]}: alcance pode cair; manter o post agendado e não usar este dia para teste A/B')
     if d in FIRE: obs.append('Gui na FIRE: Reel gravado antes e já agendado')
@@ -73,15 +75,13 @@ for i in range(90):
                        objetivo=r['obj'], gancho=r['gA'], cta=r['cta'], metrica=r['metrica'],
                        sessao_gravacao=f'G{sessao:02d}', gravar_ate=gravar.strftime('%d/%m/%Y'),
                        status='roteiro pronto', resultado='', observacao=' | '.join(obs)))
-    if d in JA_AGENDADOS:
-        linhas.append(dict(dia=f'D{i+1:02d}', data=d.strftime('%d/%m/%Y'), dia_semana=DIAS[d.weekday()], semana=semana, formato='Carrossel (já agendado)',
-                           numero='', serie='Anterior à 5ª Marcha', pilar='', tipo='', tema=JA_AGENDADOS[d], objetivo='', gancho='', cta='', metrica='',
-                           sessao_gravacao='', gravar_ate='', status='agendado no Metricool (19h)', resultado='', observacao=''))
-    carrossel = d >= INICIO_CARROSSEL and d.weekday() in (1, 3, 5)
+    carrossel = d in JA_AGENDADOS or (d >= INICIO_CARROSSEL and d.weekday() in (1, 3, 5))
     if carrossel and ci < 30:
         c = C[ordem_c[ci]]; ci += 1
         o = []
         if d in FERIADOS: o.append(f'{FERIADOS[d]}: alcance pode cair')
+        if d in JA_AGENDADOS: o.append('Substitui no Metricool o carrossel antigo das 19h: ' + JA_AGENDADOS[d])
+        o.append('Fundo ' + ('claro' if d.day % 2 else 'escuro'))
         if c.get('pend'): o.append('Pendência: ' + c['pend'])
         linhas.append(dict(dia=f'D{i+1:02d}', data=d.strftime('%d/%m/%Y'), dia_semana=DIAS[d.weekday()], semana=semana, formato='Carrossel',
                            numero=f"C{c['n']:03d}", serie=CSER[c['serie']], pilar='', tipo=f"{len(c['s'])} slides", tema=c['tema'],

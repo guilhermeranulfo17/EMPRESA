@@ -108,7 +108,7 @@ dict(n=86, serie=9, marcha=3, tema='Desafio: complete a resposta do vendedor', p
      capa='COMPLETE A RESPOSTA', leg='O cliente disse: "preciso ver com o meu sócio".\nO vendedor começou: "Faz todo sentido. Pra te ajudar nessa conversa com ele..."\nComo você completa?',
      cta='Comentar', kw='objeção, sócio, decisão em grupo, desafio de vendas', tags='#vendas #objecoes #negociacao #vendedor',
      metr_obj='Medir comentários com respostas completas', metrica='Comentários por alcance', motivo='Desafio que gera vídeo de continuação',
-     atencao='Prometer o vídeo de continuação só se for gravado. Usar o roteiro já existente de "vou ver com meu sócio" (conteudo/vendas/roteiros/2026-11-04) como base da resposta.',
+     atencao='Prometer o vídeo de continuação só se for gravado. Usar o roteiro já existente de "vou ver com meu sócio" (conteudo/vendas/arquivo/roteiros/2026-11-04) como base da resposta.',
      pend='Gravar o vídeo de continuação com a resposta do Gui e algumas respostas do público (com permissão)'),
 dict(n=87, serie=9, marcha=4, tema='POV: quatro mensagens de prospecção que você recebe', pub=PUB, obj='Compartilhamento', grav='tela', fmt='F',
      dor='Não perceber como as próprias mensagens chegam para o cliente', mec='POV: o vendedor no lugar de quem recebe abordagens',

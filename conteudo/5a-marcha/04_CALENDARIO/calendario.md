@@ -1,7 +1,7 @@
 # Calendário de 90 dias
 
 **Período:** D01 = quarta, 04/11/2026 (hoje, a pedido do Gui), até D90 = segunda, 01/02/2027.
-**Volume:** 90 Reels (1 por dia) e 30 carrosséis da 5ª Marcha (terça, quinta e sábado, a partir de 19/11). Até 18/11, o horário das 19h já tem 13 carrosséis agendados no Metricool, que aparecem no calendário como "já agendado".
+**Volume:** 90 Reels (1 por dia) e 30 carrosséis às 19h. De 04 a 18/11, os carrosséis da 5ª Marcha entram no lugar dos 13 antigos que estavam agendados no Metricool; a partir de 19/11 saem às terças, quintas e sábados. Design igual ao dos carrosséis antigos (post estilo Twitter), fundo claro em dia ímpar e escuro em dia par.
 
 Arquivos:
 - `calendario_90_dias.csv`: a tabela editável (dia, data, formato, número, série, pilar, tipo, tema, objetivo, gancho, CTA, métrica, sessão de gravação, gravar até, status, resultado, observação). Importe no Google Sheets e edite por lá.
@@ -12,7 +12,7 @@ Arquivos:
 
 1. **Rodízio das 9 séries.** O Reel do dia segue a ordem Série 1, 2, 3 ... 9 e volta. Cada série aparece pelo menos uma vez por semana e nenhuma se repete em dias seguidos.
 2. **Dentro da série, a ordem dos números.** Os 10 Reels do Lote 01 (R001 a R010) entram primeiro nas séries 1, 5 e 7, porque já foram aprovados.
-3. **Carrosséis em rodízio pelas séries A a F**, começando pelo C001 em 19/11.
+3. **Carrosséis em rodízio pelas séries A a F**, começando pelo C001 hoje (04/11).
 4. **Ordem dos pilares preservada.** O calendário mistura temas, mas nenhum conteúdo muda a sequência da metodologia (1ª Mente, 2ª Leitura, 3ª Comando, 4ª Tração, 5ª Potência).
 
 ## Equilíbrio do funil (Reels)
@@ -29,9 +29,9 @@ A etapa de relação está abaixo da meta nos Reels, porque histórias pessoais 
 
 | Semana | De | Até | Reels | Carrosséis 5ª Marcha | Destaques |
 |---|---|---|---|---|---|
-| 1 | 04/11 | 10/11 | 7 | 0 (6 já agendados) | Abertura com R001 hoje. Começa o teste T1 (gancho) |
-| 2 | 11/11 | 17/11 | 7 | 0 (6 já agendados) | Primeira revisão grande depois de 10 Reels (13/11). Feriado 15/11 |
-| 3 | 18/11 | 24/11 | 7 | 3 | Último agendado antigo e sessão G05 (18/11). FIRE de 19 a 22/11: tudo já gravado e agendado. C001 em 19/11, começa o T3 (capa). Feriado 20/11 |
+| 1 | 04/11 | 10/11 | 7 | 6 | Abertura com R001 e C001 hoje. Começa o teste T1 (gancho) e o T3 (capa) |
+| 2 | 11/11 | 17/11 | 7 | 6 | Primeira revisão grande depois de 10 Reels (13/11). Feriado 15/11 |
+| 3 | 18/11 | 24/11 | 7 | 4 | Sessão G05 (18/11). FIRE de 19 a 22/11: tudo já gravado e agendado. Feriado 20/11 |
 | 4 | 25/11 | 01/12 | 7 | 3 | Começa o T4 (duração) |
 | 5 | 02/12 | 08/12 | 7 | 3 | Fim do T2 (formato) |
 | 6 | 09/12 | 15/12 | 7 | 3 | R010 (10/12) só vai ao ar se o Gui validar as lições. Fim do T3 |
@@ -58,10 +58,10 @@ Ordem recomendada dentro de cada sessão: primeiro os Reels de câmera frontal e
 
 ## Horários
 
-Carrossel às 19h (o mesmo horário dos já agendados). Para os Reels, até o teste T5, use o melhor horário do dia indicado pelo Metricool (`getBestTimeToPostByNetwork`). Durante o T5 (30/12 a 26/01), alterne 12h e 18h.
+Carrossel às 19h. Para os Reels, até o teste T5, use o melhor horário do dia indicado pelo Metricool (`getBestTimeToPostByNetwork`). Durante o T5 (30/12 a 26/01), alterne 12h e 18h.
 
 ## O que muda com o início hoje
 
 - O calendário de 30 dias (`conteudo/vendas/calendario-30-dias.md`) fica substituído a partir de hoje.
-- Os 13 carrosséis já agendados no Metricool até 18/11 continuam como estão.
-- A pauta diária automática ainda manda o formato antigo (vídeo longo + 3 cortes). Ver a pendência P05.
+- Os 13 carrosséis antigos agendados de 04 a 18/11 foram para rascunho no Metricool e recebem a arte e a legenda da 5ª Marcha assim que o Gui subir as imagens no Drive (`07_GESTAO/metricool_carrosseis.csv`).
+- A pauta diária automática ("Pauta guisilva.vendas") passou a mandar a sessão de gravação da 5ª Marcha.
