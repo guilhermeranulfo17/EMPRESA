@@ -1,0 +1,28 @@
+id,fonte,link,data,tipo,o_que_sustenta,limitacao
+F01,Meta · Best practices para criadores (Education Hub),https://about.fb.com/news/2024/10/best-practices-education-hub-creators-instagram/,2024-10,oficial,Boas práticas de Reels e recomendações no painel profissional,Diretriz geral
+F02,Adam Mosseri · sinais de watch time curtidas e envios (via Social Media Today),https://www.socialmediatoday.com/news/instagram-shares-algorithm-insights-2025/738034/,2025-01,oficial via imprensa,Tempo assistido curtidas por alcance e envios por alcance,Não é fórmula de ranking
+F03,Instagram · view rate além dos 3 s (TechCrunch),https://techcrunch.com/2025/01/29/instagram-gives-creators-more-insight-into-their-reels-performance/,2025-01,oficial via imprensa,Retenção depois dos primeiros segundos,Métrica de produto
+F04,Instagram · gráfico de retenção (Social Media Today),https://www.socialmediatoday.com/news/instagram-adds-retention-insights-reels/758464/,2025,oficial via imprensa,Ver onde as pessoas abandonam,
+F05,Socialinsider · Instagram Reels 2026,https://www.socialinsider.io/blog/instagram-reels-statistics/,2026,estudo observacional,30 a 60 s com maior alcance médio numa amostra,Marcas; não causal
+F06,Socialinsider · duração de vídeo 2026,https://www.socialinsider.io/social-media-benchmarks/social-media-video-statistics,2026,estudo observacional,45 a 60 s com destaque em engajamento,Marcas; não causal
+F07,Buffer · Good hooks,https://buffer.com/resources/good-hooks/,2025,guia profissional,Gancho promessa e continuidade,Opinião editorial
+F08,Sprout Social · Instagram carousel,https://sproutsocial.com/insights/instagram-carousel/,2026,guia profissional,Capa específica uma ideia por slide CTA único,Opinião editorial
+F09,Meta · Trial Reels,https://about.fb.com/news/2024/12/trial-reels-try-content-non-followers-first-see-what-perfoms-best/,2024-12,oficial,Testar Reels com não seguidores,
+F10,Reddit r/InstagramMarketing · 60 Reels por alcance,https://www.reddit.com/r/InstagramMarketing/comments/1u7leel/i_ranked_my_last_60_reels_by_reach_and_the/,2026,comunidade,Primeira imagem e promessa específica,Relato anedótico
+F11,Reddit r/InstagramMarketing · primeiros segundos,https://www.reddit.com/r/InstagramMarketing/comments/1tty1do/i_analyzed_500_reels_and_found_the_same_mistake/,2026,comunidade,Evitar entrada vaga,Relato anedótico
+F12,Reddit r/InstagramMarketing · carrosséis,https://www.reddit.com/r/InstagramMarketing/comments/1rlpi77/i_stopped_chasing_shortform_video_reach_carousels/,2026,comunidade,Promessa de capa e CTA simples,Relato anedótico
+F13,Forrester · State of Business Buying 2026,https://www.forrester.com/blogs/state-of-business-buying-2026/,2026,pesquisa setorial,Compradores B2B avaliam risco com mais rigor,
+F14,Salesforce · State of Sales 2026,https://www.salesforce.com/news/stories/state-of-sales-report-announcement-2026/,2026,pesquisa setorial,Contexto de produtividade comercial,Não transferir estatística como promessa
+F15,Harvard Business Review · Stop Losing Sales to Customer Indecision,https://hbr.org/2022/06/stop-losing-sales-to-customer-indecision,2022-06,estudo/artigo,Indecisão B2B; nem todo não é preço,
+F16,Dixon e McKenna · The JOLT Effect (livro),https://buyerpersona.com/?p=25333,2022,livro com base em dados,Indecisão ligada ao medo de errar; mais de 2.5 milhões de ligações,Percentuais só vistos em resumos
+F17,Gartner · tempo do comprador com fornecedores (17%),https://www.growthmethod.com/gartner-b2b-buying-journey/,2019,pesquisa (via secundária),Comprador passa cerca de 17% do tempo com fornecedores,Dado antigo; fonte secundária
+F18,Scheibehenne et al. · meta-análise sobre excesso de escolha,https://abcwest.cogs.indiana.edu/pmwiki/pdf/scheibehenne.options.2010.pdf,2010,meta-análise,Efeito médio perto de zero,Alta variação entre estudos
+F19,Gong Labs · ligações de descoberta,https://www.gong.io/resources/labs/nailing-your-sales-discovery-calls/,2017+,dados de empresa,Mais escuta e perguntas direcionadas em descobertas bem-sucedidas,Números variam entre páginas
+F20,Gong · cold call,https://www.gong.io/blog/how-to-cold-call,2024+,dados de empresa,Cold call é diferente de descoberta,Dados de empresa de software
+F21,PetaPixel · política de repost 2026,https://petapixel.com/2026/04/30/new-instagram-policies-target-reposted-content/,2026-04,imprensa,Distribuição reduzida para repost,Cobertura secundária
+F22,Tecnoblog · combate a reposts no Reels,https://tecnoblog.net/noticias/instagram-reforca-combate-a-reposts-do-tiktok-e-de-outros-videos-no-reels/,2026,imprensa,Prioridade a conteúdo original,Cobertura secundária
+F23,HypeAuditor · @thiagoconceroficial,https://hypeauditor.com/pt/instagram/thiagoconceroficial/,2026,ferramenta de métricas,Ordem de grandeza da audiência,Números divergem entre ferramentas
+F24,Favikon · quem é Rafael Kiso,https://www.favikon.com/pt/blog/who-is-rafael-kiso,2026,perfil secundário,Atuação e foco educativo,Fonte secundária
+F25,StarNgage · top criadores de vendas no LinkedIn (EUA),https://starngage.com/plus/fil/blog/top-sales-crm-creators-on-linkedin-united-states,2026,ranking,Referências internacionais (Barrows Konrath Ingram),Ranking comercial
+F26,Tversky e Kahneman · Judgment under Uncertainty (1974),https://www.science.org/doi/10.1126/science.185.4157.1124,1974,artigo científico,Ancoragem,Tamanho do efeito varia
+F27,Kahneman e Tversky · Prospect Theory (1979),https://www.jstor.org/stable/1914185,1979,artigo científico,Aversão à perda,Debate sobre a magnitude
