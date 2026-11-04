@@ -48,4 +48,4 @@
 - [ ] A métrica principal foi definida antes de publicar
 - [ ] Ouvido no fone (voz, trilha e efeitos)
 - [ ] Agendado no Metricool como Reels no Instagram e Short no YouTube
-- [ ] Linha criada no `05_PERFORMANCE/painel.csv`
+- [ ] Linha conferida no `05_PERFORMANCE/painel.csv` (com a família do gancho)

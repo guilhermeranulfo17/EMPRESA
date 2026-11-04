@@ -1,6 +1,6 @@
 # Biblioteca de ganchos
 
-Famílias de gancho com exemplos de vendas. Elas são **hipóteses para testar**, não fórmulas com desempenho comprovado. Cada Reel registra a família usada no `07_GESTAO/indice_reels.csv`, para comparar no painel.
+Famílias de gancho com exemplos de vendas. Elas são **hipóteses para testar**, não fórmulas com desempenho comprovado. Cada Reel registra a família usada na coluna `familia_gancho` do `05_PERFORMANCE/painel.csv`, para comparar os resultados.
 
 | Família | Estrutura | Exemplo de vendas | Quando usar | Risco |
 |---|---|---|---|---|

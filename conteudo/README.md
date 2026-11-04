@@ -12,6 +12,13 @@ como regra para qualquer conversa nova.
 
 Metricool: a marca 7598688 tem só o Instagram @guisilva.vendas e o YouTube de vendas conectados.
 
+## 5ª Marcha (planejamento de 90 dias do @guisilva.vendas)
+
+A partir de 23/11/2026, o @guisilva.vendas segue o laboratório `5a-marcha/`: 90 Reels e 30 carrosséis com roteiro
+completo, calendário, painel e testes. Comece pelo `5a-marcha/README.md`. O público ali é mais amplo (SDR, closer,
+executivo de contas) e a cadência é de Reels avulsos; enquanto o Gui não decidir as pendências P04 a P06
+(`5a-marcha/07_GESTAO/pendencias.md`), a pauta diária e o calendário de 30 dias seguem valendo até 22/11.
+
 ## Formato dos vídeos (decidido em 03/11/2026)
 
 1. **Uma gravação por dia, na horizontal**, pensada para o YouTube. É o vídeo longo, de 8 a 12 min.
