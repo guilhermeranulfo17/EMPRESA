@@ -77,10 +77,15 @@ Você é o editor de vídeo do @guisilva.vendas. O Gui só manda o vídeo e voc�
    - Grave a escolha num `takes.json` (frase, início e fim).
 4. **Frase sem take bom:** se uma frase não tiver take bom, siga sem ela se o sentido aguentar. Avise o Gui do número da frase e do Reel.
    - Se faltar o gancho, não monte o Reel. Peça só aquela frase.
-5. **Repetições dentro do take (pedido do Gui em 04/11):** o whisper costuma engolir palavra repetida ("Você fez bem... Você fez bem, fez reunião"). Rode `scripts/micro.py VIDEO cuts.json -38 0.06`, que quebra cada take nas micro pausas e transcreve cada pedaço. Corte o pedaço repetido ou engasgado. Para cortar no meio de um take sem pegar o resto, marque o trecho como `[ini, fim, 1]` (corte seco).
+5. **Repetições dentro do take (pedido do Gui em 04 e 07/11):** o whisper costuma engolir palavra repetida ("Você fez bem... Você fez bem, fez reunião"). Rode `scripts/micro.py VIDEO cuts.json -40 0.05` (os trechos saem de `scripts/segs2cuts.py fala.json cuts.json`): ele quebra cada take nas micro pausas, transcreve cada pedaço e marca "REPETIDO?" quando o pedaço recomeça no seguinte. Corte o pedaço repetido ou engasgado.
+   - Quando o recomeço não tem pausa ("adquirir aquele... adquirir aquela solução"), ache o ponto com `scripts/win.py VIDEO ini-fim ini-fim2 -v`: transcreve janelas e mostra o volume a cada 20 ms. O corte vai no vale de volume entre a última palavra boa e o recomeço.
+   - Para cortar no meio de um take sem pegar o resto, marque o trecho como `[ini, fim, 1]` (corte seco).
+   - Depois de montar, rode `scripts/checkblocks.sh PASTA`, que transcreve cada bloco do clipe. Leia tudo: não pode sobrar palavra repetida nem faltar palavra.
+   - Vídeo sem roteiro (tema livre do Gui): mesma regra, último take completo de cada frase, e a ordem é a da fala.
 6. **Cortes colados (pedido do Gui em 04/11):** sem respiro entre as frases. O corte cai na última letra da palavra.
    - `scripts/refine.py VIDEO cuts.json cuts_tight.json` apara cada trecho na fala (deixa 0,06 s depois da última letra) e tira pausas internas de 0,14 s ou mais.
-   - Monte com `build_bottom.py ... --tight --hdr` (o `--hdr` converte o HLG do iPhone).
+   - O `refine.py` mede o ruído de fundo de cada trecho, para o barulho (batidas, ar-condicionado) não esticar o fim da frase.
+   - Monte com `scripts/bottom.sh VIDEO PASTA` (usa `build_bottom.py --tight --hdr`; o `--hdr` converte o HLG do iPhone; enquadramento por bloco em `frames.txt`: `b1 open`, `b2 close`...).
    - Os tempos de cada frase no clipe saem do mapa dos cortes: `scripts/maptime.py PASTA frases.json tempos.json` (o whisper erra em clipe sem pausa).
    - Exceção só para silêncio que o `ritmo` do roteiro pede de propósito (como os 3 s depois do preço no R050).
 
@@ -88,12 +93,16 @@ Você é o editor de vídeo do @guisilva.vendas. O Gui só manda o vídeo e voc�
 1. **Tela de baixo:** `build_bottom.py`, um Reel por vez.
    - Troque o enquadramento (aberto e 1,15x) onde o campo `cortes` do roteiro pedir.
    - Nas simulações (gravação `simulacao`), o motion mostra a etiqueta "VENDEDOR" ou "CLIENTE" conforme quem fala.
-2. **Tempos:** rode `transcribe_medium.py` no clipe final. Esses tempos mandam em tudo o que vem depois.
-3. **Motion:** cada item de `cenas` entra na frase em que é falado. Siga as seções 3 e 4 da `reels-split-motion`.
-   - Use o `exemplo/film_proposta.js` como base.
-   - Faça pelo menos 2 rodadas de quadros de conferência antes de renderizar.
-   - Se o roteiro tiver a tela de algum app, recrie de forma genérica, sem dados reais.
-4. **Legenda, trilha, efeitos e montagem:** seção 5 da `reels-split-motion` (`caps_split.py`, SFX Kit, `compose.sh`), com a trilha do `scripts/drama.py`. Os efeitos do SFX Kit entram por `scripts/sfxkit.py hits.json tempos.json DUR sfx.wav` (`[[momento, id], ...]`, já aplica `sync.at` e `under_voiceover_db`). A capa sai de `scripts/capa.sh VIDEO TEMPO "LINHA 1" "LINHA 2" capa.jpg 1.15` (escolha um quadro de olho aberto e sério).
+2. **Tempos:** `scripts/maptime.py PASTA frases.json tempos.json` (frases em tempo do vídeo original, com o texto da legenda e `*destaque*`). Esses tempos mandam em tudo o que vem depois.
+3. **Motion no Remotion (pedido do Gui em 07/11: "qualidade visual absurda", nada estático):**
+   - Uma vez por sessão: `scripts/setup_remotion.sh <scratchpad>/rmo` (copia `reels-split-motion/remotion`, as fontes e roda `npm i`).
+   - Escreva `spec.json` com as cenas: `hook`, `rows`, `versus`, `timeline`, `big` e `cta` (formato em `reels-split-motion/remotion/src/scenes.tsx`). Cada cena tem `a` e `b` (início e fim em segundos do clipe) e cada elemento entra no segundo em que a palavra é falada.
+   - O visual já vem pronto: fundo vivo com luz e grão, texto entrando palavra por palavra com desfoque, cards de vidro em 3D, ícones desenhados, ondas no destaque, número gigante na linha do tempo, empurrão lento de câmera e transição com zoom e rastro de luz.
+   - Confira quadros antes: `npx remotion still src/index.ts Split f.png --frame=N --props=props.json --browser-executable=/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell`. Nenhuma cena pode ficar vazia; o primeiro elemento entra até 0,3 s depois do começo da cena.
+   - Se o roteiro tiver a tela de algum app, recrie de forma genérica, sem dados reais. Número ilustrativo leva `"exemplo"`.
+4. **Legenda, trilha, efeitos e montagem:** `RMO=<scratchpad>/rmo scripts/finish.sh PASTA DUR SAIDA.mp4` faz tudo: render do Remotion, redução leve de ruído na voz (`afftdn`), legenda na divisão, efeitos do SFX Kit a partir do `spec.json` (`scripts/spec2hits.py` + `scripts/sfxkit.py`, que aplica `sync.at` e `under_voiceover_db`), trilha do `scripts/drama.py` a -32 LUFS e o `compose.sh`. Ele também tira 8 quadros em `check_final.jpg`.
+   - `DUR` é a duração do clipe mais 1 s.
+   - A capa sai de `scripts/capa.sh VIDEO TEMPO "LINHA 1" "LINHA 2" capa.jpg 1.15` (escolha um quadro de olho aberto; `FS1=88` diminui a linha de cima se ela for longa).
 5. **Versão B ou curta:** se o Reel estiver no T1 ou no T4, faça a segunda versão do mesmo jeito, mudando só o que o teste pede.
 
 ### 4. Conferir antes de entregar

@@ -30,6 +30,13 @@ for k, rngs in cuts.items():
                 bits.append((s + i * 0.01, s + j * 0.01)); i = j
             else: i += 1
         print(f'== {k} [{s:.2f},{e:.2f}]  full: {asr(s, e)}')
-        for b0, b1 in bits:
-            if b1 - b0 < 0.08: continue
-            print(f'   {b0:7.2f}-{b1:7.2f}  {asr(b0, b1)}')
+        rows = [(b0, b1, asr(b0, b1)) for b0, b1 in bits if b1 - b0 >= 0.08]
+        norm = lambda x: re.sub(r'[^a-zà-ú0-9 ]', '', x.lower()).split()
+        for i, (b0, b1, tx) in enumerate(rows):
+            flag = ''
+            if i + 1 < len(rows):
+                w, nx = norm(tx), norm(rows[i + 1][2])
+                # this bit restarts in the next one: its first words come again at the start of the next bit
+                if w and nx and (nx[:min(2, len(w))] == w[:min(2, len(w))] or (len(w) <= 3 and all(x in nx[:6] for x in w))):
+                    flag = '   <-- REPETIDO no pedaço seguinte?'
+            print(f'   {b0:7.2f}-{b1:7.2f}  {tx}{flag}')

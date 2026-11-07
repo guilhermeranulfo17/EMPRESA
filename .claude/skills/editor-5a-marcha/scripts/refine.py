@@ -19,7 +19,11 @@ for k, rngs in json.load(open(A.cuts)).items():
         s, e = rg[0], rg[1]; hard = len(rg) > 2
         s0 = max(0, s - 0.15); seg = a[int(s0 * sr):int((e + 0.15) * sr)]
         db = np.array([20 * np.log10(np.sqrt(np.mean(seg[i:i + h] ** 2)) + 1e-9) for i in range(0, len(seg) - h, h)])
-        thr = db.max() - A.rel; on = db > thr
+        # noise floor of the take's surroundings (10th percentile over +-3 s): speech must clear it by 8 dB
+        w0, w1 = int(max(0, s - 3) * sr), int((e + 3) * sr); ctx_ = a[w0:w1]
+        cdb = np.array([20 * np.log10(np.sqrt(np.mean(ctx_[i:i + h] ** 2)) + 1e-9) for i in range(0, len(ctx_) - h, h)])
+        floor = np.percentile(cdb, 10)
+        thr = max(db.max() - A.rel, floor + 8); on = db > thr
         # only consider frames inside [s, e] (+ small slack) as candidates
         idx = np.arange(len(on)) * 0.01 + s0
         on &= (idx >= s - (0 if hard else 0.08)) & (idx <= e + (0 if hard else 0.12))

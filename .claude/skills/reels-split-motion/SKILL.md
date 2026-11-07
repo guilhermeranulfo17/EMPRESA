@@ -76,7 +76,10 @@ Monte uma tabela com uma linha por frase: tempo, o que ele fala e o que aparece 
   - carimbo ("NÃO LIDO");
   - página montada bloco a bloco, com rótulos numerados.
 
-## 4. Animação (motion-reel)
+## 4. Animação
+**Desde 07/11/2026 o motion é feito no Remotion** (`remotion/`, pedido do Gui: qualidade visual alta, nada estático). O passo a passo está na skill `editor-5a-marcha` (seção "Montar cada Reel": `setup_remotion.sh`, `spec.json`, `finish.sh`). O caminho antigo, com o motion-reel em canvas, fica abaixo só como referência.
+
+### Caminho antigo (motion-reel)
 1. `cd motion && node MR/scripts/scaffold.mjs NOME --duration DUR --formats 9x16`.
    - `DUR` é a duração do clipe mais 1 segundo de final segurado.
 2. Fontes: copie `effects/fonts/ArchivoBlack-Regular.ttf` para `fonts/display.ttf` e `effects/fonts/Inter.ttf` para `fonts/ui.ttf`.
