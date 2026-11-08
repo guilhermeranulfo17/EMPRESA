@@ -32,6 +32,12 @@ const suave = Easing.bezier(0.45, 0, 0.2, 1);
 function camera(foco: Caixa | null) {
   if (!foco) return { s: 1, cx: W_ON / 2, cy: H_ON / 2 };
   const r = { x: foco.x * ESC, y: foco.y * ESC, w: foco.w * ESC, h: foco.h * ESC };
+  // campo ou botão estreito: alarga a janela para manter o rótulo e o contexto da linha
+  const minW = 1000 * ESC;
+  if (r.w < minW) {
+    r.x = Math.min(Math.max(0, r.x - (minW - r.w) / 2), W_ON - minW);
+    r.w = minW;
+  }
   const sW = (W_ON * 0.82) / Math.max(r.w, 1);
   const sH = (H_ON * 0.7) / Math.max(r.h, 1);
   // bloco alto (uma coluna inteira): aproxima pela largura e mostra a parte de cima
