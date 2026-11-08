@@ -33,7 +33,6 @@ export const Mecanismo: React.FC<{ inicio: number }> = ({ inicio }) => {
           style={{
             clipPath: `inset(-40px ${(1 - nome) * 100}% -40px -40px)`,
             translate: `0px ${(1 - sobe) * 30}px`,
-            filter: `drop-shadow(0 0 ${46 * nome}px rgba(178,247,89,0.35))`,
           }}
         >
           <Logo largura={780} />

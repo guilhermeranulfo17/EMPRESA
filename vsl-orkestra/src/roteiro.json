@@ -2,12 +2,8 @@
   "fps": 30,
   "duracao": 54.6,
   "cenas": {
-    "gancho": [
+    "abertura": [
       0,
-      8.05
-    ],
-    "dor": [
-      8.05,
       15.15
     ],
     "mecanismo": [
@@ -426,14 +422,14 @@
       "gain": 8
     },
     {
-      "at": 5.85,
-      "id": "pop-small-in",
-      "gain": 3
-    },
-    {
       "at": 8.15,
       "id": "whoosh-medium-soft",
       "gain": 2
+    },
+    {
+      "at": 8.8,
+      "id": "notification-message-in-soft",
+      "gain": 6
     },
     {
       "at": 10.15,

@@ -133,9 +133,8 @@ export const CardTela: React.FC<{
           borderRadius: 52,
           overflow: "hidden",
           backgroundColor: "#111111",
-          border: `2px solid ${COR.borda}`,
-          boxShadow:
-            "0 50px 120px rgba(0,0,0,0.65), 0 0 80px rgba(178,247,89,0.06)",
+          border: "1px solid rgba(255,255,255,0.10)",
+          boxShadow: "0 60px 120px rgba(0,0,0,0.55), 0 12px 30px rgba(0,0,0,0.35)",
           opacity: Math.min(ent * 1.4, 1) * (1 - sai),
           translate: `${entX + saiX}px ${entY + flutua}px`,
           scale: `${(0.94 + 0.06 * ent) * saiS}`,
@@ -163,8 +162,8 @@ export const CardTela: React.FC<{
                 width: d.w * q.k,
                 height: d.h * q.k,
                 borderRadius: 20,
-                border: `5px solid ${COR.limao}`,
-                boxShadow: `0 0 36px rgba(178,247,89,0.55), 0 0 0 3000px rgba(0,0,0,${0.2 * op})`,
+                border: `4px solid ${COR.limao}`,
+                boxShadow: `0 0 0 3000px rgba(0,0,0,${0.32 * op})`,
                 opacity: op,
                 scale: `${s}`,
               }}
@@ -204,8 +203,8 @@ export const CardTela: React.FC<{
                   width: 92,
                   height: 92,
                   borderRadius: 999,
-                  border: `5px solid ${COR.limao}`,
-                  opacity: (1 - onda) * (t >= a ? 0.9 : 0),
+                  border: "4px solid rgba(255,255,255,0.9)",
+                  opacity: (1 - onda) * (t >= a ? 0.8 : 0),
                   scale: `${1 + onda * 1.6}`,
                 }}
               />
@@ -217,9 +216,9 @@ export const CardTela: React.FC<{
                   width: 76,
                   height: 76,
                   borderRadius: 999,
-                  backgroundColor: "rgba(244,244,242,0.55)",
-                  border: "3px solid rgba(255,255,255,0.95)",
-                  boxShadow: "0 6px 24px rgba(0,0,0,0.35)",
+                  backgroundColor: "rgba(120,120,118,0.45)",
+                  border: "2px solid rgba(255,255,255,0.85)",
+                  boxShadow: "0 4px 14px rgba(0,0,0,0.25)",
                   opacity: opDedo,
                   scale: `${press}`,
                 }}

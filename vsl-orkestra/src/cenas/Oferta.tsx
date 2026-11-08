@@ -37,7 +37,6 @@ export const Oferta: React.FC<{ inicio: number; buffetName: string }> = ({ inici
   const cta = spring({ frame: Math.round((t - T.cta) * FPS), fps: FPS, config: { damping: 13, stiffness: 140 } });
   const digitado = "QUERO".slice(0, Math.max(0, Math.min(5, Math.floor((t - T.digita) / 0.07))));
   const enviado = t >= T.envia;
-  const brilho = interpolate(t, [T.cortesia, T.cortesia + 0.4], [0, 1], { ...lim, easing: sai });
   const logo = spring({ frame: Math.round((t - T.logo) * FPS), fps: FPS, config: { damping: 14, stiffness: 110 } });
 
   return (
@@ -66,7 +65,6 @@ export const Oferta: React.FC<{ inicio: number; buffetName: string }> = ({ inici
                 color: COR.fundo,
                 borderRadius: 26,
                 padding: "4px 32px 10px",
-                boxShadow: `0 0 ${70 * cta}px rgba(178,247,89,0.4)`,
               }}
             >
               QUERO
@@ -143,7 +141,7 @@ export const Oferta: React.FC<{ inicio: number; buffetName: string }> = ({ inici
             letterSpacing: -3,
           }}
         >
-          <span style={{ ...aparece(t, T.duas), color: COR.limao, textShadow: `0 0 ${50 * brilho}px rgba(178,247,89,0.4)` }}>
+          <span style={{ ...aparece(t, T.duas), color: COR.limao }}>
             2 semanas
           </span>
           <br />

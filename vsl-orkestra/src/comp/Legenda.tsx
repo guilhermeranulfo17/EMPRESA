@@ -67,13 +67,11 @@ export const Legenda: React.FC<{ esconderDe?: number }> = ({ esconderDe }) => {
           style={{
             fontFamily: MANROPE,
             fontWeight: 700,
-            fontSize: 46,
-            lineHeight: 1.25,
+            fontSize: 48,
+            lineHeight: 1.22,
+            letterSpacing: -0.5,
             textAlign: "center",
-            padding: "16px 30px",
-            borderRadius: 26,
-            backgroundColor: "rgba(12,12,12,0.78)",
-            border: "1px solid rgba(255,255,255,0.06)",
+            textShadow: "0 2px 3px rgba(0,0,0,0.55), 0 4px 24px rgba(0,0,0,0.65)",
             maxWidth: 920,
           }}
         >
@@ -85,7 +83,7 @@ export const Legenda: React.FC<{ esconderDe?: number }> = ({ esconderDe }) => {
                 key={i}
                 style={{
                   color: falando ? COR.limao : COR.texto,
-                  opacity: dito ? 1 : 0.42,
+                  opacity: dito ? 1 : 0.5,
                 }}
               >
                 {limpar(p.text)}

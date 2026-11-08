@@ -1,15 +1,15 @@
-import { AbsoluteFill, Sequence, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Sequence, staticFile } from "remotion";
 import { Audio } from "@remotion/media";
 import { z } from "zod";
 import { Fundo } from "./comp/Fundo";
+import { FotoFundo } from "./comp/FotoFundo";
+import { Pelicula } from "./comp/Pelicula";
+import { Abertura } from "./cenas/Abertura";
 import { Legenda } from "./comp/Legenda";
-import { Conversa } from "./comp/Conversa";
 import { CardTela, type DadosCard } from "./comp/CardTela";
-import { Gancho } from "./cenas/Gancho";
-import { Dor } from "./cenas/Dor";
 import { Mecanismo } from "./cenas/Mecanismo";
 import { Oferta } from "./cenas/Oferta";
-import { f, FPS, roteiro } from "./tema";
+import { f, roteiro } from "./tema";
 
 export const esquemaVSL = z.object({
   buffetName: z.string(),
@@ -18,25 +18,20 @@ export const esquemaVSL = z.object({
 const C = roteiro.cenas;
 const faixa = ([de, ate]: number[]) => ({ from: f(de), durationInFrames: f(ate) - f(de) });
 
-const CamadaConversa: React.FC = () => {
-  const frame = useCurrentFrame();
-  return <Conversa t={3.75 + frame / FPS} entra={3.75} digitando={4.25} mensagem={5.8} resposta={8.75} sai={9.95} />;
-};
-
 export const VSL: React.FC<z.infer<typeof esquemaVSL>> = ({ buffetName }) => {
   return (
     <AbsoluteFill>
       <Fundo />
       <Audio src={staticFile("audio/mix.wav")} />
 
-      <Sequence name="Gancho" {...faixa(C.gancho)}>
-        <Gancho buffetName={buffetName} />
+      <Sequence name="Abertura" {...faixa(C.abertura)}>
+        <Abertura buffetName={buffetName} />
       </Sequence>
-      <Sequence name="Conversa" from={f(3.75)} durationInFrames={f(10.4) - f(3.75)}>
-        <CamadaConversa />
+      <Sequence name="Foto do salão" from={f(14.9)} durationInFrames={f(44.9) - f(14.9)}>
+        <FotoFundo src="salao.jpg" inicio={14.9} dur={30} desfoque={22} brilho={0.3} saturacao={0.8} zoom={[1.15, 1.0]} />
       </Sequence>
-      <Sequence name="Dor" {...faixa(C.dor)}>
-        <Dor inicio={C.dor[0]} />
+      <Sequence name="Foto dos balões" from={f(44.5)} durationInFrames={f(52.9) - f(44.5)}>
+        <FotoFundo src="baloes.jpg" inicio={44.5} dur={8.4} desfoque={14} brilho={0.3} saturacao={0.85} posicao="50% 30%" zoom={[1.0, 1.1]} />
       </Sequence>
       <Sequence name="Mecanismo" {...faixa(C.mecanismo)}>
         <Mecanismo inicio={C.mecanismo[0]} />
@@ -61,6 +56,7 @@ export const VSL: React.FC<z.infer<typeof esquemaVSL>> = ({ buffetName }) => {
         <Oferta inicio={C.oferta[0]} buffetName={buffetName} />
       </Sequence>
 
+      <Pelicula />
       <Legenda esconderDe={52.1} />
     </AbsoluteFill>
   );

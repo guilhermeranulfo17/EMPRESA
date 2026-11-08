@@ -6,8 +6,11 @@ Vídeo vertical 1080x1920, 30 fps, 54,6 s, feito no Remotion com capturas reais 
 ## Renderizar uma versão para um prospect
 
 ```bash
-npx remotion render OrkestraVSL "out/orkestra-vsl-buffet-alegria.mp4" --codec=h264 --crf=18 --audio-codec=aac --audio-bitrate=192k --x264-preset=veryslow --props='{"buffetName":"Buffet Alegria"}'
+bash scripts/final.sh "Buffet Alegria" "out/orkestra-vsl-buffet-alegria.mp4"
 ```
+
+O script faz um master quase sem perda no Remotion e depois o H.264 em duas passadas mirando ~15,5 MB
+(abaixo dos 16 MB do WhatsApp), com áudio AAC 192k.
 
 `buffetName` aparece no primeiro segundo ("Para o Buffet Alegria") e no fim ("2 semanas de cortesia
 pro Buffet Alegria"). Sem `--props`, sai "seu buffet". A narração não muda (é a mesma para todos).
@@ -15,6 +18,7 @@ pro Buffet Alegria"). Sem `--props`, sai "seu buffet". A narração não muda (�
 ## Peças
 
 - `public/marca/orkestra-branco.png` e `orkestra-preto.png`: o logo oficial (arquivos enviados pelo dono), recortados.
+- `public/fotos/`: fotos reais de fundo, CC0 (origem em `public/fotos/CREDITOS.txt`).
 - `public/capturas/`: as telas (Playwright, 390x844 a 3x), refeitas com `scripts/capturar.cjs`.
 - `public/audio/narracao.mp3`: `narracao-v1.mp3` até 44,4 s + `frase-final-v2.mp3` (a frase da cortesia),
   emendadas por `scripts/emendar.sh`. Narração do ElevenLabs (voz "José Ferreira - Conversa (WhatsApp)",
