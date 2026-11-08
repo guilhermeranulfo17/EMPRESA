@@ -383,7 +383,7 @@ module.exports = [
         fala: 'Em link e divulgação você cuida da página do buffet. No topo está o seu link, com o botão para copiar e o botão para testar como cliente.',
         fazer: async (g, p) => {
           await g.ir('/app/empresa/link');
-          await g.mostrar(p.getByRole('heading', { name: 'Seu link' }).locator('xpath=ancestor::div[contains(@class,"rounded")][1]'), { bloco: 'start' });
+          await g.mostrar(p.getByRole('heading', { name: 'Seu link' }).locator('xpath=ancestor::section[1]'), { bloco: 'start' });
         },
       },
       {
@@ -430,7 +430,7 @@ module.exports = [
         texto: 'Um link para cada canal',
         fala: 'Em links por canal, use um link diferente no Instagram, no WhatsApp e no Google. Assim você vê em números de onde vem cada cliente.',
         fazer: async (g, p) => {
-          await g.mostrar(p.getByText('Links por canal', { exact: true }).first().locator('xpath=ancestor::div[contains(@class,"rounded")][1]'), { bloco: 'start' });
+          await g.mostrar(p.getByText('Links por canal', { exact: true }).first().locator('xpath=ancestor::section[1]'), { bloco: 'start' });
         },
       },
       {
@@ -438,8 +438,8 @@ module.exports = [
         texto: 'QR code e textos prontos',
         fala: 'O QR code pode ser baixado em imagem ou em PDF para imprimir. E em textos prontos tem a bio do Instagram, a mensagem do WhatsApp e um post, já com o seu link. É só copiar.',
         fazer: async (g, p) => {
-          await g.mostrar(p.getByText('QR code', { exact: true }).first().locator('xpath=ancestor::div[contains(@class,"rounded")][1]'), { bloco: 'start' });
-          await g.mostrar(p.getByText('Textos prontos', { exact: true }).first().locator('xpath=ancestor::div[contains(@class,"rounded")][1]'), { bloco: 'start' });
+          await g.mostrar(p.getByText('QR code', { exact: true }).first().locator('xpath=ancestor::section[1]'), { bloco: 'start' });
+          await g.mostrar(p.getByText('Textos prontos', { exact: true }).first().locator('xpath=ancestor::section[1]'), { bloco: 'start' });
           await g.clicar(botao(p, /^Copiar/).last(), { espera: 1200 });
         },
       },
@@ -467,7 +467,7 @@ module.exports = [
         fala: 'No simulador você testa qualquer festa: escolha a data, o turno, os convidados e o pacote, e confira o cálculo item por item, com o ajuste do dia e o sinal.',
         fazer: async (g, p) => {
           await g.ir('/app/empresa/simulador');
-          await g.digitar(p.locator('#sim-data'), '05122026');
+          await g.digitar(p.locator('#sim-data'), '06032027');
           await g.digitar(p.locator('#sim-adultos'), '40');
           await g.clicar(botao(p, /Calcular preço/).first(), { espera: 2000 });
           await g.mostrar(p.getByRole('heading', { name: 'Resultado' }).locator('xpath=ancestor::div[contains(@class,"rounded")][1]'), { bloco: 'start' });

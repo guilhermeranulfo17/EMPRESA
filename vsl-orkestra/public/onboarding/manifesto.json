@@ -1555,8 +1555,13 @@
      "fala": "Em links por canal, use um link diferente no Instagram, no WhatsApp e no Google. Assim você vê em números de onde vem cada cliente.",
      "quadros": [
       {
-       "arquivo": "c5/105.png",
-       "foco": null,
+       "arquivo": "c5/501.png",
+       "foco": {
+        "x": 288,
+        "y": 98,
+        "w": 1120,
+        "h": 614
+       },
        "cursor": null,
        "clique": false
       }
@@ -1568,19 +1573,29 @@
      "fala": "O QR code pode ser baixado em imagem ou em PDF para imprimir. E em textos prontos tem a bio do Instagram, a mensagem do WhatsApp e um post, já com o seu link. É só copiar.",
      "quadros": [
       {
-       "arquivo": "c5/106.png",
-       "foco": null,
+       "arquivo": "c5/502.png",
+       "foco": {
+        "x": 288,
+        "y": 552,
+        "w": 1120,
+        "h": 258
+       },
        "cursor": null,
        "clique": false
       },
       {
-       "arquivo": "c5/107.png",
-       "foco": null,
+       "arquivo": "c5/503.png",
+       "foco": {
+        "x": 288,
+        "y": 38,
+        "w": 1120,
+        "h": 734
+       },
        "cursor": null,
        "clique": false
       },
       {
-       "arquivo": "c5/108.png",
+       "arquivo": "c5/504.png",
        "foco": {
         "x": 1295,
         "y": 589,
@@ -1636,7 +1651,7 @@
      "fala": "No simulador você testa qualquer festa: escolha a data, o turno, os convidados e o pacote, e confira o cálculo item por item, com o ajuste do dia e o sinal.",
      "quadros": [
       {
-       "arquivo": "c6/111.png",
+       "arquivo": "c6/601.png",
        "foco": {
         "x": 425,
         "y": 383,
@@ -1650,7 +1665,7 @@
        "clique": true
       },
       {
-       "arquivo": "c6/112.png",
+       "arquivo": "c6/602.png",
        "foco": {
         "x": 425,
         "y": 383,
@@ -1661,7 +1676,7 @@
        "clique": false
       },
       {
-       "arquivo": "c6/113.png",
+       "arquivo": "c6/603.png",
        "foco": {
         "x": 438,
         "y": 383,
@@ -1675,7 +1690,7 @@
        "clique": true
       },
       {
-       "arquivo": "c6/114.png",
+       "arquivo": "c6/604.png",
        "foco": {
         "x": 438,
         "y": 383,
@@ -1686,7 +1701,7 @@
        "clique": false
       },
       {
-       "arquivo": "c6/115.png",
+       "arquivo": "c6/605.png",
        "foco": {
         "x": 425,
         "y": 629,
@@ -1700,12 +1715,12 @@
        "clique": true
       },
       {
-       "arquivo": "c6/116.png",
+       "arquivo": "c6/606.png",
        "foco": {
         "x": 860,
-        "y": 0,
+        "y": 80,
         "w": 436,
-        "h": 713
+        "h": 577
        },
        "cursor": null,
        "clique": false

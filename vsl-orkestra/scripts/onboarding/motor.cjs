@@ -7,6 +7,8 @@ const path = require('node:path');
 
 const BASE = 'http://localhost:3000';
 const VIEW = { width: 1440, height: 810 };
+// campos de data no formato brasileiro (dd/mm/aaaa): o formato vem do idioma do processo
+const NAVEGADOR = { env: { ...process.env, LANG: 'pt_BR.UTF-8', LANGUAGE: 'pt_BR:pt', LC_ALL: 'pt_BR.UTF-8' } };
 
 class Gravador {
   constructor(saida) {
@@ -139,7 +141,7 @@ class Gravador {
 async function rodar(roteiro, saida, filtro) {
   fs.mkdirSync(saida, { recursive: true });
   const g = new Gravador(saida);
-  const browser = await chromium.launch();
+  const browser = await chromium.launch(NAVEGADOR);
   for (const cap of roteiro) {
     if (filtro && !filtro.includes(cap.id)) continue;
     console.log(`# ${cap.id} ${cap.titulo}`);
@@ -164,4 +166,4 @@ async function rodar(roteiro, saida, filtro) {
   return g.manifesto;
 }
 
-module.exports = { rodar, BASE };
+module.exports = { rodar, BASE, Gravador, NAVEGADOR };
