@@ -1,0 +1,2 @@
+Fotos reais CC0 (as mesmas de public/fotos e TRIMFLOW/scripts/midia-video, ver CREDITOS.txt de lá).
+logo-girassol.png: logo fictício desenhado em código para a conta de demonstração.

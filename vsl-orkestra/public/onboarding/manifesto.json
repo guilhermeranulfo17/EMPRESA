@@ -1,0 +1,2296 @@
+{
+ "viewport": {
+  "width": 1440,
+  "height": 810
+ },
+ "escala": 1.3333333333333333,
+ "capitulos": [
+  {
+   "id": "c0",
+   "titulo": "Primeiro acesso",
+   "passos": [
+    {
+     "id": "cadastro",
+     "texto": "Crie sua conta grátis",
+     "fala": "Para começar, entre no site do Orkestra e clique em criar conta grátis. Em poucos minutos o link de orçamento do seu buffet fica no ar.",
+     "quadros": [
+      {
+       "arquivo": "c0/001.png",
+       "foco": {
+        "x": 916,
+        "y": 74,
+        "w": 398,
+        "h": 736
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "dados",
+     "texto": "Seu nome, o nome do buffet e o WhatsApp",
+     "fala": "Preencha o seu nome, o nome do buffet e o WhatsApp que vai receber os pedidos.",
+     "quadros": [
+      {
+       "arquivo": "c0/002.png",
+       "foco": {
+        "x": 916,
+        "y": 225,
+        "w": 398,
+        "h": 44
+       },
+       "cursor": {
+        "x": 1036,
+        "y": 247
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c0/003.png",
+       "foco": {
+        "x": 916,
+        "y": 225,
+        "w": 398,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c0/004.png",
+       "foco": {
+        "x": 916,
+        "y": 307,
+        "w": 398,
+        "h": 44
+       },
+       "cursor": {
+        "x": 1036,
+        "y": 329
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c0/005.png",
+       "foco": {
+        "x": 916,
+        "y": 307,
+        "w": 398,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c0/006.png",
+       "foco": {
+        "x": 916,
+        "y": 383,
+        "w": 398,
+        "h": 44
+       },
+       "cursor": {
+        "x": 1036,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c0/007.png",
+       "foco": {
+        "x": 916,
+        "y": 383,
+        "w": 398,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "segmento",
+     "texto": "Escolha o tipo de buffet",
+     "fala": "Escolha o tipo de buffet. A conta já vem com um modelo pronto para ele, com pacotes, opcionais, turnos e regras de exemplo.",
+     "quadros": [
+      {
+       "arquivo": "c0/008.png",
+       "foco": {
+        "x": 916,
+        "y": 383,
+        "w": 398,
+        "h": 44
+       },
+       "cursor": {
+        "x": 1115,
+        "y": 405
+       },
+       "clique": true
+      }
+     ]
+    },
+    {
+     "id": "criar",
+     "texto": "E-mail, senha e criar conta",
+     "fala": "Coloque o seu e-mail e uma senha, aceite os termos e clique em criar conta grátis.",
+     "quadros": [
+      {
+       "arquivo": "c0/009.png",
+       "foco": {
+        "x": 916,
+        "y": 399,
+        "w": 398,
+        "h": 44
+       },
+       "cursor": {
+        "x": 1036,
+        "y": 421
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c0/010.png",
+       "foco": {
+        "x": 916,
+        "y": 399,
+        "w": 398,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c0/011.png",
+       "foco": {
+        "x": 916,
+        "y": 481,
+        "w": 398,
+        "h": 44
+       },
+       "cursor": {
+        "x": 1036,
+        "y": 503
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c0/012.png",
+       "foco": {
+        "x": 916,
+        "y": 481,
+        "w": 398,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c0/013.png",
+       "foco": {
+        "x": 916,
+        "y": 571,
+        "w": 16,
+        "h": 16
+       },
+       "cursor": {
+        "x": 924,
+        "y": 579
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c0/014.png",
+       "foco": {
+        "x": 916,
+        "y": 605,
+        "w": 398,
+        "h": 48
+       },
+       "cursor": {
+        "x": 1115,
+        "y": 629
+       },
+       "clique": true
+      }
+     ]
+    },
+    {
+     "id": "passo1",
+     "texto": "Passo 1: o modelo que já vem pronto",
+     "fala": "A conta foi criada e o assistente de configuração abre sozinho. O primeiro passo mostra o que já veio no modelo. Tudo isso pode ser ajustado depois, em minha empresa.",
+     "quadros": [
+      {
+       "arquivo": "c0/015.png",
+       "foco": {
+        "x": 432,
+        "y": -114,
+        "w": 576,
+        "h": 924
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c0/016.png",
+       "foco": {
+        "x": 908,
+        "y": 754,
+        "w": 100,
+        "h": 44
+       },
+       "cursor": {
+        "x": 958,
+        "y": 776
+       },
+       "clique": true
+      }
+     ]
+    },
+    {
+     "id": "passo2",
+     "texto": "Passo 2: logo, cidade e uma frase sobre o buffet",
+     "fala": "No passo dois, envie o logo, informe a cidade e escreva uma frase sobre o buffet. Isso aparece na página que o cliente vê.",
+     "quadros": [
+      {
+       "arquivo": "c0/017.png",
+       "foco": {
+        "x": 432,
+        "y": -1,
+        "w": 576,
+        "h": 812
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c0/018.png",
+       "foco": {
+        "x": 432,
+        "y": -1,
+        "w": 576,
+        "h": 812
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c0/019.png",
+       "foco": {
+        "x": 448,
+        "y": 464,
+        "w": 436,
+        "h": 44
+       },
+       "cursor": {
+        "x": 568,
+        "y": 486
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c0/020.png",
+       "foco": {
+        "x": 448,
+        "y": 464,
+        "w": 436,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c0/021.png",
+       "foco": {
+        "x": 896,
+        "y": 464,
+        "w": 96,
+        "h": 44
+       },
+       "cursor": {
+        "x": 944,
+        "y": 486
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c0/022.png",
+       "foco": {
+        "x": 896,
+        "y": 464,
+        "w": 96,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c0/023.png",
+       "foco": {
+        "x": 448,
+        "y": 618,
+        "w": 544,
+        "h": 64
+       },
+       "cursor": {
+        "x": 568,
+        "y": 650
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c0/024.png",
+       "foco": {
+        "x": 448,
+        "y": 618,
+        "w": 544,
+        "h": 64
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c0/025.png",
+       "foco": {
+        "x": 856,
+        "y": 754,
+        "w": 152,
+        "h": 44
+       },
+       "cursor": {
+        "x": 932,
+        "y": 776
+       },
+       "clique": true
+      }
+     ]
+    },
+    {
+     "id": "passo3",
+     "texto": "Passo 3: digite o preço de cada pacote",
+     "fala": "O passo três é o mais importante: os seus preços. Digite o valor de cada pacote para até trinta convidados.",
+     "quadros": [
+      {
+       "arquivo": "c0/026.png",
+       "foco": {
+        "x": 465,
+        "y": 301,
+        "w": 378,
+        "h": 44
+       },
+       "cursor": {
+        "x": 585,
+        "y": 323
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c0/027.png",
+       "foco": {
+        "x": 465,
+        "y": 301,
+        "w": 378,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c0/028.png",
+       "foco": {
+        "x": 465,
+        "y": 383,
+        "w": 379,
+        "h": 44
+       },
+       "cursor": {
+        "x": 585,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c0/029.png",
+       "foco": {
+        "x": 465,
+        "y": 383,
+        "w": 379,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c0/030.png",
+       "foco": {
+        "x": 465,
+        "y": 511,
+        "w": 379,
+        "h": 44
+       },
+       "cursor": {
+        "x": 585,
+        "y": 533
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c0/031.png",
+       "foco": {
+        "x": 465,
+        "y": 511,
+        "w": 379,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "passo3-faixas",
+     "texto": "Confira as outras faixas e confirme",
+     "fala": "As outras faixas de convidados são calculadas na mesma proporção, e você pode abrir e ajustar uma por uma. Só o preço que você confirmar aparece para o cliente.",
+     "quadros": [
+      {
+       "arquivo": "c0/032.png",
+       "foco": {
+        "x": 465,
+        "y": 357,
+        "w": 210,
+        "h": 44
+       },
+       "cursor": {
+        "x": 570,
+        "y": 379
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c0/033.png",
+       "foco": null,
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c0/034.png",
+       "foco": {
+        "x": 781,
+        "y": 754,
+        "w": 227,
+        "h": 44
+       },
+       "cursor": {
+        "x": 895,
+        "y": 776
+       },
+       "clique": true
+      }
+     ]
+    },
+    {
+     "id": "passo4",
+     "texto": "Passo 4: espaços e horários",
+     "fala": "No passo quatro, confira o salão, a capacidade e o horário de cada turno. Se já tiver festas fechadas, registre depois na agenda para essas datas não aparecerem como livres.",
+     "quadros": [
+      {
+       "arquivo": "c0/035.png",
+       "foco": {
+        "x": 432,
+        "y": 0,
+        "w": 576,
+        "h": 978
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c0/036.png",
+       "foco": {
+        "x": 908,
+        "y": 754,
+        "w": 100,
+        "h": 44
+       },
+       "cursor": {
+        "x": 958,
+        "y": 776
+       },
+       "clique": true
+      }
+     ]
+    },
+    {
+     "id": "passo5",
+     "texto": "Passo 5: o seu link está no ar",
+     "fala": "Pronto, o seu link está no ar. Copie e coloque na bio do Instagram, baixe o QR code para imprimir e teste como se fosse um cliente.",
+     "quadros": [
+      {
+       "arquivo": "c0/037.png",
+       "foco": {
+        "x": 448,
+        "y": 224,
+        "w": 544,
+        "h": 118
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c0/038.png",
+       "foco": {
+        "x": 448,
+        "y": 362,
+        "w": 544,
+        "h": 246
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c0/039.png",
+       "foco": {
+        "x": 448,
+        "y": 606,
+        "w": 544,
+        "h": 44
+       },
+       "cursor": {
+        "x": 720,
+        "y": 628
+       },
+       "clique": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "c1",
+   "titulo": "Identidade do buffet",
+   "passos": [
+    {
+     "id": "checklist",
+     "texto": "Minha empresa: a lista do que falta",
+     "fala": "Toda a configuração fica em minha empresa, e você muda quando quiser. No topo, esta lista mostra o quanto o seu link está pronto e o que ainda falta para vender melhor.",
+     "quadros": [
+      {
+       "arquivo": "c1/040.png",
+       "foco": null,
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "identidade",
+     "texto": "Nome, WhatsApp, cidade e cor da marca",
+     "fala": "Em identidade ficam o nome, o WhatsApp, a cidade e a cor da marca, que pinta os botões da sua página e da proposta. Mudou alguma coisa, clique em salvar.",
+     "quadros": [
+      {
+       "arquivo": "c1/041.png",
+       "foco": {
+        "x": 425,
+        "y": 383,
+        "w": 846,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c1/042.png",
+       "foco": {
+        "x": 493,
+        "y": 383,
+        "w": 144,
+        "h": 44
+       },
+       "cursor": {
+        "x": 565,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c1/043.png",
+       "foco": {
+        "x": 493,
+        "y": 383,
+        "w": 144,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c1/044.png",
+       "foco": {
+        "x": 1159,
+        "y": 383,
+        "w": 112,
+        "h": 44
+       },
+       "cursor": {
+        "x": 1215,
+        "y": 405
+       },
+       "clique": true
+      }
+     ]
+    },
+    {
+     "id": "proposta",
+     "texto": "Razão social, CNPJ e endereço",
+     "fala": "Em dados da proposta, coloque a razão social, o CNPJ e o endereço. Eles aparecem no rodapé da proposta e do PDF.",
+     "quadros": [
+      {
+       "arquivo": "c1/045.png",
+       "foco": {
+        "x": 425,
+        "y": 383,
+        "w": 846,
+        "h": 44
+       },
+       "cursor": {
+        "x": 545,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c1/046.png",
+       "foco": {
+        "x": 425,
+        "y": 383,
+        "w": 846,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c1/047.png",
+       "foco": {
+        "x": 425,
+        "y": 383,
+        "w": 846,
+        "h": 44
+       },
+       "cursor": {
+        "x": 545,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c1/048.png",
+       "foco": {
+        "x": 425,
+        "y": 383,
+        "w": 846,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c1/049.png",
+       "foco": {
+        "x": 425,
+        "y": 383,
+        "w": 846,
+        "h": 44
+       },
+       "cursor": {
+        "x": 545,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c1/050.png",
+       "foco": {
+        "x": 425,
+        "y": 383,
+        "w": 846,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c1/051.png",
+       "foco": {
+        "x": 1159,
+        "y": 383,
+        "w": 112,
+        "h": 44
+       },
+       "cursor": {
+        "x": 1215,
+        "y": 405
+       },
+       "clique": true
+      }
+     ]
+    },
+    {
+     "id": "capa",
+     "texto": "Envie a foto de capa",
+     "fala": "Em logo e capa, envie uma foto do salão. A capa é a primeira imagem que o cliente vê no seu link.",
+     "quadros": [
+      {
+       "arquivo": "c1/052.png",
+       "foco": {
+        "x": 400,
+        "y": 229,
+        "w": 896,
+        "h": 351
+       },
+       "cursor": {
+        "x": 907.5,
+        "y": 515
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c1/053.png",
+       "foco": {
+        "x": 400,
+        "y": 229,
+        "w": 896,
+        "h": 351
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "link",
+     "texto": "O endereço do seu link",
+     "fala": "E aqui está o link do buffet. Dá para mudar o final do endereço, e o link antigo continua funcionando.",
+     "quadros": [
+      {
+       "arquivo": "c1/054.png",
+       "foco": {
+        "x": 400,
+        "y": 461,
+        "w": 896,
+        "h": 349
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "c2",
+   "titulo": "Espaços e turnos",
+   "passos": [
+    {
+     "id": "espacos",
+     "texto": "Onde acontecem as festas",
+     "fala": "Em espaços e turnos você diz onde e quando acontecem as festas. Cada espaço tem um nome e a capacidade de convidados.",
+     "quadros": [
+      {
+       "arquivo": "c2/055.png",
+       "foco": {
+        "x": 400,
+        "y": 248,
+        "w": 896,
+        "h": 48
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c2/056.png",
+       "foco": {
+        "x": 1187,
+        "y": 321,
+        "w": 44,
+        "h": 44
+       },
+       "cursor": {
+        "x": 1209,
+        "y": 343
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c2/057.png",
+       "foco": {
+        "x": 413,
+        "y": 392,
+        "w": 870,
+        "h": 406
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "turnos",
+     "texto": "Turnos: início, duração e dias",
+     "fala": "Cada turno tem o horário de início, a duração e os dias da semana em que funciona. A agenda e o link usam isso para mostrar só os horários livres. Para criar outro, clique em adicionar turno.",
+     "quadros": [
+      {
+       "arquivo": "c2/058.png",
+       "foco": {
+        "x": 400,
+        "y": 468,
+        "w": 896,
+        "h": 48
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c2/059.png",
+       "foco": {
+        "x": 1135,
+        "y": 563,
+        "w": 44,
+        "h": 44
+       },
+       "cursor": {
+        "x": 1157,
+        "y": 585
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c2/060.png",
+       "foco": {
+        "x": 413,
+        "y": 446,
+        "w": 870,
+        "h": 364
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c2/061.png",
+       "foco": {
+        "x": 400,
+        "y": 654,
+        "w": 896,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "c3",
+   "titulo": "Catálogo: pacotes e opcionais",
+   "passos": [
+    {
+     "id": "lista",
+     "texto": "Pacotes, opcionais e tipos de festa",
+     "fala": "No catálogo ficam os pacotes, os opcionais e os tipos de festa. A ordem desta lista é a ordem que o cliente vê.",
+     "quadros": [
+      {
+       "arquivo": "c3/062.png",
+       "foco": {
+        "x": 400,
+        "y": 312,
+        "w": 364,
+        "h": 48
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "pacote",
+     "texto": "Abra o pacote para editar",
+     "fala": "Clique no lápis para editar um pacote. Em dados do pacote ficam o nome, a descrição e o destaque, que mostra o selo de mais pedido.",
+     "quadros": [
+      {
+       "arquivo": "c3/063.png",
+       "foco": {
+        "x": 489,
+        "y": 393,
+        "w": 54,
+        "h": 24
+       },
+       "cursor": {
+        "x": 516,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c3/064.png",
+       "foco": {
+        "x": 425,
+        "y": 319,
+        "w": 846,
+        "h": 491
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "preco",
+     "texto": "Preço por faixa de convidados",
+     "fala": "Em preço, escolha cobrar por faixa de convidados ou por pessoa. Na faixa, cada linha é o valor até aquela quantidade. Embaixo vão o valor de cada convidado a mais, o mínimo, o máximo e a hora extra. Cada bloco desta tela tem o seu botão de salvar.",
+     "quadros": [
+      {
+       "arquivo": "c3/065.png",
+       "foco": {
+        "x": 828,
+        "y": 383,
+        "w": 378,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c3/066.png",
+       "foco": {
+        "x": 828,
+        "y": 383,
+        "w": 378,
+        "h": 44
+       },
+       "cursor": {
+        "x": 948,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c3/067.png",
+       "foco": {
+        "x": 828,
+        "y": 383,
+        "w": 378,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c3/068.png",
+       "foco": {
+        "x": 856,
+        "y": 383,
+        "w": 415,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c3/069.png",
+       "foco": {
+        "x": 1159,
+        "y": 383,
+        "w": 112,
+        "h": 44
+       },
+       "cursor": {
+        "x": 1215,
+        "y": 405
+       },
+       "clique": true
+      }
+     ]
+    },
+    {
+     "id": "fotos",
+     "texto": "Fotos do pacote",
+     "fala": "Em fotos, envie as fotos do pacote. Pacote com foto vende mais.",
+     "quadros": [
+      {
+       "arquivo": "c3/070.png",
+       "foco": {
+        "x": 425,
+        "y": 393,
+        "w": 846,
+        "h": 24
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c3/071.png",
+       "foco": {
+        "x": 425,
+        "y": 393,
+        "w": 846,
+        "h": 24
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "cardapio",
+     "texto": "Cardápio por seções",
+     "fala": "No cardápio, organize os itens por seções, como salgados, bebidas e doces. O cliente vê o cardápio na proposta.",
+     "quadros": [
+      {
+       "arquivo": "c3/072.png",
+       "foco": {
+        "x": 438,
+        "y": 383,
+        "w": 672,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c3/073.png",
+       "foco": {
+        "x": 438,
+        "y": 383,
+        "w": 672,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "salvar",
+     "texto": "Opcionais inclusos e salvar",
+     "fala": "Por fim, marque os opcionais que já vêm inclusos neste pacote e clique em salvar.",
+     "quadros": [
+      {
+       "arquivo": "c3/074.png",
+       "foco": {
+        "x": 425,
+        "y": 492,
+        "w": 415,
+        "h": 52
+       },
+       "cursor": {
+        "x": 633,
+        "y": 518
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c3/075.png",
+       "foco": {
+        "x": 1159,
+        "y": 629,
+        "w": 112,
+        "h": 44
+       },
+       "cursor": {
+        "x": 1215,
+        "y": 651
+       },
+       "clique": true
+      }
+     ]
+    },
+    {
+     "id": "opcional",
+     "texto": "Opcionais: preço e forma de cobrar",
+     "fala": "Os opcionais funcionam do mesmo jeito: nome, preço e se é cobrado por valor fixo, por unidade ou por hora. Você também escolhe em quais pacotes ele aparece.",
+     "quadros": [
+      {
+       "arquivo": "c3/076.png",
+       "foco": {
+        "x": 413,
+        "y": 393,
+        "w": 112,
+        "h": 24
+       },
+       "cursor": {
+        "x": 469,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c3/077.png",
+       "foco": {
+        "x": 856,
+        "y": 677,
+        "w": 415,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c3/078.png",
+       "foco": {
+        "x": 425,
+        "y": 383,
+        "w": 846,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "novos",
+     "texto": "Novo pacote e novo opcional",
+     "fala": "Para criar um pacote ou um opcional do zero, use os botões novo pacote e novo opcional.",
+     "quadros": [
+      {
+       "arquivo": "c3/079.png",
+       "foco": {
+        "x": 1171,
+        "y": 328,
+        "w": 125,
+        "h": 32
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "c4",
+   "titulo": "Preços e regras",
+   "passos": [
+    {
+     "id": "dias",
+     "texto": "Ajustes por dia da semana",
+     "fala": "Em preços e regras ficam as contas do orçamento. Os ajustes por dia mudam o preço conforme o dia: aqui, de segunda a quinta é quinze por cento mais barato, e o sábado é dez por cento mais caro.",
+     "quadros": [
+      {
+       "arquivo": "c4/080.png",
+       "foco": {
+        "x": 400,
+        "y": 0,
+        "w": 896,
+        "h": 891
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c4/081.png",
+       "foco": {
+        "x": 958,
+        "y": 662,
+        "w": 248,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "feriados",
+     "texto": "Feriados",
+     "fala": "Em feriados, cadastre as datas que devem ter o mesmo preço de fim de semana.",
+     "quadros": [
+      {
+       "arquivo": "c4/082.png",
+       "foco": {
+        "x": 425,
+        "y": 393,
+        "w": 846,
+        "h": 24
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "criancas",
+     "texto": "Quanto cada idade paga",
+     "fala": "Em crianças, defina as faixas de idade e quanto cada uma paga. No exemplo, até cinco anos não paga, e de seis a dez paga metade.",
+     "quadros": [
+      {
+       "arquivo": "c4/083.png",
+       "foco": {
+        "x": 400,
+        "y": 0,
+        "w": 896,
+        "h": 871
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "deslocamento",
+     "texto": "Deslocamento e intervalo entre festas",
+     "fala": "Deslocamento é para quem faz festa no local do cliente: dá para cobrar por quilômetro ou por faixa de distância. Logo abaixo, o intervalo entre eventos garante o tempo de limpeza entre uma festa e outra.",
+     "quadros": [
+      {
+       "arquivo": "c4/084.png",
+       "foco": {
+        "x": 425,
+        "y": 393,
+        "w": 846,
+        "h": 24
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c4/085.png",
+       "foco": {
+        "x": 425,
+        "y": 766,
+        "w": 80,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "condicoes",
+     "texto": "Sinal, parcelas, validade e prazos",
+     "fala": "Nas condições comerciais vão o sinal para reservar a data, o número de parcelas, a validade da proposta, o prazo da pré-reserva e a antecedência mínima para fechar uma festa.",
+     "quadros": [
+      {
+       "arquivo": "c4/086.png",
+       "foco": {
+        "x": 400,
+        "y": -183,
+        "w": 896,
+        "h": 1175
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "pagamento",
+     "texto": "Formas de pagamento e como o preço aparece",
+     "fala": "Marque as formas de pagamento que você aceita e escolha como o preço aparece para o cliente: o valor exato, uma faixa de preço, ou só depois do contato.",
+     "quadros": [
+      {
+       "arquivo": "c4/087.png",
+       "foco": {
+        "x": 1000,
+        "y": 383,
+        "w": 271,
+        "h": 44
+       },
+       "cursor": {
+        "x": 1136,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c4/088.png",
+       "foco": {
+        "x": 425,
+        "y": 443,
+        "w": 846,
+        "h": 114
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "textos",
+     "texto": "Textos da proposta e salvar",
+     "fala": "Por último, escreva as condições gerais, o que não está incluso e a política de cancelamento. Esses textos vão para a proposta. Cada bloco desta tela tem o seu botão de salvar.",
+     "quadros": [
+      {
+       "arquivo": "c4/089.png",
+       "foco": {
+        "x": 425,
+        "y": 689,
+        "w": 846,
+        "h": 64
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c4/090.png",
+       "foco": {
+        "x": 425,
+        "y": 406,
+        "w": 846,
+        "h": 64
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c4/091.png",
+       "foco": {
+        "x": 1159,
+        "y": 629,
+        "w": 112,
+        "h": 44
+       },
+       "cursor": {
+        "x": 1215,
+        "y": 651
+       },
+       "clique": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "c5",
+   "titulo": "Link e divulgação",
+   "passos": [
+    {
+     "id": "link",
+     "texto": "Seu link e o teste como cliente",
+     "fala": "Em link e divulgação você cuida da página do buffet. No topo está o seu link, com o botão para copiar e o botão para testar como cliente.",
+     "quadros": [
+      {
+       "arquivo": "c5/092.png",
+       "foco": null,
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "frase",
+     "texto": "Frase de apresentação, com prévia ao lado",
+     "fala": "Escreva uma frase de apresentação e veja na hora, na prévia ao lado, como a página fica para o cliente.",
+     "quadros": [
+      {
+       "arquivo": "c5/093.png",
+       "foco": {
+        "x": 288,
+        "y": 198,
+        "w": 1120,
+        "h": 1800
+       },
+       "cursor": {
+        "x": 433,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c5/094.png",
+       "foco": {
+        "x": 288,
+        "y": 198,
+        "w": 1120,
+        "h": 1800
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "estilo",
+     "texto": "Estilo e diferenciais",
+     "fala": "Escolha o estilo da página e adicione os diferenciais do buffet, como monitores, brinquedão e estacionamento. Depois clique em salvar.",
+     "quadros": [
+      {
+       "arquivo": "c5/095.png",
+       "foco": {
+        "x": 313,
+        "y": 360,
+        "w": 194,
+        "h": 90
+       },
+       "cursor": {
+        "x": 410,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c5/096.png",
+       "foco": {
+        "x": 439,
+        "y": 392,
+        "w": 92,
+        "h": 26
+       },
+       "cursor": {
+        "x": 485,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c5/097.png",
+       "foco": {
+        "x": 573,
+        "y": 392,
+        "w": 99,
+        "h": 26
+       },
+       "cursor": {
+        "x": 623,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c5/098.png",
+       "foco": {
+        "x": 573,
+        "y": 392,
+        "w": 126,
+        "h": 26
+       },
+       "cursor": {
+        "x": 636,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c5/099.png",
+       "foco": {
+        "x": 807,
+        "y": 383,
+        "w": 112,
+        "h": 44
+       },
+       "cursor": {
+        "x": 863,
+        "y": 405
+       },
+       "clique": true
+      }
+     ]
+    },
+    {
+     "id": "galeria",
+     "texto": "Galeria de fotos do espaço",
+     "fala": "Na galeria, envie fotos do espaço e das festas. A primeira aparece maior. Clique em salvar galeria.",
+     "quadros": [
+      {
+       "arquivo": "c5/100.png",
+       "foco": {
+        "x": 288,
+        "y": 273,
+        "w": 656,
+        "h": 263
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c5/101.png",
+       "foco": {
+        "x": 288,
+        "y": 273,
+        "w": 656,
+        "h": 579
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c5/102.png",
+       "foco": {
+        "x": 797,
+        "y": 383,
+        "w": 122,
+        "h": 44
+       },
+       "cursor": {
+        "x": 858,
+        "y": 405
+       },
+       "clique": true
+      }
+     ]
+    },
+    {
+     "id": "depoimentos",
+     "texto": "Depoimentos e perguntas frequentes",
+     "fala": "Depois, coloque depoimentos reais de clientes e as perguntas frequentes. O sistema nunca inventa depoimento: só aparece o que você escrever.",
+     "quadros": [
+      {
+       "arquivo": "c5/103.png",
+       "foco": {
+        "x": 288,
+        "y": 476,
+        "w": 656,
+        "h": 275
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c5/104.png",
+       "foco": {
+        "x": 288,
+        "y": 509,
+        "w": 656,
+        "h": 301
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "canais",
+     "texto": "Um link para cada canal",
+     "fala": "Em links por canal, use um link diferente no Instagram, no WhatsApp e no Google. Assim você vê em números de onde vem cada cliente.",
+     "quadros": [
+      {
+       "arquivo": "c5/105.png",
+       "foco": null,
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "qr",
+     "texto": "QR code e textos prontos",
+     "fala": "O QR code pode ser baixado em imagem ou em PDF para imprimir. E em textos prontos tem a bio do Instagram, a mensagem do WhatsApp e um post, já com o seu link. É só copiar.",
+     "quadros": [
+      {
+       "arquivo": "c5/106.png",
+       "foco": null,
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c5/107.png",
+       "foco": null,
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c5/108.png",
+       "foco": {
+        "x": 1295,
+        "y": 589,
+        "w": 92,
+        "h": 44
+       },
+       "cursor": {
+        "x": 1341,
+        "y": 611
+       },
+       "clique": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "c6",
+   "titulo": "Conferir antes de divulgar",
+   "passos": [
+    {
+     "id": "proposta",
+     "texto": "Ver minha proposta",
+     "fala": "Antes de divulgar, abra ver minha proposta. É exatamente o que o cliente recebe, com os seus preços, as suas condições e o cardápio.",
+     "quadros": [
+      {
+       "arquivo": "c6/109.png",
+       "foco": {
+        "x": 512,
+        "y": -1,
+        "w": 672,
+        "h": 1702
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c6/110.png",
+       "foco": {
+        "x": 529,
+        "y": 608,
+        "w": 638,
+        "h": 20
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "simulador",
+     "texto": "Simulador: teste qualquer festa",
+     "fala": "No simulador você testa qualquer festa: escolha a data, o turno, os convidados e o pacote, e confira o cálculo item por item, com o ajuste do dia e o sinal.",
+     "quadros": [
+      {
+       "arquivo": "c6/111.png",
+       "foco": {
+        "x": 425,
+        "y": 383,
+        "w": 185,
+        "h": 44
+       },
+       "cursor": {
+        "x": 518,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c6/112.png",
+       "foco": {
+        "x": 425,
+        "y": 383,
+        "w": 185,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c6/113.png",
+       "foco": {
+        "x": 438,
+        "y": 383,
+        "w": 174,
+        "h": 44
+       },
+       "cursor": {
+        "x": 525,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c6/114.png",
+       "foco": {
+        "x": 438,
+        "y": 383,
+        "w": 174,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c6/115.png",
+       "foco": {
+        "x": 425,
+        "y": 629,
+        "w": 386,
+        "h": 44
+       },
+       "cursor": {
+        "x": 618,
+        "y": 651
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c6/116.png",
+       "foco": {
+        "x": 860,
+        "y": 0,
+        "w": 436,
+        "h": 713
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "c7",
+   "titulo": "Follow-up automático",
+   "passos": [
+    {
+     "id": "regras",
+     "texto": "Tarefas automáticas para não esquecer ninguém",
+     "fala": "Em follow-up ficam as tarefas automáticas: o sistema lembra você de chamar o cliente na hora certa. Por exemplo, proposta sem resposta cria uma tarefa depois de vinte e quatro horas.",
+     "quadros": [
+      {
+       "arquivo": "c7/117.png",
+       "foco": {
+        "x": 256,
+        "y": 0,
+        "w": 1184,
+        "h": 1398
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c7/118.png",
+       "foco": {
+        "x": 460,
+        "y": 376,
+        "w": 103,
+        "h": 40
+       },
+       "cursor": {
+        "x": 511.5,
+        "y": 396
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c7/119.png",
+       "foco": {
+        "x": 460,
+        "y": 376,
+        "w": 103,
+        "h": 40
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "mais",
+     "texto": "Ligue, desligue e ajuste o prazo",
+     "fala": "Tem também cobrar o sinal, confirmar a visita e lead quente sem contato. Ligue ou desligue cada regra e ajuste o prazo. As tarefas aparecem na sua caixa de leads.",
+     "quadros": [
+      {
+       "arquivo": "c7/120.png",
+       "foco": {
+        "x": 460,
+        "y": 385,
+        "w": 102,
+        "h": 40
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "c8",
+   "titulo": "Usuários, plano e privacidade",
+   "passos": [
+    {
+     "id": "usuarios",
+     "texto": "Vendedores com login próprio",
+     "fala": "Em usuários, cadastre os seus vendedores. Cada um tem login próprio, atende os leads e faz orçamentos, mas não muda a configuração. Você define o limite de desconto de cada um.",
+     "quadros": [
+      {
+       "arquivo": "c8/121.png",
+       "foco": {
+        "x": 1148,
+        "y": 248,
+        "w": 148,
+        "h": 44
+       },
+       "cursor": {
+        "x": 1222,
+        "y": 270
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c8/122.png",
+       "foco": {
+        "x": 489,
+        "y": 173,
+        "w": 462,
+        "h": 464
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "plano",
+     "texto": "Plano e acesso do suporte",
+     "fala": "Em plano você acompanha o teste grátis, faz a assinatura e libera o acesso do suporte quando precisar de ajuda.",
+     "quadros": [
+      {
+       "arquivo": "c8/123.png",
+       "foco": {
+        "x": 256,
+        "y": 64,
+        "w": 1184,
+        "h": 746
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "privacidade",
+     "texto": "Privacidade e dados",
+     "fala": "E em privacidade e dados você define por quanto tempo guardar os leads e pode exportar todos os seus dados quando quiser.",
+     "quadros": [
+      {
+       "arquivo": "c8/124.png",
+       "foco": {
+        "x": 600,
+        "y": 445,
+        "w": 320,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "c9",
+   "titulo": "O dia a dia",
+   "passos": [
+    {
+     "id": "caixa",
+     "texto": "Caixa de leads, por prioridade",
+     "fala": "Agora, o dia a dia. Os pedidos do link caem na caixa de leads, já em ordem de prioridade: primeiro quem pediu pré-reserva ou visita, depois as tarefas do dia.",
+     "quadros": [
+      {
+       "arquivo": "c9/125.png",
+       "foco": {
+        "x": 256,
+        "y": 0,
+        "w": 1184,
+        "h": 1174
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "funil",
+     "texto": "Ou veja em funil",
+     "fala": "Se preferir, veja em funil, com cada negociação na sua etapa: novo, em conversa, proposta, pré-reserva e reservado.",
+     "quadros": [
+      {
+       "arquivo": "c9/126.png",
+       "foco": {
+        "x": 623,
+        "y": 92,
+        "w": 78,
+        "h": 36
+       },
+       "cursor": {
+        "x": 662,
+        "y": 110
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c9/127.png",
+       "foco": null,
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "lead",
+     "texto": "Tudo sobre o lead em uma tela",
+     "fala": "Clique no lead para ver tudo: a data, o pacote, o valor e a linha do tempo do que o cliente fez no link.",
+     "quadros": [
+      {
+       "arquivo": "c9/128.png",
+       "foco": {
+        "x": 480,
+        "y": 364,
+        "w": 62,
+        "h": 24
+       },
+       "cursor": {
+        "x": 511,
+        "y": 376
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c9/129.png",
+       "foco": {
+        "x": 256,
+        "y": 0,
+        "w": 1184,
+        "h": 1700
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "whatsapp",
+     "texto": "Mensagem pronta para o WhatsApp",
+     "fala": "O botão WhatsApp abre uma mensagem pronta para o momento da negociação. Você revisa e envia pelo seu próprio WhatsApp.",
+     "quadros": [
+      {
+       "arquivo": "c9/130.png",
+       "foco": {
+        "x": 473,
+        "y": 313,
+        "w": 227,
+        "h": 44
+       },
+       "cursor": {
+        "x": 587,
+        "y": 335
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c9/131.png",
+       "foco": {
+        "x": 432,
+        "y": 235,
+        "w": 576,
+        "h": 340
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "confirmar",
+     "texto": "Sinal pago: confirme a reserva",
+     "fala": "Quando o cliente pagar o sinal, clique em confirmar. A data fica reservada na agenda e o lead vai para reservado.",
+     "quadros": [
+      {
+       "arquivo": "c9/132.png",
+       "foco": {
+        "x": 477,
+        "y": 389,
+        "w": 174,
+        "h": 32
+       },
+       "cursor": {
+        "x": 564,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c9/133.png",
+       "foco": {
+        "x": 490,
+        "y": 383,
+        "w": 354,
+        "h": 44
+       },
+       "cursor": {
+        "x": 610,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c9/134.png",
+       "foco": {
+        "x": 490,
+        "y": 383,
+        "w": 354,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c9/135.png",
+       "foco": {
+        "x": 1062,
+        "y": 389,
+        "w": 144,
+        "h": 32
+       },
+       "cursor": {
+        "x": 1134,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c9/136.png",
+       "foco": {
+        "x": 256,
+        "y": -211,
+        "w": 1184,
+        "h": 1800
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "orcamento",
+     "texto": "Orçamento para quem chama no WhatsApp",
+     "fala": "Para quem chama pelo WhatsApp ou pelo telefone, use o botão mais orçamento. Preencha o cliente, a festa e o pacote, e o sistema calcula o preço com as suas regras.",
+     "quadros": [
+      {
+       "arquivo": "c9/137.png",
+       "foco": {
+        "x": 533,
+        "y": 237,
+        "w": 630,
+        "h": 44
+       },
+       "cursor": {
+        "x": 653,
+        "y": 259
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c9/138.png",
+       "foco": {
+        "x": 533,
+        "y": 237,
+        "w": 630,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c9/139.png",
+       "foco": {
+        "x": 533,
+        "y": 325,
+        "w": 630,
+        "h": 44
+       },
+       "cursor": {
+        "x": 653,
+        "y": 347
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c9/140.png",
+       "foco": {
+        "x": 533,
+        "y": 325,
+        "w": 630,
+        "h": 44
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c9/141.png",
+       "foco": {
+        "x": 533,
+        "y": 383,
+        "w": 159,
+        "h": 44
+       },
+       "cursor": {
+        "x": 613,
+        "y": 405
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c9/142.png",
+       "foco": null,
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "agenda",
+     "texto": "Agenda do mês",
+     "fala": "Na agenda você vê o mês inteiro: livre, pré-reservado, reservado e bloqueado. Clique no dia para ver os turnos, registrar uma festa ou bloquear a data.",
+     "quadros": [
+      {
+       "arquivo": "c9/143.png",
+       "foco": {
+        "x": 256,
+        "y": 0,
+        "w": 1184,
+        "h": 874
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c9/144.png",
+       "foco": {
+        "x": 1247,
+        "y": 345,
+        "w": 160,
+        "h": 96
+       },
+       "cursor": {
+        "x": 1327,
+        "y": 393
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c9/145.png",
+       "foco": null,
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "contratos",
+     "texto": "Contratos com assinatura pelo celular",
+     "fala": "Em contratos, você gera o contrato a partir do orçamento, com os dados já preenchidos, e o cliente assina pelo celular. Os modelos de contrato ficam no botão modelos.",
+     "quadros": [
+      {
+       "arquivo": "c9/146.png",
+       "foco": {
+        "x": 256,
+        "y": 64,
+        "w": 1184,
+        "h": 746
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "financeiro",
+     "texto": "Financeiro: parcelas e recebimentos",
+     "fala": "No financeiro ficam as parcelas de cada festa: o que já recebeu, o que vence e o que está atrasado. Abra a festa para montar o plano de pagamento e registrar cada recebimento.",
+     "quadros": [
+      {
+       "arquivo": "c9/147.png",
+       "foco": {
+        "x": 256,
+        "y": 0,
+        "w": 1184,
+        "h": 1188
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c9/148.png",
+       "foco": {
+        "x": 401,
+        "y": 335,
+        "w": 894,
+        "h": 96
+       },
+       "cursor": {
+        "x": 848,
+        "y": 383
+       },
+       "clique": true
+      },
+      {
+       "arquivo": "c9/149.png",
+       "foco": {
+        "x": 256,
+        "y": 0,
+        "w": 1184,
+        "h": 1278
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "clientes",
+     "texto": "Clientes e hora de chamar de novo",
+     "fala": "Em clientes ficam as famílias que já fizeram festa com você, com o aviso de hora de chamar de novo para o próximo aniversário.",
+     "quadros": [
+      {
+       "arquivo": "c9/150.png",
+       "foco": {
+        "x": 256,
+        "y": 0,
+        "w": 1184,
+        "h": 1110
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "numeros",
+     "texto": "Números do seu buffet",
+     "fala": "Em números você acompanha o funil do link, de onde vem quem fecha, por que você perdeu e a ocupação da agenda.",
+     "quadros": [
+      {
+       "arquivo": "c9/151.png",
+       "foco": {
+        "x": 256,
+        "y": 0,
+        "w": 1184,
+        "h": 2244
+       },
+       "cursor": null,
+       "clique": false
+      },
+      {
+       "arquivo": "c9/152.png",
+       "foco": {
+        "x": 356,
+        "y": 416,
+        "w": 464,
+        "h": 48
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    },
+    {
+     "id": "avisos",
+     "texto": "Ative os avisos no celular",
+     "fala": "Por fim, ative os avisos no celular em minha conta, para saber na hora quando chega um pedido. Pronto: é isso que você precisa para usar o Orkestra no dia a dia.",
+     "quadros": [
+      {
+       "arquivo": "c9/153.png",
+       "foco": {
+        "x": 256,
+        "y": 0,
+        "w": 1184,
+        "h": 1894
+       },
+       "cursor": null,
+       "clique": false
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
