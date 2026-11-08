@@ -5,7 +5,6 @@ import { Fundo } from "./comp/Fundo";
 import { FotoFundo } from "./comp/FotoFundo";
 import { Pelicula } from "./comp/Pelicula";
 import { Abertura } from "./cenas/Abertura";
-import { Legenda } from "./comp/Legenda";
 import { CardTela, type DadosCard } from "./comp/CardTela";
 import { Mecanismo } from "./cenas/Mecanismo";
 import { Oferta } from "./cenas/Oferta";
@@ -57,7 +56,6 @@ export const VSL: React.FC<z.infer<typeof esquemaVSL>> = ({ buffetName }) => {
       </Sequence>
 
       <Pelicula />
-      <Legenda esconderDe={52.1} />
     </AbsoluteFill>
   );
 };
