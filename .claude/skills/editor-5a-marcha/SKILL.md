@@ -94,16 +94,21 @@ Você é o editor de vídeo do @guisilva.vendas. O Gui só manda o vídeo e voc�
    - Troque o enquadramento (aberto e 1,15x) onde o campo `cortes` do roteiro pedir.
    - Nas simulações (gravação `simulacao`), o motion mostra a etiqueta "VENDEDOR" ou "CLIENTE" conforme quem fala.
 2. **Tempos:** `scripts/maptime.py PASTA frases.json tempos.json` (frases em tempo do vídeo original, com o texto da legenda e `*destaque*`). Esses tempos mandam em tudo o que vem depois.
-3. **Motion no Remotion (pedido do Gui em 07/11: "qualidade visual absurda", nada estático):**
+3. **Motion interativo e explicativo (pedido do Gui em 08/11, aprovado):** a animação explica pela imagem, não só por palavras.
+   - Cada frase vira uma pequena cena com bonequinhos, objetos e ícones que agem: o vendedor conduz o cliente, a moeda e o produto trocam de mão, a balança pesa, o funil filtra, o selo carimba.
+   - Use `reels-split-motion/remotion/src/illu.tsx` (personagens `Person` com poses, balões, moedas, loja, prédio, fábrica, celular, relógio, coração, escudo, coroa, gráfico, lâmpada, quebra-cabeça e outros), `shell.tsx` (cenas, título e transições) e um arquivo `exNNNN.tsx` por vídeo, como os de 07/11. Registre a composição em `Composition.tsx` e renderize com `scripts/finish2.sh PASTA COMPID DUR SAIDA.mp4` (precisa de `hits_ex.json` com os efeitos).
+   - 3D (`@remotion/three`, exemplo em `Prior3D.tsx`) só onde fizer diferença: fica ótimo, mas leva perto de 1 hora de render por vídeo (`GL=swangle`).
+   - Conteúdo da cena a partir de y = 380, para não bater no título; o título se ajusta para caber numa linha.
+4. **Motion no Remotion, modelo por cenas de texto (07/11, ainda serve para vídeos simples):**
    - Uma vez por sessão: `scripts/setup_remotion.sh <scratchpad>/rmo` (copia `reels-split-motion/remotion`, as fontes e roda `npm i`).
    - Escreva `spec.json` com as cenas: `hook`, `rows`, `versus`, `timeline`, `big` e `cta` (formato em `reels-split-motion/remotion/src/scenes.tsx`). Cada cena tem `a` e `b` (início e fim em segundos do clipe) e cada elemento entra no segundo em que a palavra é falada.
    - O visual já vem pronto: fundo vivo com luz e grão, texto entrando palavra por palavra com desfoque, cards de vidro em 3D, ícones desenhados, ondas no destaque, número gigante na linha do tempo, empurrão lento de câmera e transição com zoom e rastro de luz.
    - Confira quadros antes: `npx remotion still src/index.ts Split f.png --frame=N --props=props.json --browser-executable=/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell`. Nenhuma cena pode ficar vazia; o primeiro elemento entra até 0,3 s depois do começo da cena.
    - Se o roteiro tiver a tela de algum app, recrie de forma genérica, sem dados reais. Número ilustrativo leva `"exemplo"`.
-4. **Legenda, trilha, efeitos e montagem:** `RMO=<scratchpad>/rmo scripts/finish.sh PASTA DUR SAIDA.mp4` faz tudo: render do Remotion, redução leve de ruído na voz (`afftdn`), legenda na divisão, efeitos do SFX Kit a partir do `spec.json` (`scripts/spec2hits.py` + `scripts/sfxkit.py`, que aplica `sync.at` e `under_voiceover_db`), trilha do `scripts/drama.py` a -32 LUFS e o `compose.sh`. Ele também tira 8 quadros em `check_final.jpg`.
+5. **Legenda, trilha, efeitos e montagem:** `RMO=<scratchpad>/rmo scripts/finish.sh PASTA DUR SAIDA.mp4` faz tudo: render do Remotion, redução leve de ruído na voz (`afftdn`), legenda na divisão, efeitos do SFX Kit a partir do `spec.json` (`scripts/spec2hits.py` + `scripts/sfxkit.py`, que aplica `sync.at` e `under_voiceover_db`), trilha do `scripts/drama.py` a -32 LUFS e o `compose.sh`. Ele também tira 8 quadros em `check_final.jpg`.
    - `DUR` é a duração do clipe mais 1 s.
    - A capa sai de `scripts/capa.sh VIDEO TEMPO "LINHA 1" "LINHA 2" capa.jpg 1.15` (escolha um quadro de olho aberto; `FS1=88` diminui a linha de cima se ela for longa).
-5. **Versão B ou curta:** se o Reel estiver no T1 ou no T4, faça a segunda versão do mesmo jeito, mudando só o que o teste pede.
+6. **Versão B ou curta:** se o Reel estiver no T1 ou no T4, faça a segunda versão do mesmo jeito, mudando só o que o teste pede.
 
 ### 4. Conferir antes de entregar
 Tire 8 quadros de cada Reel e monte uma prancha. Confira:

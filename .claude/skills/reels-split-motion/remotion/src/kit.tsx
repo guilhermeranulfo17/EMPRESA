@@ -108,8 +108,8 @@ export const Words: React.FC<{
   const words = text.split(" ");
   return (
     <div style={{ width: width ?? undefined, display: width == null ? "inline-flex" : "flex", flexWrap: "wrap", justifyContent: align === "center" ? "center" : "flex-start", columnGap: size * 0.28, rowGap: size * (lineHeight - 1), perspective: 900 }}>
-      {words.map((w, i) => {
-        const hot = /^\*.*\*[.,!?:]*$/.test(w);
+      {(() => { let open = false; return words.map((w) => { const starts = w.startsWith("*"); const ends = /\*[.,!?:]*$/.test(w); const hot = open || starts; open = (open || starts) && !ends; return hot; }); })().map((hot, i) => {
+        const w = words[i];
         const clean = w.replace(/\*/g, "");
         const k = sp(frame, fps, at + i * stagger, 15, 160);
         return (

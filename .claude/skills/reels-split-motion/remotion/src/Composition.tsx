@@ -2,6 +2,14 @@ import React, { useState } from "react";
 import { AbsoluteFill, CalculateMetadataFunction, Composition, continueRender, delayRender, interpolate, staticFile } from "remotion";
 import { Background, DISPLAY, EASE, UI, useT } from "./kit";
 import { Scene, SceneView } from "./scenes";
+import { Prior3D } from "./Prior3D";
+import { Ex5183 } from "./ex5183";
+import { Ex5186 } from "./ex5186";
+import { Ex5187 } from "./ex5187";
+import { Ex5188 } from "./ex5188";
+import { Ex5189 } from "./ex5189";
+import { Ex5190 } from "./ex5190";
+import { Ex5191 } from "./ex5191";
 
 type Props = { duration: number; scenes: Scene[] };
 
@@ -72,5 +80,15 @@ const demo: Props = {
 };
 
 export const MyComposition = () => (
+  <>
+  <Composition id="Ex5183" component={Ex5183} fps={30} width={1080} height={960} durationInFrames={Math.ceil(30.8 * 30)} />
+  <Composition id="Ex5186" component={Ex5186} fps={30} width={1080} height={960} durationInFrames={Math.ceil(63.7 * 30)} />
+  <Composition id="Ex5187" component={Ex5187} fps={30} width={1080} height={960} durationInFrames={Math.ceil(36.4 * 30)} />
+  <Composition id="Ex5188" component={Ex5188} fps={30} width={1080} height={960} durationInFrames={Math.ceil(57.0 * 30)} />
+  <Composition id="Ex5189" component={Ex5189} fps={30} width={1080} height={960} durationInFrames={Math.ceil(42.8 * 30)} />
+  <Composition id="Ex5190" component={Ex5190} fps={30} width={1080} height={960} durationInFrames={Math.ceil(45.7 * 30)} />
+  <Composition id="Ex5191" component={Ex5191} fps={30} width={1080} height={960} durationInFrames={Math.ceil(69.5 * 30)} />
+  <Composition id="Prior3D" component={Prior3D} fps={30} width={1080} height={960} durationInFrames={Math.ceil(42.9 * 30)} />
   <Composition id="Split" component={Split} fps={30} width={1080} height={960} durationInFrames={180} defaultProps={demo} calculateMetadata={calculateMetadata} />
+  </>
 );
