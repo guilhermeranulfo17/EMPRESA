@@ -1,0 +1,40 @@
+{
+ "quadros": [
+  {
+   "arquivo": "00.png",
+   "rotulo": "inicio",
+   "total": "nova versão R$ 5.550,00"
+  },
+  {
+   "arquivo": "01.png",
+   "rotulo": "reais",
+   "total": "nova versão R$ 5.550,00"
+  },
+  {
+   "arquivo": "02.png",
+   "rotulo": "digita-3",
+   "total": "nova versão R$ 5.547,00"
+  },
+  {
+   "arquivo": "03.png",
+   "rotulo": "digita-30",
+   "total": "nova versão R$ 5.520,00"
+  },
+  {
+   "arquivo": "04.png",
+   "rotulo": "digita-300",
+   "total": "nova versão R$ 5.250,00"
+  },
+  {
+   "arquivo": "05.png",
+   "rotulo": "digita-300,00",
+   "total": "nova versão R$ 5.250,00"
+  }
+ ],
+ "campo": {
+  "x": 125.328125,
+  "y": 502.296875,
+  "width": 231.671875,
+  "height": 44
+ }
+}

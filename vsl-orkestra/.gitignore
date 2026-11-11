@@ -8,3 +8,10 @@ public/audio/trilha.wav
 __pycache__/
 !public/marca/*.png
 public/onboarding/audio/*.wav
+# vídeo de vendas v2: vídeos do Mixkit, quadros da gravação e trilhas ficam fora do git (refazer com scripts/v2)
+public/v2/bruto/
+public/v2/fundos/*.mp4
+public/v2/demo/
+public/v2/musica/
+public/v2/audio/mix.wav
+public/v2/telas/ajuste-inteira.png

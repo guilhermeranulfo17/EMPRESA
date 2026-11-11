@@ -1,0 +1,11 @@
+Vídeo de vendas Orkestra v2: origem do material de terceiros
+
+Vídeos de fundo: Mixkit (licença livre Mixkit, uso comercial sem crédito obrigatório), ids:
+31414, 39782, 4672, 50754, 50813, 8745, 22066, 10445, 39789, 31408, 50768, 4817, 5111, 5101, 34367, 32001
+(planos e recortes em scripts/v2/cortar_fundos.py; baixar de https://assets.mixkit.co/videos/<id>/<id>-2160.mp4,
+ou -720.mp4 para o 22066)
+Trilha: Mixkit Music (licença livre Mixkit): 615 "Tapis" (Eugenio Mininni) e 33 "Motivating Mornings" (Ahjay Stelino)
+Efeitos: SFX Kit (CC0)
+Fontes: Bricolage Grotesque e Instrument Serif (OFL, em public/v2/fontes)
+Vozes: ElevenLabs, narrador Renan Matheus (cCd5pjwRv69hyjEKrf0o) e cliente Sofia - Natural & Expressiva (n2a9VtkZLl8j1FSXHsL7)
+Telas: demonstração real em www.sistemaorkestra.com.br e sistema local com dados fictícios (Buffet Estrela)
