@@ -4,3 +4,4 @@ dist/
 .env.local
 # a raiz ignora *.png; o logo do site precisa ir junto
 !public/outside-logo.png
+dist-arquivo/
