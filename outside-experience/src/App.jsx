@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import "@/App.css";
 import "lenis/dist/lenis.css";
 import Lenis from "lenis";
@@ -11,6 +11,9 @@ import Moments from "@/components/Moments";
 import Statement from "@/components/Statement";
 import Program from "@/components/Program";
 import Envio from "@/components/Envio";
+import FieldSteps from "@/components/FieldSteps";
+import Proof from "@/components/Proof";
+import Groups from "@/components/Groups";
 import ForWho from "@/components/ForWho";
 import Speakers from "@/components/Speakers";
 import Testimonials from "@/components/Testimonials";
@@ -21,15 +24,16 @@ import NextStep from "@/components/NextStep";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 import ScrollProgress from "@/components/ScrollProgress";
-import SplashScreen from "@/components/SplashScreen";
 import BackToTop from "@/components/BackToTop";
 import MobileCTA from "@/components/MobileCTA";
 import AdminPanel from "@/pages/AdminPanel";
 import { scrollToId } from "@/lib/scroll";
+import { guardarOrigem } from "@/lib/origem";
 
 function HomePage() {
-  const [splashDone, setSplashDone] = useState(false);
-  const handleSplashComplete = useCallback(() => setSplashDone(true), []);
+  useEffect(() => {
+    guardarOrigem();
+  }, []);
 
   useEffect(() => {
     const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
@@ -46,28 +50,30 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (splashDone && window.location.hash) {
+    if (window.location.hash) {
       const t = setTimeout(() => scrollToId(window.location.hash), 400);
       return () => clearTimeout(t);
     }
-  }, [splashDone]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#050505] text-white antialiased">
-      {!splashDone && <SplashScreen onComplete={handleSplashComplete} />}
       <ScrollProgress />
       <Header />
       <main>
-        <Hero ready={splashDone} />
+        <Hero ready />
         <Marquee />
         <AboutEvent />
+        <Proof />
         <Moments />
         <Statement />
         <Program />
         <Envio />
+        <FieldSteps />
         <ForWho />
         <Speakers />
         <Testimonials />
+        <Groups />
         <Enrollment />
         <Faq />
         <FinalCTA />

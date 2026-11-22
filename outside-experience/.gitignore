@@ -5,3 +5,5 @@ dist/
 # a raiz ignora *.png; o logo do site precisa ir junto
 !public/outside-logo.png
 dist-arquivo/
+# a raiz ignora pastas data/ (dados do escritório); aqui é o código do site
+!src/data/

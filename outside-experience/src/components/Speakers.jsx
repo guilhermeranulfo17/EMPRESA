@@ -1,3 +1,4 @@
+import { Instagram } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { SPEAKERS } from "@/data/event";
 
@@ -51,6 +52,18 @@ export default function Speakers() {
               <p className="mt-1 text-[11px] tracking-[0.25em] uppercase text-neutral-500" data-testid={`speaker-${i + 1}-role`}>
                 {s.role}
               </p>
+              {s.bio && <p className="mt-3 text-sm text-neutral-400 leading-relaxed" data-testid={`speaker-${i + 1}-bio`}>{s.bio}</p>}
+              {s.instagram && (
+                <a
+                  href={`https://instagram.com/${s.instagram}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-3 inline-flex items-center gap-2 text-xs text-neutral-300 hover:text-orange-400 transition-colors"
+                  data-testid={`speaker-${i + 1}-instagram`}
+                >
+                  <Instagram size={13} /> @{s.instagram}
+                </a>
+              )}
             </article>
           </Reveal>
         ))}

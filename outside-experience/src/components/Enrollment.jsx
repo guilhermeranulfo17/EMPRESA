@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CalendarDays, MapPin, Tag, Check } from "lucide-react";
+import { CalendarDays, MapPin, Tag, Check, Users } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import EnrollForm from "@/components/EnrollForm";
 import Ticket from "@/components/Ticket";
@@ -11,6 +11,7 @@ const INFO = [
   { icon: CalendarDays, label: "Data", value: EVENT.dateLabel, accent: true },
   { icon: MapPin, label: "Local", value: EVENT.venue, sub: `${EVENT.address} · ${EVENT.city}` },
   { icon: Tag, label: "Investimento", value: EVENT.price ?? "A divulgar" },
+  ...(EVENT.capacity ? [{ icon: Users, label: "Vagas", value: `${EVENT.capacity} vagas`, sub: "Quem está na lista recebe primeiro" }] : []),
 ];
 
 const PERKS = ["Acesso antecipado à abertura das inscrições", "Grupo de preparação no WhatsApp", "Convite pronto para chamar amigos"];

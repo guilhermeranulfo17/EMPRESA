@@ -53,7 +53,7 @@ export default function Hero({ ready }) {
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "16%"]);
   const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
   const fadeOut = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
-  const [playing, setPlaying] = useState(true);
+  const [playing, setPlaying] = useState(false);
   const lines = isDesktop ? LINES_DESKTOP : LINES_MOBILE;
   const last = lines.length - 1;
 
@@ -153,7 +153,7 @@ export default function Hero({ ready }) {
           aria-label={playing ? "Pausar música" : "Tocar música"}
         >
           {playing ? <Volume2 size={13} className="text-orange-500" /> : <VolumeX size={13} />}
-          {playing ? "Som ligado" : "Som desligado"}
+          {playing ? "Som ligado" : "Tocar música"}
         </button>
       </motion.div>
     </section>
