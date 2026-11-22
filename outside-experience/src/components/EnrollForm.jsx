@@ -3,7 +3,7 @@ import axios from "axios";
 import { ArrowRight, ArrowLeft, Check, ShieldCheck } from "lucide-react";
 import { lerOrigem } from "@/lib/origem";
 
-const API = `${import.meta.env.VITE_BACKEND_URL ?? ""}/api`;
+import { API } from "@/lib/api";
 const OUTFIT = { fontFamily: "Outfit, sans-serif" };
 
 const maskPhone = (v) => {
@@ -47,11 +47,11 @@ export default function EnrollForm({ onSuccess }) {
     try {
       const payload = { ...data, whatsapp: data.whatsapp, is_minor: isMinor, guardian_consent: isMinor ? consent : false, origem: lerOrigem() };
       const { data: created } = await axios.post(`${API}/enrollments`, payload);
-      const code = created.id.replace(/-/g, "").slice(0, 8).toUpperCase();
-      await axios.put(`${API}/enrollments/${created.id}/ticket-code`, { enrollment_id: created.id, ticket_code: code });
-      onSuccess({ ...created, ticket_code: code });
+      onSuccess(created);
     } catch (e) {
-      setError("Não foi possível concluir agora. Tente novamente em instantes.");
+      const status = e.response?.status;
+      const detail = e.response?.data?.detail;
+      setError(status && status < 500 && detail ? detail : "Não foi possível concluir agora. Tente novamente em instantes.");
     } finally {
       setLoading(false);
     }

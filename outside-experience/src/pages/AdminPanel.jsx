@@ -3,7 +3,10 @@ import { Lock, Users, UserCheck, Church, AlertTriangle, Search, Download, CheckC
 import axios from "axios";
 import { Toaster, toast } from "@/components/ui/sonner";
 
-const API = `${import.meta.env.VITE_BACKEND_URL ?? ""}/api`;
+import { API } from "@/lib/api";
+
+// a senha vai no cabeçalho, nunca no endereço
+const adminApi = (password) => axios.create({ baseURL: `${API}/admin`, headers: { "x-admin-password": password } });
 
 function EditionBar({ editions, selected, onSelect, onCreate, onMakeCurrent }) {
   const [creating, setCreating] = useState(false);
@@ -71,7 +74,7 @@ function LoginScreen({ onLogin }) {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(`${API}/admin/login`, { password });
+      await adminApi(password).post("/login");
       onLogin(password);
     } catch {
       toast.error("Senha incorreta");
@@ -129,7 +132,7 @@ export default function AdminPanel() {
   const [checkinLoading, setCheckinLoading] = useState(false);
 
   const loadEditions = useCallback(async () => {
-    const { data } = await axios.get(`${API}/admin/editions?password=${password}`);
+    const { data } = await adminApi(password).get("/editions");
     setEditions(data);
     return data;
   }, [password]);
@@ -138,8 +141,8 @@ export default function AdminPanel() {
     if (!edition) return;
     try {
       const [statsRes, enrollRes] = await Promise.all([
-        axios.get(`${API}/admin/stats?password=${password}&edition=${edition}`),
-        axios.get(`${API}/admin/enrollments?password=${password}&edition=${edition}`),
+        adminApi(password).get("/stats", { params: { edition } }),
+        adminApi(password).get("/enrollments", { params: { edition } }),
       ]);
       setStats(statsRes.data);
       setEnrollments(enrollRes.data);
@@ -161,7 +164,7 @@ export default function AdminPanel() {
 
   const createEdition = async (payload) => {
     try {
-      const { data } = await axios.post(`${API}/admin/editions?password=${password}`, payload);
+      const { data } = await adminApi(password).post("/editions", payload);
       await loadEditions();
       setEdition(data.slug);
       setCheckinResult(null);
@@ -173,7 +176,7 @@ export default function AdminPanel() {
 
   const makeCurrent = async (id) => {
     try {
-      await axios.put(`${API}/admin/editions/${id}/current?password=${password}`);
+      await adminApi(password).put(`/editions/${id}/current`);
       await loadEditions();
       toast.success("Edição atual atualizada");
     } catch {
@@ -187,7 +190,7 @@ export default function AdminPanel() {
     setCheckinLoading(true);
     setCheckinResult(null);
     try {
-      const res = await axios.post(`${API}/admin/checkin?password=${password}&edition=${edition}`, { query: checkinQuery });
+      const res = await adminApi(password).post("/checkin", { query: checkinQuery }, { params: { edition } });
       setCheckinResult(res.data);
       if (res.data.status === "checked_in") {
         toast.success("Check-in realizado!");
@@ -195,6 +198,8 @@ export default function AdminPanel() {
         loadEditions();
       } else if (res.data.status === "already_checked_in") {
         toast.info("Já fez check-in anteriormente");
+      } else if (res.data.status === "multiple") {
+        toast.info("Mais de uma inscrição com esse nome");
       }
     } catch (err) {
       if (err.response?.status === 404) {
@@ -208,8 +213,18 @@ export default function AdminPanel() {
     }
   };
 
-  const exportCSV = () => {
-    window.open(`${API}/admin/export-csv?password=${password}&edition=${edition}`, "_blank");
+  const exportCSV = async () => {
+    try {
+      const { data } = await adminApi(password).get("/export-csv", { params: { edition }, responseType: "blob" });
+      const url = URL.createObjectURL(data);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `inscritos-${edition}.csv`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch {
+      toast.error("Erro ao gerar o CSV");
+    }
   };
 
   const filtered = enrollments.filter((e) => {
@@ -361,13 +376,28 @@ export default function AdminPanel() {
             {checkinResult && (
               <div data-testid="checkin-result" className={`border p-6 space-y-4 ${
                 checkinResult.status === "checked_in" ? "border-green-500/30 bg-green-500/5" :
-                checkinResult.status === "already_checked_in" ? "border-orange-500/30 bg-orange-500/5" :
+                checkinResult.status === "already_checked_in" || checkinResult.status === "multiple" ? "border-orange-500/30 bg-orange-500/5" :
                 "border-red-500/30 bg-red-500/5"
               }`}>
                 {checkinResult.status === "not_found" ? (
                   <div className="flex items-center gap-3">
                     <XCircle size={20} className="text-red-400" />
                     <span className="text-red-300 font-medium">Inscrição não encontrada</span>
+                  </div>
+                ) : checkinResult.status === "multiple" ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <AlertTriangle size={20} className="text-orange-400" />
+                      <span className="text-orange-300 font-medium">Mais de uma inscrição encontrada: busque pelo código</span>
+                    </div>
+                    <ul className="space-y-1 text-sm">
+                      {checkinResult.matches?.map((m) => (
+                        <li key={m.ticket_code} className="flex justify-between gap-4">
+                          <span>{m.name}</span>
+                          <span className="font-mono text-neutral-500">OE-{m.ticket_code}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 ) : (
                   <>

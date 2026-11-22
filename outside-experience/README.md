@@ -40,10 +40,12 @@ Quase tudo fica em `src/data/event.js`. Seções sem conteúdo ficam escondidas 
 
 ## Inscrições (lista de espera) e painel /admin
 
-O formulário e o painel `/admin` falam com um servidor de inscrições na rota `/api`
-(`POST /api/enrollments`, `PUT /api/enrollments/:id/ticket-code`, `/api/admin/...`).
-Esse servidor **não está neste repositório**: era o backend do Emergent.
+As inscrições ficam no Supabase, no projeto **outside** (`bowffbnelsjurbhmgxlg`, região São Paulo):
 
-- Defina `VITE_BACKEND_URL` (veja `.env.example`) com o endereço desse servidor.
-- Sem servidor, o site abre normalmente, mas o último passo do formulário mostra
-  "Não foi possível concluir agora".
+- **Banco:** `supabase/migrations/` (tabelas `editions` e `enrollments`, com RLS ligado e sem acesso público).
+- **Servidor:** função `outside-api` em `supabase/functions/outside-api/index.ts`. O site já aponta para ela
+  (`src/lib/api.js`); para usar outro servidor, defina `VITE_BACKEND_URL`.
+- **Painel:** abra `/admin` no site. A senha é o segredo `ADMIN_PASSWORD` da função
+  (Supabase → Edge Functions → Secrets). No painel dá para ver inscritos, fazer check-in no dia,
+  baixar planilha (CSV) e abrir uma nova edição.
+- Cada WhatsApp entra uma vez por edição. Menores de 18 anos só entram com a autorização do responsável marcada.

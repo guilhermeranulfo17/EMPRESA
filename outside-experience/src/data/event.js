@@ -8,7 +8,7 @@ export const EVENT = {
   venue: "Comunidade Apostólica pela Cruz",
   address: "Rua Orozimbo Francisco Fernandes, 145",
   price: null,
-  capacity: null, // ex.: 200 — mostra "200 vagas" na inscrição
+  capacity: 30, // mostra "30 vagas" na inscrição
   email: "contato@outsideglobal.com.br",
   instagram: "outsideglobal.io",
   instagramUrl: "https://instagram.com/outsideglobal.io",
@@ -30,7 +30,7 @@ export const IMAGES = {
 export const SPEAKERS = [
   { name: "Guilherme Ranulfo", role: "Outside", photo: "/img/guilherme.jpg", bio: "", instagram: "" },
   { name: "Pastor Marcos", role: "Comunidade pela Cruz", photo: "/img/marcos.jpg", bio: "", instagram: "" },
-  { name: "Thiago Evangelista", role: "Outside", photo: "/img/thiago.jpg", bio: "", instagram: "" },
+  { name: "Thiago Evangelista", role: "Outside", photo: "/img/thiago.jpg", bio: "", instagram: "thiagoevangelistapersonal" },
 ];
 
 // Depoimentos de quem já viveu o Experience: { text: "...", name: "Nome, 22 anos" }
@@ -38,7 +38,16 @@ export const TESTIMONIALS = [];
 
 // Prova de que já aconteceu. A seção só aparece com pelo menos um número ou o vídeo.
 // stats: [{ value: "120", label: "pessoas" }, ...]   videoId: id do vídeo no YouTube
-export const PROOF = { videoId: "", stats: [] };
+// instagramUrl: link de um post/reels com o registro da edição (ou o perfil)
+export const PROOF = {
+  edition: "1ª edição",
+  stats: [
+    { value: "12", label: "participantes" },
+    { value: "10", label: "conversões" },
+  ],
+  videoId: "",
+  instagramUrl: "https://instagram.com/outsideglobal.io",
+};
 
 // Mensagem que pastores e líderes mandam no WhatsApp para levar um grupo
 export const GROUP_WHATSAPP_TEXT =
