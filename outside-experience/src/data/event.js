@@ -1,32 +1,67 @@
+// Tudo o que muda de edição para edição fica aqui.
+
 export const EVENT = {
   brand: "OUTSIDE",
   name: "Outside Experience",
-  date: null,
-  dateLabel: "EM BREVE",
+  edition: "2ª edição",
+  date: null, // data exata (ex.: "2027-01-23T08:00:00-03:00"): liga o contador e o "adicionar ao calendário"
+  dateLabel: "Janeiro de 2027",
+  dateShort: "Jan 2027",
   city: "Uberlândia – MG",
   cityShort: "Uberlândia",
-  venue: "Comunidade Apostólica pela Cruz",
-  address: "Rua Orozimbo Francisco Fernandes, 145",
+  venue: null, // nome do local quando estiver definido
+  address: null, // endereço completo quando estiver definido (liga o mapa e o "como chegar")
+  venueLabel: "Local em breve",
   price: null,
-  capacity: 30, // mostra "30 vagas" na inscrição
+  capacity: 30,
   email: "contato@outsideglobal.com.br",
   instagram: "outsideglobal.io",
   instagramUrl: "https://instagram.com/outsideglobal.io",
   whatsapp: "5534997066338",
   whatsappLabel: "(34) 99706-6338",
+  whatsappGroup: "https://chat.whatsapp.com/LHGEeL8R8CtKducev5C8OO",
   schoolUrl: "https://outside-school.acessorianeura.chatgpt.site/",
   youtubeId: "TXuuAPqvXgo",
+};
+
+// Medição de anúncios: preencha os IDs para ligar (ficam desligados enquanto vazios)
+export const TRACKING = {
+  metaPixelId: "",
+  googleTagId: "", // ex.: "G-XXXXXXX"
 };
 
 export const LOGO = "/outside-logo.png";
 
 export const IMAGES = {
   hero: "/img/hero.jpg",
-  hands: "https://images.pexels.com/photos/17010855/pexels-photo-17010855.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-  prayer: "https://images.pexels.com/photos/18279962/pexels-photo-18279962.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1200",
 };
 
-// bio: uma frase sobre a pessoa; instagram: só o @, sem o "@" (aparecem quando preenchidos)
+// Fotos reais da 1ª edição (Instagram @outsideglobal.io)
+export const PHOTOS = {
+  oracaoBanco: { src: "/img/edicao-1/oracao-banco.jpg", alt: "Equipe orando por um rapaz sentado num banco da praça, à noite" },
+  oracaoRua: { src: "/img/edicao-1/oracao-rua.jpg", alt: "Jovens de mãos dadas orando com uma pessoa na rua" },
+  conversaRua: { src: "/img/edicao-1/conversa-rua.jpg", alt: "Dois homens conversando numa calçada à noite" },
+  ruaNoite: { src: "/img/edicao-1/rua-noite.jpg", alt: "Grupo reunido na rua, à noite, sob a luz de um poste" },
+  camiseta: { src: "/img/edicao-1/camiseta.jpg", alt: "Costas de uma camiseta branca escrito O Brasil é do Senhor" },
+  pregacao1: { src: "/img/edicao-1/pregacao-1.jpg", alt: "Pregação no palco durante a ativação" },
+  pregacao2: { src: "/img/edicao-1/pregacao-2.jpg", alt: "Ministração para os participantes antes da saída" },
+  pregacao3: { src: "/img/edicao-1/pregacao-3.jpg", alt: "Pregador com microfone, em frente ao púlpito" },
+  pregacao4: { src: "/img/edicao-1/pregacao-4.jpg", alt: "Pregador de camiseta branca com microfone" },
+  testemunho: { src: "/img/edicao-1/testemunho.jpg", alt: "Participante compartilhando o que viveu" },
+};
+
+// Galeria "Como foi a 1ª edição", na ordem em que aparece
+export const GALLERY = [
+  PHOTOS.oracaoBanco,
+  PHOTOS.pregacao4,
+  PHOTOS.oracaoRua,
+  PHOTOS.camiseta,
+  PHOTOS.conversaRua,
+  PHOTOS.pregacao2,
+  PHOTOS.testemunho,
+];
+
+// bio: uma frase sobre a pessoa; instagram: só o usuário, sem o "@"
 export const SPEAKERS = [
   { name: "Guilherme Ranulfo", role: "Outside", photo: "/img/guilherme.jpg", bio: "", instagram: "gui.ranulfo" },
   { name: "Pastor Marcos", role: "Comunidade pela Cruz", photo: "/img/marcos.jpg", bio: "", instagram: "marcospelacruz" },
@@ -36,22 +71,17 @@ export const SPEAKERS = [
 // Depoimentos de quem já viveu o Experience: { text: "...", name: "Nome, 22 anos" }
 export const TESTIMONIALS = [];
 
-// Prova de que já aconteceu. A seção só aparece com pelo menos um número ou o vídeo.
-// stats: [{ value: "120", label: "pessoas" }, ...]   videoId: id do vídeo no YouTube
-// instagramUrl: link de um post/reels com o registro da edição (ou o perfil)
+// O que já aconteceu. Só salvações, como o Guilherme pediu.
 export const PROOF = {
   edition: "1ª edição",
-  stats: [
-    { value: "30", label: "participantes" },
-    { value: "10", label: "conversões" },
-  ],
+  salvations: 10,
   note: "No apelo da 1ª edição, 10 pessoas receberam Jesus como único e suficiente Salvador.",
-  videoId: "",
   instagramUrl: "https://instagram.com/outsideglobal.io",
 };
 
 // Mensagem que pastores e líderes mandam no WhatsApp para levar um grupo
-export const GROUP_WHATSAPP_TEXT =
-  "Olá! Sou líder e quero levar um grupo da minha igreja para o Outside Experience.";
+export const GROUP_WHATSAPP_TEXT = "Olá! Sou líder e quero levar um grupo da minha igreja para o Outside Experience.";
 
-export const ENROLL_LINK = `${window.location.origin}/#inscricao`;
+export const SITE_URL = (import.meta.env.VITE_SITE_URL || window.location.origin).replace(/\/$/, "");
+export const ENROLL_LINK = `${SITE_URL}/#inscricao`;
+export const inviteLink = (code) => `${SITE_URL}/?convite=${encodeURIComponent(code)}#inscricao`;

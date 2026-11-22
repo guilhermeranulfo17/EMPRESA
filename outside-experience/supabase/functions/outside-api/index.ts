@@ -1,5 +1,6 @@
 // Servidor de inscrições do Outside Experience (lista de espera + painel /admin).
 // Rotas, a partir de .../functions/v1/outside-api:
+//   GET  /api/vagas                          quantos já estão na lista da edição atual (só o número)
 //   POST /api/enrollments                    inscrição pública
 //   POST /api/admin/login                    confere a senha
 //   GET  /api/admin/editions                 lista edições
@@ -9,7 +10,8 @@
 //   GET  /api/admin/enrollments?edition=slug
 //   POST /api/admin/checkin?edition=slug     { query: nome ou código }
 //   GET  /api/admin/export-csv?edition=slug
-// As rotas /admin exigem o cabeçalho x-admin-password igual ao segredo ADMIN_PASSWORD.
+// As rotas /admin exigem o cabeçalho x-admin-password. A senha fica no banco (admin_config, só o hash)
+// ou, se ainda não houver, no segredo ADMIN_PASSWORD. 20 erros em 15 minutos bloqueiam novas tentativas.
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 
 const db = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, {
@@ -33,14 +35,52 @@ const PUBLIC_FIELDS = "id, name, whatsapp, age, church, is_minor, guardian_conse
 async function sha256(texto: string) {
   return new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(texto)));
 }
-async function senhaConfere(req: Request) {
-  const esperada = Deno.env.get("ADMIN_PASSWORD");
-  const enviada = req.headers.get("x-admin-password") ?? "";
-  if (!esperada || !enviada) return false;
-  const [a, b] = await Promise.all([sha256(esperada), sha256(enviada)]);
+const iguais = (a: Uint8Array, b: Uint8Array) => {
+  if (a.length !== b.length) return false;
   let diff = 0;
   for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
   return diff === 0;
+};
+const hexParaBytes = (hex: string) => new Uint8Array((hex.match(/../g) ?? []).map((h) => parseInt(h, 16)));
+// o Postgres devolve bytea como "\\x0a1b..."
+const byteaParaBytes = (v: string) => hexParaBytes(v.replace(/^\\x/, ""));
+
+const LIMITE_ERROS = 20;
+const JANELA_MIN = 15;
+
+async function bloqueado() {
+  const desde = new Date(Date.now() - JANELA_MIN * 60_000).toISOString();
+  const { count, error } = await db.from("admin_login_failures").select("at", { count: "exact", head: true }).gte("at", desde);
+  return !error && (count ?? 0) >= LIMITE_ERROS;
+}
+
+async function registrarErro() {
+  const { error } = await db.from("admin_login_failures").insert({});
+  if (!error) await db.from("admin_login_failures").delete().lt("at", new Date(Date.now() - 86_400_000).toISOString());
+}
+
+async function senhaConfere(enviada: string) {
+  if (!enviada) return false;
+  const { data, error } = await db.from("admin_config").select("password_salt, password_hash").maybeSingle();
+  if (!error && data) {
+    const sal = byteaParaBytes(String(data.password_salt));
+    const junto = new Uint8Array([...sal, ...new TextEncoder().encode(enviada)]);
+    const hash = new Uint8Array(await crypto.subtle.digest("SHA-256", junto));
+    return iguais(hash, hexParaBytes(data.password_hash));
+  }
+  const esperada = Deno.env.get("ADMIN_PASSWORD");
+  if (!esperada) return false;
+  const [a, b] = await Promise.all([sha256(esperada), sha256(enviada)]);
+  return iguais(a, b);
+}
+
+async function vagas() {
+  const { data: edicao } = await db.from("editions").select("id").eq("is_current", true).maybeSingle();
+  if (!edicao) return json({ inscritos: 0 });
+  const { count } = await db.from("enrollments").select("id", { count: "exact", head: true }).eq("edition_id", edicao.id);
+  return new Response(JSON.stringify({ inscritos: count ?? 0 }), {
+    headers: { ...CORS, "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=60" },
+  });
 }
 
 // ---------- ajudantes ----------
@@ -50,7 +90,7 @@ function slugify(s: string) {
   return (
     s
       .normalize("NFD")
-      .replace(/[̀-ͯ]/g, "")
+      .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "")
@@ -183,7 +223,7 @@ async function estatisticas(editionId: string) {
   const lista = await inscricoesDa(editionId);
   const igrejas = new Map<string, string>();
   for (const e of lista) {
-    const chave = e.church.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+    const chave = e.church.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     if (!igrejas.has(chave)) igrejas.set(chave, e.church);
   }
   const checked = lista.filter((e) => e.checked_in).length;
@@ -203,7 +243,7 @@ async function checkin(req: Request, editionId: string) {
   if (!q) return erro(422, "Informe o nome ou o código.");
   const lista = await inscricoesDa(editionId);
   const codigo = q.toUpperCase().replace(/^OE-?/, "");
-  const normal = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const normal = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   let achados = lista.filter((e) => e.ticket_code === codigo);
   if (!achados.length) achados = lista.filter((e) => normal(e.name) === normal(q));
   if (!achados.length) achados = lista.filter((e) => normal(e.name).includes(normal(q)));
@@ -241,7 +281,7 @@ async function exportarCsv(edicao: { id: string; slug: string }) {
       .map(celulaCsv)
       .join(";"),
   );
-  const csv = "﻿" + [cab.join(";"), ...linhas].join("\r\n");
+  const csv = "\uFEFF" + [cab.join(";"), ...linhas].join("\r\n");
   return new Response(csv, {
     headers: {
       ...CORS,
@@ -257,10 +297,15 @@ Deno.serve(async (req) => {
   const caminho = url.pathname.replace(/^.*?\/api(?=\/)/, "");
 
   try {
+    if (req.method === "GET" && caminho === "/vagas") return await vagas();
     if (req.method === "POST" && caminho === "/enrollments") return await criarInscricao(req);
 
     if (caminho.startsWith("/admin/")) {
-      if (!(await senhaConfere(req))) return erro(401, "Senha incorreta.");
+      if (await bloqueado()) return erro(429, "Muitas tentativas erradas. Tente de novo em 15 minutos.");
+      if (!(await senhaConfere(req.headers.get("x-admin-password") ?? ""))) {
+        await registrarErro();
+        return erro(401, "Senha incorreta.");
+      }
       if (req.method === "POST" && caminho === "/admin/login") return json({ ok: true });
       if (req.method === "GET" && caminho === "/admin/editions") return await listarEdicoes();
       if (req.method === "POST" && caminho === "/admin/editions") return await criarEdicao(req);

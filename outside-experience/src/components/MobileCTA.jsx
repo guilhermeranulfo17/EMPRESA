@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
-import { ArrowRight } from "lucide-react";
 import { EVENT } from "@/data/event";
 import { scrollToId } from "@/lib/scroll";
+import { useVagas } from "@/lib/vagas";
 
 export default function MobileCTA() {
-  const [scrolled, setScrolled] = useState(false);
-  const [nearForm, setNearForm] = useState(false);
+  const [passou, setPassou] = useState(false);
+  const [noForm, setNoForm] = useState(false);
+  const { restantes, total } = useVagas();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 520);
+    const onScroll = () => setPassou(window.scrollY > 600);
     window.addEventListener("scroll", onScroll, { passive: true });
     const el = document.querySelector("#inscricao");
-    const io = new IntersectionObserver(([e]) => setNearForm(e.isIntersecting), { threshold: 0.12 });
+    const io = new IntersectionObserver(([e]) => setNoForm(e.isIntersecting), { threshold: 0.1 });
     if (el) io.observe(el);
     return () => {
       window.removeEventListener("scroll", onScroll);
@@ -19,25 +20,21 @@ export default function MobileCTA() {
     };
   }, []);
 
-  const visible = scrolled && !nearForm;
+  const visivel = passou && !noForm;
 
   return (
     <div
-      className={`lg:hidden fixed bottom-0 inset-x-0 z-40 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${visible ? "translate-y-0" : "translate-y-full"}`}
+      className={`no-print fixed inset-x-0 bottom-0 z-40 transition-transform duration-500 lg:hidden ${visivel ? "translate-y-0" : "translate-y-full"}`}
+      aria-hidden={!visivel}
       data-testid="mobile-sticky-cta"
-      aria-hidden={!visible}
     >
-      <div className="bg-[#050505]/92 backdrop-blur-xl border-t border-orange-500/30 px-4 py-3 flex items-center gap-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-        <div className="flex-1 min-w-0">
-          <span className="block text-[9px] tracking-[0.25em] uppercase text-orange-400 font-semibold truncate">Próxima edição</span>
-          <span className="block text-[10px] text-neutral-400 truncate">{EVENT.dateLabel} · {EVENT.city}</span>
+      <div className="flex items-center gap-3 border-t border-white/10 bg-ink/95 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur">
+        <div className="min-w-0 flex-1 leading-tight">
+          <p className="truncate font-semibold">{EVENT.dateLabel}</p>
+          <p className="truncate text-sm text-white/60">{restantes === null ? `${total} vagas` : `Restam ${restantes} vagas`}</p>
         </div>
-        <button
-          onClick={() => scrollToId("#inscricao")}
-          data-testid="mobile-sticky-cta-btn"
-          className="inline-flex items-center gap-2 bg-orange-500 text-black text-[10px] font-bold tracking-[0.2em] uppercase px-5 py-3.5"
-        >
-          Garantir minha vaga <ArrowRight size={12} strokeWidth={2.5} />
+        <button onClick={() => scrollToId("#inscricao")} className="btn-brand min-h-[48px] px-6" tabIndex={visivel ? 0 : -1} data-testid="mobile-sticky-cta-btn">
+          Quero ir
         </button>
       </div>
     </div>

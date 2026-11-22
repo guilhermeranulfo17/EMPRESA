@@ -14,29 +14,34 @@ npm run build    # gera a pasta dist/ pronta para publicar (Vercel, Netlify etc.
 
 ## Onde mudar as coisas
 
-Quase tudo fica em `src/data/event.js`. Seções sem conteúdo ficam escondidas até serem preenchidas:
+Quase tudo fica em `src/data/event.js`:
 
-| O que preencher | Campo | Onde aparece |
-|---|---|---|
-| Fotos/números/vídeo de edições passadas | `PROOF` (`stats`, `videoId`) | Seção "Já aconteceu", logo depois de "Não é só mais um evento" |
-| Depoimentos | `TESTIMONIALS` | Seção "Testemunhos", depois dos ministrantes |
-| Bio e Instagram dos ministrantes | `bio`, `instagram` em `SPEAKERS` | Abaixo de cada foto |
-| Número de vagas | `capacity` | Bloco da inscrição |
-| Data | `date` | Contador regressivo no topo |
-| Mensagem de líderes no WhatsApp | `GROUP_WHATSAPP_TEXT` | Botão "Quero levar meu grupo" |
+| O que | Campo |
+|---|---|
+| Data e local da próxima edição | `dateLabel`, `date` (liga o contador), `venue`, `address` |
+| Vagas (barra de vagas restantes) | `capacity` |
+| Link do grupo de preparação (aparece no ingresso) | `whatsappGroup` |
+| Salvações e texto da edição anterior | `PROOF` |
+| Fotos da galeria (pasta `public/img/edicao-1/`) | `PHOTOS` e `GALLERY` |
+| Ministrantes (foto, bio, Instagram) | `SPEAKERS` |
+| Depoimentos (a seção aparece quando houver algum) | `TESTIMONIALS` |
+| Pixel do Meta e Google Analytics (desligados enquanto vazios) | `TRACKING` |
 
-### Publicar
+Visual: cores e fontes em `tailwind.config.js` e `src/index.css` (preto quente, papel cru, laranja da marca;
+títulos em Anton, falas e versículos em Instrument Serif, texto em Archivo).
 
-- Defina `VITE_SITE_URL` com o endereço final do site: sem ele, o WhatsApp não mostra a imagem de prévia (`public/og.jpg`).
-- Links com `?utm_source=...` ou `?ref=nome-da-igreja` (ex.: `?ref=pela-cruz`) guardam de onde a pessoa veio
-  e mandam isso junto com a inscrição, no campo `origem`. O servidor de inscrições precisa salvar esse campo.
+## Páginas
 
-### Outros ajustes
+- `/` site do evento
+- `/lideres` material para pastores e líderes: link com o nome da igreja (`?ref=`), artes para story e feed geradas na hora, textos prontos
+- `/responsaveis` informações para pais de participantes menores de idade
+- `/admin` painel (veja abaixo)
 
-- **Data:** formato `"2027-03-14T08:00:00-03:00"`.
-- **Textos de cada seção:** um arquivo por seção em `src/components/` (Hero, Program, Faq...).
-- **Fotos:** `public/img/` (hero e palestrantes). As fotos de "mãos em oração" e "jovens orando" vêm do Pexels.
-- **Música do topo:** `youtubeId` em `src/data/event.js`.
+## Convites e origem das inscrições
+
+- Cada inscrito recebe um link pessoal (`?convite=CODIGO`); quem entra por ele fica marcado como convidado dessa pessoa.
+- Links de igreja (`?ref=nome-da-igreja`) e anúncios (`?utm_source=`) também ficam registrados.
+- No painel, o dashboard mostra "Quem mais convidou", "Links de igrejas" e "Anúncios e outros sites".
 
 ## Inscrições (lista de espera) e painel /admin
 
@@ -49,3 +54,7 @@ As inscrições ficam no Supabase, no projeto **outside** (`bowffbnelsjurbhmgxlg
   (Supabase → Edge Functions → Secrets). No painel dá para ver inscritos, fazer check-in no dia,
   baixar planilha (CSV) e abrir uma nova edição.
 - Cada WhatsApp entra uma vez por edição. Menores de 18 anos só entram com a autorização do responsável marcada.
+- **Check-in:** aba Check-in → "Ler QR code do ingresso" abre a câmera do celular; também dá para buscar por nome ou código.
+- **Equipes:** aba Equipes divide os inscritos (ou só quem fez check-in) misturando igrejas e espalhando os menores; tem botão de imprimir.
+- **Senha:** fica no banco só como hash (`select public.set_admin_password('nova-senha');` no SQL Editor, depois de aplicar
+  `supabase/migrations/20261122190000_senha_admin.sql`). 20 senhas erradas em 15 minutos bloqueiam novas tentativas.

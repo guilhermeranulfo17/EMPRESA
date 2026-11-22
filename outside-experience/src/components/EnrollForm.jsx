@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { ArrowRight, ArrowLeft, Check, ShieldCheck } from "lucide-react";
 import { lerOrigem } from "@/lib/origem";
+import { rastrear } from "@/lib/rastreio";
 
 import { API } from "@/lib/api";
-const OUTFIT = { fontFamily: "Outfit, sans-serif" };
 
 const maskPhone = (v) => {
   const d = v.replace(/\D/g, "").slice(0, 11);
@@ -47,6 +47,7 @@ export default function EnrollForm({ onSuccess }) {
     try {
       const payload = { ...data, whatsapp: data.whatsapp, is_minor: isMinor, guardian_consent: isMinor ? consent : false, origem: lerOrigem() };
       const { data: created } = await axios.post(`${API}/enrollments`, payload);
+      rastrear("Lead");
       onSuccess(created);
     } catch (e) {
       const status = e.response?.status;
@@ -65,22 +66,22 @@ export default function EnrollForm({ onSuccess }) {
   };
 
   return (
-    <div className="bg-[#0a0a0a] border border-white/10 p-6 sm:p-8 lg:p-10 relative overflow-hidden" data-testid="enroll-form">
-      <span className="absolute top-0 left-0 h-[3px] bg-orange-500 transition-[width] duration-500" style={{ width: `${((step + 1) / total) * 100}%` }} />
-      <div className="flex items-center justify-between mb-8">
-        <span className="text-[10px] tracking-[0.3em] uppercase text-orange-500 font-semibold" data-testid="enroll-step-indicator">
-          Passo {step + 1} / {total}
+    <div className="relative bg-ink p-6 sm:p-10" data-testid="enroll-form">
+      <div className="flex items-center justify-between text-sm text-white/60">
+        <span data-testid="enroll-step-indicator">
+          Passo {step + 1} de {total}
         </span>
-        <span className="text-[10px] tracking-[0.25em] uppercase text-neutral-600">Lista de espera</span>
+        <span>Lista de espera</span>
+      </div>
+      <div className="mt-3 h-1 w-full bg-white/10" aria-hidden="true">
+        <div className="h-full bg-brand transition-[width] duration-500" style={{ width: `${((step + 1) / total) * 100}%` }} />
       </div>
 
-      <div key={current.key} className="animate-fade-up">
+      <div key={current.key} className="animate-fade-up mt-10">
         {current.key === "guardian" ? (
           <>
-            <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tight leading-none" style={OUTFIT}>
-              Autorização do responsável
-            </h3>
-            <p className="mt-4 text-sm text-neutral-400 leading-relaxed">
+            <h3 className="display text-4xl">Autorização do responsável</h3>
+            <p className="mt-4 text-white/75">
               Como você tem menos de 18 anos, precisamos da autorização de um responsável para a sua participação.
             </p>
             <button
@@ -88,72 +89,73 @@ export default function EnrollForm({ onSuccess }) {
               onClick={() => setConsent((c) => !c)}
               data-testid="guardian-consent-btn"
               aria-pressed={consent}
-              className={`mt-6 w-full flex items-start gap-4 text-left p-5 border transition-colors ${
-                consent ? "border-orange-500 bg-orange-500/10" : "border-white/15 hover:border-white/40"
+              className={`mt-6 flex w-full items-start gap-4 border p-5 text-left transition-colors ${
+                consent ? "border-brand bg-brand/10" : "border-white/20 hover:border-white/50"
               }`}
             >
-              <span className={`mt-0.5 w-5 h-5 shrink-0 flex items-center justify-center border ${consent ? "bg-orange-500 border-orange-500 text-black" : "border-white/40"}`}>
-                {consent && <Check size={14} strokeWidth={3} />}
+              <span className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center border-2 ${consent ? "border-brand bg-brand text-ink" : "border-white/50"}`}>
+                {consent && <Check size={16} strokeWidth={3} />}
               </span>
-              <span className="text-sm text-neutral-200 leading-relaxed">
+              <span className="text-white/90">
                 Confirmo que meu responsável legal está ciente e autoriza minha participação no Outside Experience, incluindo a saída às ruas em equipe.
               </span>
             </button>
           </>
         ) : (
           <>
-            <label htmlFor={`enroll-${current.key}`} className="block text-2xl sm:text-3xl font-black uppercase tracking-tight leading-none" style={OUTFIT}>
+            <label htmlFor={`enroll-${current.key}`} className="display block text-4xl sm:text-5xl">
               {current.label}
             </label>
-            {current.hint && <p className="mt-3 text-xs text-neutral-500">{current.hint}</p>}
+            {current.hint && <p className="mt-3 text-white/60">{current.hint}</p>}
             <input
               ref={inputRef}
               id={`enroll-${current.key}`}
               data-testid={`enroll-input-${current.key}`}
               type={current.type}
               inputMode={current.type === "number" ? "numeric" : current.type === "tel" ? "tel" : "text"}
+              autoComplete={{ name: "name", whatsapp: "tel", age: "off", church: "organization" }[current.key]}
               value={data[current.key]}
               placeholder={current.placeholder}
               onKeyDown={onKey}
               onChange={(e) =>
                 setData((d) => ({ ...d, [current.key]: current.key === "whatsapp" ? maskPhone(e.target.value) : e.target.value }))
               }
-              className="mt-6 w-full bg-transparent border-b-2 border-white/20 focus:border-orange-500 outline-none py-4 text-xl sm:text-2xl text-white placeholder:text-neutral-700 transition-colors"
+              className="mt-6 w-full border-b-2 border-white/25 bg-transparent py-3 text-2xl text-white outline-none transition-colors placeholder:text-white/30 focus:border-brand"
             />
           </>
         )}
       </div>
 
       {error && (
-        <p className="mt-4 text-xs text-red-400" data-testid="enroll-error">
+        <p className="mt-5 text-[15px] text-red-300" role="alert" data-testid="enroll-error">
           {error}
         </p>
       )}
 
-      <div className="mt-8 flex items-center justify-between gap-4">
+      <div className="mt-10 flex items-center justify-between gap-4">
         <button
           type="button"
           onClick={() => setStep((s) => Math.max(0, s - 1))}
           disabled={step === 0}
           data-testid="enroll-back-btn"
-          className="inline-flex items-center gap-2 text-[10px] tracking-[0.25em] uppercase text-neutral-500 hover:text-white disabled:opacity-0 transition-colors"
+          className="inline-flex min-h-[44px] items-center gap-2 text-white/70 transition-colors hover:text-white disabled:invisible"
         >
-          <ArrowLeft size={14} /> Voltar
+          <ArrowLeft size={18} /> Voltar
         </button>
         <button
           type="button"
           onClick={next}
           disabled={!canProceed || loading}
           data-testid={step === total - 1 ? "enroll-submit-btn" : "enroll-next-btn"}
-          className="group inline-flex items-center gap-3 bg-orange-500 hover:bg-orange-400 disabled:bg-neutral-800 disabled:text-neutral-500 text-black text-xs font-bold tracking-[0.2em] uppercase px-6 py-4 transition-colors"
+          className="btn-brand disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/40"
         >
-          {loading ? "Enviando..." : step === total - 1 ? "Garantir minha vaga" : "Continuar"}
-          {!loading && <ArrowRight size={14} strokeWidth={2.5} className="transition-transform duration-300 group-hover:translate-x-1" />}
+          {loading ? "Enviando..." : step === total - 1 ? "Entrar na lista" : "Continuar"}
+          {!loading && <ArrowRight size={18} />}
         </button>
       </div>
 
-      <p className="mt-6 flex items-center gap-2 text-[10px] text-neutral-600 tracking-wider">
-        <ShieldCheck size={12} /> Seus dados são usados apenas para o Outside Experience.
+      <p className="mt-8 flex items-center gap-2 text-sm text-white/50">
+        <ShieldCheck size={16} /> Seus dados são usados só para o Outside Experience.
       </p>
     </div>
   );

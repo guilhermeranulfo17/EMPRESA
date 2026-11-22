@@ -1,59 +1,36 @@
-import { ArrowUpRight, Users } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { EVENT, GROUP_WHATSAPP_TEXT } from "@/data/event";
 
-const OUTFIT = { fontFamily: "Outfit, sans-serif" };
-
-const STEPS = [
-  "Fale com a equipe pelo WhatsApp",
-  "Combinamos juntos a participação do seu grupo",
-  "Vocês vivem o dia juntos e voltam juntos para a igreja",
-];
-
 export default function Groups() {
-  const link = `https://wa.me/${EVENT.whatsapp}?text=${encodeURIComponent(GROUP_WHATSAPP_TEXT)}`;
   return (
-    <section id="grupos" className="py-20 md:py-24 px-5 md:px-10 lg:px-20 bg-orange-500 text-black" data-testid="groups-section">
-      <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-end">
+    <section id="grupos" className="bg-brand py-16 text-ink sm:py-20" data-testid="groups-section">
+      <Reveal className="wrap grid gap-8 lg:grid-cols-12 lg:items-center">
         <div className="lg:col-span-7">
-          <Reveal>
-            <span className="inline-flex items-center gap-3 text-[10px] tracking-[0.35em] uppercase font-bold">
-              <Users size={14} strokeWidth={2.5} /> Pastores e líderes
-            </span>
-            <h2 className="mt-6 text-4xl sm:text-5xl xl:text-6xl font-black uppercase tracking-[-0.02em] leading-[0.92]" style={OUTFIT} data-testid="groups-title">
-              Leve sua igreja
-              <br />
-              ou célula
-            </h2>
-            <p className="mt-6 max-w-lg text-black/75 text-sm sm:text-base leading-relaxed">
-              Ninguém sai sozinho, e nenhum grupo também. Traga seus jovens, sua célula ou seu ministério para viver o Experience juntos.
-            </p>
-          </Reveal>
+          <p className="label">Pastores e líderes</p>
+          <h2 className="display mt-3 text-[clamp(2.6rem,6vw,4.6rem)]" data-testid="groups-title">
+            Traga sua célula, seus jovens, sua igreja
+          </h2>
+          <p className="mt-4 max-w-xl text-lg text-ink/80">
+            Ninguém sai sozinho, e nenhum grupo também. Preparamos arte, texto e um link com o nome da sua igreja para você divulgar.
+          </p>
         </div>
-
-        <div className="lg:col-span-5">
-          <Reveal delay={0.1}>
-            <ol className="border-t border-black/20">
-              {STEPS.map((s, i) => (
-                <li key={s} className="flex items-start gap-4 py-3 border-b border-black/20 text-sm font-semibold">
-                  <span className="font-mono text-[11px] pt-0.5">0{i + 1}</span>
-                  {s}
-                </li>
-              ))}
-            </ol>
-            <a
-              href={link}
-              target="_blank"
-              rel="noreferrer"
-              data-testid="groups-whatsapp-btn"
-              className="group mt-6 w-full inline-flex items-center justify-center gap-3 bg-black hover:bg-neutral-900 text-white text-xs font-bold tracking-[0.2em] uppercase px-7 py-4 transition-colors"
-            >
-              Quero levar meu grupo
-              <ArrowUpRight size={16} strokeWidth={2.5} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </a>
-          </Reveal>
+        <div className="flex flex-col gap-3 lg:col-span-4 lg:col-start-9">
+          <Link to="/lideres" className="btn bg-ink text-white hover:bg-ink-3" data-testid="groups-kit-btn">
+            Pegar material de divulgação <ArrowRight size={18} />
+          </Link>
+          <a
+            href={`https://wa.me/${EVENT.whatsapp}?text=${encodeURIComponent(GROUP_WHATSAPP_TEXT)}`}
+            target="_blank"
+            rel="noreferrer"
+            className="btn-ghost text-ink hover:bg-ink/10"
+            data-testid="groups-whatsapp-btn"
+          >
+            Falar com a equipe no WhatsApp
+          </a>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

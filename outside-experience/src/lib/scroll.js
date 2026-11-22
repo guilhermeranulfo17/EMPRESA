@@ -1,11 +1,8 @@
-export function scrollToId(id, offset = -72) {
+export function scrollToId(id) {
   const el = document.querySelector(id);
-  if (!el) return;
-  if (window.__lenis) window.__lenis.scrollTo(el, { offset, duration: 1.4 });
-  else el.scrollIntoView({ behavior: "smooth" });
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 export function scrollToTop() {
-  if (window.__lenis) window.__lenis.scrollTo(0, { duration: 1.2 });
-  else window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }

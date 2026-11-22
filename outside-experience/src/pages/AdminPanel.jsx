@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import { Lock, Users, UserCheck, Church, AlertTriangle, Search, Download, CheckCircle, XCircle, ArrowLeft, BarChart3, Plus, Star } from "lucide-react";
+import { Lock, Users, UserCheck, Church, AlertTriangle, Search, Download, CheckCircle, XCircle, ArrowLeft, BarChart3, Plus, Star, QrCode, LayoutGrid } from "lucide-react";
+import LeitorQR from "@/pages/admin/LeitorQR";
+import Equipes from "@/pages/admin/Equipes";
+import Origens from "@/pages/admin/Origens";
 import axios from "axios";
 import { Toaster, toast } from "@/components/ui/sonner";
 
@@ -24,7 +27,7 @@ function EditionBar({ editions, selected, onSelect, onCreate, onMakeCurrent }) {
   };
 
   return (
-    <div className="border-b border-white/10 bg-[#0a0a0a] px-6 md:px-12 py-3 flex flex-wrap items-center gap-3" data-testid="edition-bar">
+    <div className="no-print border-b border-white/10 bg-[#0a0a0a] px-6 md:px-12 py-3 flex flex-wrap items-center gap-3" data-testid="edition-bar">
       <span className="text-[9px] tracking-[0.25em] uppercase text-neutral-500">Edição</span>
       <select
         value={selected || ""}
@@ -184,13 +187,14 @@ export default function AdminPanel() {
     }
   };
 
-  const handleCheckin = async (e) => {
-    e.preventDefault();
-    if (!checkinQuery.trim()) return;
+  const [camera, setCamera] = useState(false);
+
+  const fazerCheckin = async (query) => {
+    if (!query.trim()) return;
     setCheckinLoading(true);
     setCheckinResult(null);
     try {
-      const res = await adminApi(password).post("/checkin", { query: checkinQuery }, { params: { edition } });
+      const res = await adminApi(password).post("/checkin", { query }, { params: { edition } });
       setCheckinResult(res.data);
       if (res.data.status === "checked_in") {
         toast.success("Check-in realizado!");
@@ -212,6 +216,20 @@ export default function AdminPanel() {
       setCheckinLoading(false);
     }
   };
+
+  const handleCheckin = (e) => {
+    e.preventDefault();
+    fazerCheckin(checkinQuery);
+  };
+
+  const lerCodigo = useCallback(
+    (codigo) => {
+      setCheckinQuery(codigo);
+      fazerCheckin(codigo);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [password, edition],
+  );
 
   const exportCSV = async () => {
     try {
@@ -239,7 +257,7 @@ export default function AdminPanel() {
     <div className="min-h-screen bg-[#050505] text-white">
       <Toaster theme="dark" position="top-right" />
       {/* Header */}
-      <div className="border-b border-white/10 px-6 md:px-12 py-4 flex items-center justify-between">
+      <div className="no-print border-b border-white/10 px-6 md:px-12 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <a href="/" data-testid="admin-back-btn" className="text-neutral-500 hover:text-white transition-colors">
             <ArrowLeft size={18} />
@@ -257,11 +275,12 @@ export default function AdminPanel() {
       <EditionBar editions={editions} selected={edition} onSelect={(s) => { setEdition(s); setCheckinResult(null); }} onCreate={createEdition} onMakeCurrent={makeCurrent} />
 
       {/* Tabs */}
-      <div className="border-b border-white/5 px-6 md:px-12 flex gap-0">
+      <div className="no-print border-b border-white/5 px-6 md:px-12 flex gap-0 overflow-x-auto">
         {[
           { id: "dashboard", label: "DASHBOARD", icon: BarChart3 },
           { id: "enrollments", label: "INSCRITOS", icon: Users },
           { id: "checkin", label: "CHECK-IN", icon: UserCheck },
+          { id: "equipes", label: "EQUIPES", icon: LayoutGrid },
         ].map((t) => (
           <button
             key={t.id}
@@ -293,6 +312,11 @@ export default function AdminPanel() {
                 <span className="text-sm text-orange-300"><strong>{stats.pending_checkin}</strong> pessoas ainda não fizeram check-in</span>
               </div>
             )}
+
+            <div>
+              <span className="text-[11px] tracking-[0.15em] uppercase text-neutral-400 block mb-3">DE ONDE VIERAM AS INSCRIÇÕES</span>
+              <Origens inscritos={enrollments} />
+            </div>
 
             {stats.churches_list?.length > 0 && (
               <div className="bg-[#0a0a0a] border border-white/8 p-6">
@@ -350,6 +374,8 @@ export default function AdminPanel() {
           </div>
         )}
 
+        {tab === "equipes" && <Equipes inscritos={enrollments} />}
+
         {/* Check-in */}
         {tab === "checkin" && (
           <div className="max-w-lg space-y-8" data-testid="checkin-tab">
@@ -357,6 +383,19 @@ export default function AdminPanel() {
               <h2 className="text-xl font-bold uppercase tracking-tight mb-2" style={{ fontFamily: "Outfit, sans-serif" }}>CHECK-IN DIGITAL</h2>
               <p className="text-neutral-500 text-sm">Busque pelo nome ou código da inscrição — apenas na edição selecionada</p>
             </div>
+
+            {camera ? (
+              <LeitorQR onCodigo={lerCodigo} onFechar={() => setCamera(false)} />
+            ) : (
+              <button
+                type="button"
+                onClick={() => setCamera(true)}
+                data-testid="checkin-camera-btn"
+                className="w-full flex items-center justify-center gap-3 bg-orange-500 text-black font-bold uppercase tracking-widest text-xs py-4 hover:bg-orange-400"
+              >
+                <QrCode size={16} /> Ler QR code do ingresso
+              </button>
+            )}
 
             <form onSubmit={handleCheckin} className="flex gap-3">
               <input
