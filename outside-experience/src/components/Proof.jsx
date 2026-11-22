@@ -5,7 +5,7 @@ import { PROOF } from "@/data/event";
 const OUTFIT = { fontFamily: "Outfit, sans-serif" };
 
 export default function Proof() {
-  const { videoId, stats, instagramUrl, edition } = PROOF;
+  const { videoId, stats, instagramUrl, edition, note } = PROOF;
   if (!videoId && !stats.length) return null;
   return (
     <section id="edicoes" className="py-24 md:py-28 px-5 md:px-10 lg:px-20 bg-[#050505] border-t border-white/10" data-testid="proof-section">
@@ -28,6 +28,14 @@ export default function Proof() {
               <span className="mt-2 block text-[11px] tracking-[0.25em] uppercase text-neutral-400">{s.label}</span>
             </div>
           ))}
+        </Reveal>
+      )}
+
+      {note && (
+        <Reveal delay={0.12} className="mt-8 max-w-2xl border-l-2 border-orange-500 pl-5">
+          <p className="text-base sm:text-lg text-white leading-snug" style={OUTFIT} data-testid="proof-note">
+            {note}
+          </p>
         </Reveal>
       )}
 

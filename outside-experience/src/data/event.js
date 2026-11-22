@@ -28,8 +28,8 @@ export const IMAGES = {
 
 // bio: uma frase sobre a pessoa; instagram: só o @, sem o "@" (aparecem quando preenchidos)
 export const SPEAKERS = [
-  { name: "Guilherme Ranulfo", role: "Outside", photo: "/img/guilherme.jpg", bio: "", instagram: "" },
-  { name: "Pastor Marcos", role: "Comunidade pela Cruz", photo: "/img/marcos.jpg", bio: "", instagram: "" },
+  { name: "Guilherme Ranulfo", role: "Outside", photo: "/img/guilherme.jpg", bio: "", instagram: "gui.ranulfo" },
+  { name: "Pastor Marcos", role: "Comunidade pela Cruz", photo: "/img/marcos.jpg", bio: "", instagram: "marcospelacruz" },
   { name: "Thiago Evangelista", role: "Outside", photo: "/img/thiago.jpg", bio: "", instagram: "thiagoevangelistapersonal" },
 ];
 
@@ -42,9 +42,10 @@ export const TESTIMONIALS = [];
 export const PROOF = {
   edition: "1ª edição",
   stats: [
-    { value: "12", label: "participantes" },
+    { value: "30", label: "participantes" },
     { value: "10", label: "conversões" },
   ],
+  note: "No apelo da 1ª edição, 10 pessoas receberam Jesus como único e suficiente Salvador.",
   videoId: "",
   instagramUrl: "https://instagram.com/outsideglobal.io",
 };
