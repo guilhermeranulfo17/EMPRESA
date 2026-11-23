@@ -34,6 +34,7 @@ export const LOGO = "/outside-logo.png";
 
 export const IMAGES = {
   hero: "/img/hero.jpg",
+  heroCelular: "/img/hero-celular.jpg", // versão em pé, usada em telas estreitas
 };
 
 // Fotos reais da 1ª edição (Instagram @outsideglobal.io)

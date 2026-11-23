@@ -18,12 +18,15 @@ export default function Hero() {
 
   return (
     <section id="topo" className="relative flex min-h-[100svh] flex-col overflow-hidden bg-ink" data-testid="hero-section">
-      <img
-        src={IMAGES.hero}
-        alt="Pessoas caminhando pela cidade em direção à cruz"
-        className="absolute inset-0 h-full w-full object-cover object-[70%_center]"
-        fetchPriority="high"
-      />
+      <picture>
+        <source media="(max-width: 767px)" srcSet={IMAGES.heroCelular} />
+        <img
+          src={IMAGES.hero}
+          alt="Equipe da Outside conversando e orando com pessoas numa calçada da cidade"
+          className="absolute inset-0 h-full w-full object-cover object-[70%_center] max-md:object-center"
+          fetchPriority="high"
+        />
+      </picture>
       <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/10" />
       <div className="absolute inset-0 bg-gradient-to-r from-ink/80 via-ink/20 to-transparent" />
 
