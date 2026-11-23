@@ -14,7 +14,7 @@ export const SCHOOL = {
   formato: "On-line e ao vivo",
   turma: "Turma Uberlândia", // nome da turma aberta
   turmaInfo: "Inscrições abertas", // ex.: "Terças e quintas, 20h" quando estiver definido
-  whatsapp: "5534997066338",
+  whatsapp: "5534991355450",
   instagram: "outsideglobal.io",
   instagramUrl: "https://instagram.com/outsideglobal.io",
 };

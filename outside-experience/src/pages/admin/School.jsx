@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Download, MessageCircle } from "lucide-react";
+import { Download, MessageCircle, Trash2 } from "lucide-react";
 
 // Candidaturas da Outside School (página /school). api: axios já com a senha no cabeçalho.
 export default function SchoolCandidaturas({ api }) {
@@ -13,6 +13,17 @@ export default function SchoolCandidaturas({ api }) {
       .then(({ data }) => setLista(data))
       .catch(() => setErro("Não foi possível carregar as candidaturas."));
   }, [api]);
+
+  const excluir = async (c) => {
+    if (!window.confirm(`Excluir a candidatura de ${c.name}? Ela pode se candidatar de novo depois.`)) return;
+    try {
+      await api.delete(`/school/candidaturas/${c.id}`);
+      setLista((l) => l.filter((x) => x.id !== c.id));
+      setAberta(null);
+    } catch {
+      window.alert("Não foi possível excluir agora.");
+    }
+  };
 
   const baixar = async () => {
     const { data } = await api.get("/school/export-csv", { responseType: "blob" });
@@ -68,6 +79,9 @@ export default function SchoolCandidaturas({ api }) {
                   <p>
                     <span className="text-neutral-500">Liderança:</span> {c.pastor_name} ({c.pastor_contact})
                   </p>
+                  <button onClick={() => excluir(c)} className="mt-2 mr-5 inline-flex items-center gap-2 text-neutral-400 hover:text-red-400">
+                    <Trash2 size={14} /> Excluir candidatura
+                  </button>
                   <a
                     href={`https://wa.me/55${c.whatsapp.replace(/\D/g, "")}`}
                     target="_blank"

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { Lock, Users, UserCheck, Church, AlertTriangle, Search, Download, CheckCircle, XCircle, ArrowLeft, BarChart3, Plus, Star, QrCode, LayoutGrid, GraduationCap } from "lucide-react";
+import { Lock, Users, UserCheck, Church, AlertTriangle, Search, Download, CheckCircle, XCircle, ArrowLeft, BarChart3, Plus, Star, QrCode, LayoutGrid, GraduationCap, Trash2 } from "lucide-react";
 import LeitorQR from "@/pages/admin/LeitorQR";
 import Equipes from "@/pages/admin/Equipes";
 import Origens from "@/pages/admin/Origens";
@@ -247,6 +247,20 @@ export default function AdminPanel() {
     }
   };
 
+  const excluirInscrito = async (e) => {
+    if (!window.confirm(`Excluir a inscrição de ${e.name}? A pessoa some da lista e pode se inscrever de novo.`)) return;
+    try {
+      await adminApi(password).delete(`/enrollments/${e.id}`);
+      toast.success("Inscrição excluída");
+      loadData();
+      loadEditions();
+    } catch {
+      toast.error("Não foi possível excluir");
+    }
+  };
+
+  const idadeTexto = (e) => (e.age ? `${e.age} anos` : e.is_minor ? "Menor de 18" : "18 ou mais");
+
   const filtered = enrollments.filter((e) => {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
@@ -354,7 +368,7 @@ export default function AdminPanel() {
               <table className="w-full text-left" data-testid="enrollments-table">
                 <thead>
                   <tr className="border-b border-white/10">
-                    {["Nome", "WhatsApp", "Idade", "Igreja", "Menor", "Check-in", "Código"].map((h) => (
+                    {["Nome", "WhatsApp", "Idade", "Igreja", "Menor", "Check-in", "Código", ""].map((h) => (
                       <th key={h} className="text-[9px] tracking-[0.2em] uppercase text-neutral-500 py-3 px-3 font-normal">{h}</th>
                     ))}
                   </tr>
@@ -364,11 +378,22 @@ export default function AdminPanel() {
                     <tr key={e.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
                       <td className="py-3 px-3 text-sm font-medium">{e.name}</td>
                       <td className="py-3 px-3 text-sm text-neutral-400">{e.whatsapp}</td>
-                      <td className="py-3 px-3 text-sm text-neutral-400">{e.age}</td>
+                      <td className="py-3 px-3 text-sm text-neutral-400">{idadeTexto(e)}</td>
                       <td className="py-3 px-3 text-sm text-neutral-400">{e.church}</td>
                       <td className="py-3 px-3">{e.is_minor ? <AlertTriangle size={14} className="text-orange-400" /> : <span className="text-neutral-600">—</span>}</td>
                       <td className="py-3 px-3">{e.checked_in ? <CheckCircle size={14} className="text-green-500" /> : <XCircle size={14} className="text-neutral-600" />}</td>
                       <td className="py-3 px-3 text-[10px] font-mono text-neutral-500">{e.ticket_code || "—"}</td>
+                      <td className="py-3 px-3 text-right">
+                        <button
+                          onClick={() => excluirInscrito(e)}
+                          aria-label={`Excluir ${e.name}`}
+                          title="Excluir inscrição"
+                          data-testid={`excluir-${e.id}`}
+                          className="inline-flex h-8 w-8 items-center justify-center text-neutral-500 transition-colors hover:bg-red-500/10 hover:text-red-400"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -458,7 +483,7 @@ export default function AdminPanel() {
                       </div>
                       <div>
                         <span className="text-[9px] tracking-[0.2em] uppercase text-neutral-600 block mb-1">IDADE</span>
-                        <span className="text-sm">{checkinResult.enrollment?.age} anos</span>
+                        <span className="text-sm">{checkinResult.enrollment ? idadeTexto(checkinResult.enrollment) : ""}</span>
                       </div>
                       <div>
                         <span className="text-[9px] tracking-[0.2em] uppercase text-neutral-600 block mb-1">IGREJA</span>

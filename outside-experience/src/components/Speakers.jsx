@@ -6,11 +6,10 @@ export default function Speakers() {
   return (
     <section id="quem-vai" className="bg-ink secao" data-testid="speakers-section">
       <div className="wrap">
-        <Reveal className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <Reveal>
           <h2 className="display t-h2" data-testid="speakers-title">
-            Quem vai com você
+            Quem ministra
           </h2>
-          <p className="max-w-xs text-white/70">Quem ministra no Experience.</p>
         </Reveal>
 
         <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">

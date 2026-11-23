@@ -10,6 +10,8 @@
 //   GET  /api/admin/enrollments?edition=slug
 //   POST /api/admin/checkin?edition=slug     { query: nome ou código }
 //   GET  /api/admin/export-csv?edition=slug
+//   DELETE /api/admin/enrollments/:id        exclui uma inscrição (a pessoa pode se inscrever de novo)
+//   DELETE /api/admin/school/candidaturas/:id exclui uma candidatura da School
 //   POST /api/school/candidaturas            candidatura pública da Outside School
 //   GET  /api/admin/school/candidaturas      lista as candidaturas da School
 //   GET  /api/admin/school/export-csv        planilha das candidaturas
@@ -23,7 +25,7 @@ const db = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SE
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "content-type, x-admin-password",
   "Access-Control-Max-Age": "86400",
 };
@@ -144,14 +146,17 @@ async function criarInscricao(req: Request) {
   const name = texto(body.name, 120);
   const whatsapp = texto(body.whatsapp, 20);
   const whatsappDigits = whatsapp.replace(/\D/g, "");
-  const age = Number(body.age);
+  // o formulário pergunta só "tem 18 anos ou mais?" (adult); a idade exata ficou opcional
+  const temIdade = body.age !== undefined && body.age !== null && body.age !== "";
+  const age = temIdade ? Number(body.age) : null;
   const church = texto(body.church, 120);
-  const isMinor = Number.isFinite(age) && age < 18;
+  const isMinor = typeof body.adult === "boolean" ? !body.adult : age !== null && age < 18;
   const consent = body.guardian_consent === true;
 
   if (name.length < 2) return erro(422, "Informe seu nome.");
   if (!/^[0-9]{10,11}$/.test(whatsappDigits)) return erro(422, "Informe um WhatsApp com DDD.");
-  if (!Number.isInteger(age) || age < 5 || age > 120) return erro(422, "Informe uma idade válida.");
+  if (age !== null && (!Number.isInteger(age) || age < 5 || age > 120)) return erro(422, "Informe uma idade válida.");
+  if (age === null && typeof body.adult !== "boolean") return erro(422, "Responda se você tem 18 anos ou mais.");
   if (church.length < 2) return erro(422, "Informe sua igreja.");
   if (isMinor && !consent) return erro(422, "Menores de 18 anos precisam da autorização do responsável.");
 
@@ -267,12 +272,12 @@ async function checkin(req: Request, editionId: string) {
 
 async function exportarCsv(edicao: { id: string; slug: string }) {
   const lista = await inscricoesDa(edicao.id);
-  const cab = ["Nome", "WhatsApp", "Idade", "Igreja", "Menor", "Autorização do responsável", "Check-in", "Código", "Origem", "Inscrito em"];
+  const cab = ["Nome", "WhatsApp", "Idade", "Igreja", "Menor de 18", "Autorização do responsável", "Check-in", "Código", "Origem", "Inscrito em"];
   const linhas = lista.map((e) =>
     [
       e.name,
       e.whatsapp,
-      e.age,
+      e.age ?? "",
       e.church,
       e.is_minor ? "sim" : "não",
       e.is_minor ? (e.guardian_consent ? "sim" : "não") : "",
@@ -383,6 +388,13 @@ async function exportarCandidaturas() {
   });
 }
 
+async function excluir(tabela: string, id: string) {
+  const { data, error } = await db.from(tabela).delete().eq("id", id).select("id");
+  if (error) throw error;
+  if (!data?.length) return erro(404, "Registro não encontrado.");
+  return json({ ok: true });
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
   const url = new URL(req.url);
@@ -406,6 +418,10 @@ Deno.serve(async (req) => {
       if (req.method === "PUT" && atual) return await tornarAtual(atual[1]);
       if (req.method === "GET" && caminho === "/admin/school/candidaturas") return json(await candidaturas());
       if (req.method === "GET" && caminho === "/admin/school/export-csv") return await exportarCandidaturas();
+      const apagarInscricao = caminho.match(/^\/admin\/enrollments\/([0-9a-f-]{36})$/);
+      if (req.method === "DELETE" && apagarInscricao) return await excluir("enrollments", apagarInscricao[1]);
+      const apagarCandidatura = caminho.match(/^\/admin\/school\/candidaturas\/([0-9a-f-]{36})$/);
+      if (req.method === "DELETE" && apagarCandidatura) return await excluir("school_applications", apagarCandidatura[1]);
 
       const edicao = await edicaoPorSlug(url.searchParams.get("edition"));
       if (!edicao) return erro(404, "Edição não encontrada.");

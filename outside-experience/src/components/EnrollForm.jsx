@@ -16,25 +16,25 @@ const maskPhone = (v) => {
 const BASE_STEPS = [
   { key: "name", label: "Como você se chama?", placeholder: "Seu nome completo", type: "text", valid: (v) => v.trim().length >= 2 },
   { key: "whatsapp", label: "Qual é o seu WhatsApp?", placeholder: "(34) 99999-9999", type: "tel", valid: (v) => v.replace(/\D/g, "").length >= 10, hint: "É por aqui que avisamos quando as inscrições abrirem." },
-  { key: "age", label: "Quantos anos você tem?", placeholder: "Ex.: 22", type: "number", valid: (v) => Number(v) >= 5 && Number(v) <= 120 },
+  { key: "adult", label: "Você tem 18 anos ou mais?", type: "choice", valid: (v) => v === true || v === false },
   { key: "church", label: "Qual igreja você frequenta?", placeholder: "Ex.: Comunidade pela Cruz", type: "text", valid: (v) => v.trim().length >= 2, hint: "Se não frequenta nenhuma, escreva “nenhuma”." },
 ];
 
 export default function EnrollForm({ onSuccess }) {
-  const [data, setData] = useState({ name: "", whatsapp: "", age: "", church: "" });
+  const [data, setData] = useState({ name: "", whatsapp: "", adult: null, church: "" });
   const [step, setStep] = useState(0);
   const [consent, setConsent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const inputRef = useRef(null);
 
-  const isMinor = data.age !== "" && Number(data.age) < 18;
+  const isMinor = data.adult === false;
   const steps = isMinor ? [...BASE_STEPS, { key: "guardian" }] : BASE_STEPS;
   const current = steps[step];
   const total = steps.length;
 
   useEffect(() => {
-    if (step > 0) inputRef.current?.focus();
+    if (step > 0 && current.type !== "choice") inputRef.current?.focus();
   }, [step]);
 
   const canProceed = current.key === "guardian" ? consent : current.valid(data[current.key]);
@@ -45,7 +45,7 @@ export default function EnrollForm({ onSuccess }) {
     if (step < total - 1) return setStep(step + 1);
     setLoading(true);
     try {
-      const payload = { ...data, whatsapp: data.whatsapp, is_minor: isMinor, guardian_consent: isMinor ? consent : false, origem: lerOrigem() };
+      const payload = { ...data, is_minor: isMinor, guardian_consent: isMinor ? consent : false, origem: lerOrigem() };
       const { data: created } = await axios.post(`${API}/enrollments`, payload);
       rastrear("Lead");
       onSuccess(created);
@@ -101,6 +101,34 @@ export default function EnrollForm({ onSuccess }) {
               </span>
             </button>
           </>
+        ) : current.type === "choice" ? (
+          <fieldset>
+            <legend className="display block text-4xl sm:text-5xl">{current.label}</legend>
+            <div className="mt-8 grid grid-cols-2 gap-3" role="radiogroup">
+              {[
+                [true, "Sim"],
+                [false, "Não"],
+              ].map(([valor, rotulo]) => (
+                <button
+                  key={rotulo}
+                  type="button"
+                  role="radio"
+                  aria-checked={data.adult === valor}
+                  data-testid={`enroll-adult-${valor ? "sim" : "nao"}`}
+                  onClick={() => {
+                    setData((d) => ({ ...d, adult: valor }));
+                    setStep((s) => s + 1);
+                  }}
+                  className={`min-h-[64px] border text-xl font-semibold transition-colors ${
+                    data.adult === valor ? "border-brand bg-brand text-ink" : "border-white/25 text-white hover:border-white/60"
+                  }`}
+                >
+                  {rotulo}
+                </button>
+              ))}
+            </div>
+            <p className="mt-4 text-white/55">Se for menor de idade, a gente pede a autorização do responsável no próximo passo.</p>
+          </fieldset>
         ) : (
           <>
             <label htmlFor={`enroll-${current.key}`} className="display block text-4xl sm:text-5xl">
@@ -113,7 +141,7 @@ export default function EnrollForm({ onSuccess }) {
               data-testid={`enroll-input-${current.key}`}
               type={current.type}
               inputMode={current.type === "number" ? "numeric" : current.type === "tel" ? "tel" : "text"}
-              autoComplete={{ name: "name", whatsapp: "tel", age: "off", church: "organization" }[current.key]}
+              autoComplete={{ name: "name", whatsapp: "tel", church: "organization" }[current.key]}
               value={data[current.key]}
               placeholder={current.placeholder}
               onKeyDown={onKey}

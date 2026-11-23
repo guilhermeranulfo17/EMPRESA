@@ -6,7 +6,7 @@ import { scrollToId } from "@/lib/scroll";
 const NAV = [
   { label: "Como é o dia", href: "#o-dia" },
   { label: "Na rua", href: "#na-rua" },
-  { label: "Quem vai", href: "#quem-vai" },
+  { label: "Ministros", href: "#quem-vai" },
   { label: "Dúvidas", href: "#duvidas" },
 ];
 
