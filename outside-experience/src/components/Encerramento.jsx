@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { EVENT } from "@/data/event";
@@ -35,10 +36,8 @@ export default function Encerramento() {
             </span>
             <ArrowUpRight className="shrink-0 text-white/50 group-hover:text-brand" />
           </a>
-          <a
-            href={EVENT.schoolUrl}
-            target="_blank"
-            rel="noreferrer"
+          <Link
+            to={EVENT.schoolUrl}
             className="group flex items-center justify-between gap-4 border-t border-white/10 py-6 text-lg sm:border-l sm:border-t-0 sm:pl-8"
             data-testid="next-step-school"
           >
@@ -47,7 +46,7 @@ export default function Encerramento() {
               <span className="font-semibold group-hover:text-brand">Conhecer a Outside School</span>
             </span>
             <ArrowUpRight className="shrink-0 text-white/50 group-hover:text-brand" />
-          </a>
+          </Link>
         </Reveal>
       </div>
     </section>

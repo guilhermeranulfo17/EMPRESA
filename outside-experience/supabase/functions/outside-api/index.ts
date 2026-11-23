@@ -10,6 +10,9 @@
 //   GET  /api/admin/enrollments?edition=slug
 //   POST /api/admin/checkin?edition=slug     { query: nome ou código }
 //   GET  /api/admin/export-csv?edition=slug
+//   POST /api/school/candidaturas            candidatura pública da Outside School
+//   GET  /api/admin/school/candidaturas      lista as candidaturas da School
+//   GET  /api/admin/school/export-csv        planilha das candidaturas
 // As rotas /admin exigem o cabeçalho x-admin-password. A senha fica no banco (admin_config, só o hash)
 // ou, se ainda não houver, no segredo ADMIN_PASSWORD. 20 erros em 15 minutos bloqueiam novas tentativas.
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
@@ -291,6 +294,95 @@ async function exportarCsv(edicao: { id: string; slug: string }) {
   });
 }
 
+// ---------- Outside School ----------
+const SCHOOL_FIELDS = "id, turma, name, whatsapp, email, age, city, church, pastor_name, pastor_contact, motivation, status, origem, created_at";
+
+async function criarCandidatura(req: Request) {
+  let body: Record<string, unknown>;
+  try {
+    body = await req.json();
+  } catch {
+    return erro(400, "Dados inválidos.");
+  }
+  const name = texto(body.name, 120);
+  const whatsapp = texto(body.whatsapp, 20);
+  const whatsappDigits = whatsapp.replace(/\D/g, "");
+  const email = texto(body.email, 160);
+  const age = Number(body.age);
+  const city = texto(body.city, 120);
+  const church = texto(body.church, 120);
+  const pastor_name = texto(body.pastor_name, 120);
+  const pastor_contact = texto(body.pastor_contact, 160);
+  const motivation = typeof body.motivation === "string" ? body.motivation.trim().slice(0, 1500) : "";
+
+  if (name.length < 2) return erro(422, "Informe seu nome.");
+  if (!/^[0-9]{10,11}$/.test(whatsappDigits)) return erro(422, "Informe um WhatsApp com DDD.");
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return erro(422, "Confira o e-mail.");
+  if (!Number.isInteger(age) || age < 14 || age > 120) return erro(422, "Informe uma idade válida (a partir de 14 anos).");
+  if (city.length < 2) return erro(422, "Informe sua cidade.");
+  if (church.length < 2) return erro(422, "Informe sua igreja.");
+  if (pastor_name.length < 2) return erro(422, "Informe o nome do seu pastor ou líder.");
+  if (pastor_contact.length < 5) return erro(422, "Informe um contato do seu pastor ou líder.");
+  if (motivation.length < 10) return erro(422, "Conte um pouco por que você quer fazer a School.");
+
+  const { data, error } = await db
+    .from("school_applications")
+    .insert({
+      name,
+      whatsapp,
+      whatsapp_digits: whatsappDigits,
+      email: email || null,
+      age,
+      city,
+      church,
+      pastor_name,
+      pastor_contact,
+      motivation,
+      origem: limparOrigem(body.origem),
+    })
+    .select("id, name")
+    .single();
+
+  if (error) {
+    if (error.code === "23505") return erro(409, "Já recebemos uma candidatura com esse WhatsApp.");
+    console.error("insert school", error);
+    return erro(500, "Não foi possível concluir agora.");
+  }
+  return json(data, 201);
+}
+
+async function candidaturas() {
+  const { data, error } = await db.from("school_applications").select(SCHOOL_FIELDS).order("created_at", { ascending: false });
+  if (error) throw error;
+  return data ?? [];
+}
+
+async function exportarCandidaturas() {
+  const lista = await candidaturas();
+  const cab = ["Nome", "WhatsApp", "E-mail", "Idade", "Cidade", "Igreja", "Pastor/líder", "Contato do pastor", "Por que quer fazer", "Situação", "Enviada em"];
+  const linhas = lista.map((c) =>
+    [
+      c.name,
+      c.whatsapp,
+      c.email ?? "",
+      c.age,
+      c.city,
+      c.church,
+      c.pastor_name,
+      c.pastor_contact,
+      c.motivation,
+      c.status,
+      new Date(c.created_at).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" }),
+    ]
+      .map(celulaCsv)
+      .join(";"),
+  );
+  const csv = "\uFEFF" + [cab.join(";"), ...linhas].join("\r\n");
+  return new Response(csv, {
+    headers: { ...CORS, "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": 'attachment; filename="candidaturas-school.csv"' },
+  });
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
   const url = new URL(req.url);
@@ -299,6 +391,7 @@ Deno.serve(async (req) => {
   try {
     if (req.method === "GET" && caminho === "/vagas") return await vagas();
     if (req.method === "POST" && caminho === "/enrollments") return await criarInscricao(req);
+    if (req.method === "POST" && caminho === "/school/candidaturas") return await criarCandidatura(req);
 
     if (caminho.startsWith("/admin/")) {
       if (await bloqueado()) return erro(429, "Muitas tentativas erradas. Tente de novo em 15 minutos.");
@@ -311,6 +404,8 @@ Deno.serve(async (req) => {
       if (req.method === "POST" && caminho === "/admin/editions") return await criarEdicao(req);
       const atual = caminho.match(/^\/admin\/editions\/([0-9a-f-]{36})\/current$/);
       if (req.method === "PUT" && atual) return await tornarAtual(atual[1]);
+      if (req.method === "GET" && caminho === "/admin/school/candidaturas") return json(await candidaturas());
+      if (req.method === "GET" && caminho === "/admin/school/export-csv") return await exportarCandidaturas();
 
       const edicao = await edicaoPorSlug(url.searchParams.get("edition"));
       if (!edicao) return erro(404, "Edição não encontrada.");

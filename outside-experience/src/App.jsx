@@ -19,6 +19,7 @@ import MobileCTA from "@/components/MobileCTA";
 import AdminPanel from "@/pages/AdminPanel";
 import Lideres from "@/pages/Lideres";
 import Responsaveis from "@/pages/Responsaveis";
+import School from "@/pages/School";
 import { scrollToId } from "@/lib/scroll";
 import { guardarOrigem } from "@/lib/origem";
 import { iniciarRastreio } from "@/lib/rastreio";
@@ -68,6 +69,7 @@ export default function App() {
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/lideres" element={<Lideres />} />
         <Route path="/responsaveis" element={<Responsaveis />} />
+        <Route path="/school" element={<School />} />
         <Route path="*" element={<Inicio />} />
       </Routes>
     </BrowserRouter>

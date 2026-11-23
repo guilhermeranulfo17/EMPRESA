@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from "react";
-import { Lock, Users, UserCheck, Church, AlertTriangle, Search, Download, CheckCircle, XCircle, ArrowLeft, BarChart3, Plus, Star, QrCode, LayoutGrid } from "lucide-react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { Lock, Users, UserCheck, Church, AlertTriangle, Search, Download, CheckCircle, XCircle, ArrowLeft, BarChart3, Plus, Star, QrCode, LayoutGrid, GraduationCap } from "lucide-react";
 import LeitorQR from "@/pages/admin/LeitorQR";
 import Equipes from "@/pages/admin/Equipes";
 import Origens from "@/pages/admin/Origens";
+import SchoolCandidaturas from "@/pages/admin/School";
 import axios from "axios";
 import { Toaster, toast } from "@/components/ui/sonner";
 
@@ -133,6 +134,7 @@ export default function AdminPanel() {
   const [checkinQuery, setCheckinQuery] = useState("");
   const [checkinResult, setCheckinResult] = useState(null);
   const [checkinLoading, setCheckinLoading] = useState(false);
+  const schoolApi = useMemo(() => adminApi(password), [password]);
 
   const loadEditions = useCallback(async () => {
     const { data } = await adminApi(password).get("/editions");
@@ -281,6 +283,7 @@ export default function AdminPanel() {
           { id: "enrollments", label: "INSCRITOS", icon: Users },
           { id: "checkin", label: "CHECK-IN", icon: UserCheck },
           { id: "equipes", label: "EQUIPES", icon: LayoutGrid },
+          { id: "school", label: "SCHOOL", icon: GraduationCap },
         ].map((t) => (
           <button
             key={t.id}
@@ -375,6 +378,7 @@ export default function AdminPanel() {
         )}
 
         {tab === "equipes" && <Equipes inscritos={enrollments} />}
+        {tab === "school" && <SchoolCandidaturas api={schoolApi} />}
 
         {/* Check-in */}
         {tab === "checkin" && (

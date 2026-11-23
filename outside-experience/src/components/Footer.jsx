@@ -30,7 +30,7 @@ export default function Footer() {
         <ul className="space-y-3 text-white/75">
           <li><Link to="/lideres" className="hover:text-white">Para pastores e líderes</Link></li>
           <li><Link to="/responsaveis" className="hover:text-white">Para pais e responsáveis</Link></li>
-          <li><a href={EVENT.schoolUrl} target="_blank" rel="noreferrer" className="hover:text-white">Outside School</a></li>
+          <li><Link to={EVENT.schoolUrl} className="hover:text-white">Outside School</Link></li>
         </ul>
       </div>
       <p className="wrap mt-12 text-sm text-white/40" data-testid="footer-copyright">

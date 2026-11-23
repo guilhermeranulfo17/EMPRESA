@@ -3,7 +3,10 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "rewrites": [{ "source": "/((?!assets/|img/|video/|og\\.jpg|outside-logo\\.png).*)", "destination": "/index.html" }],
+  "rewrites": [
+    { "source": "/school", "destination": "/school.html" },
+    { "source": "/((?!assets/|img/|video/|og\\.jpg|og-school\\.jpg|outside-logo\\.png|school\\.html).*)", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",

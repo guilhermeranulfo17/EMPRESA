@@ -20,7 +20,7 @@ export const EVENT = {
   whatsapp: "5534997066338",
   whatsappLabel: "(34) 99706-6338",
   whatsappGroup: "https://chat.whatsapp.com/LHGEeL8R8CtKducev5C8OO",
-  schoolUrl: "https://outside-school.acessorianeura.chatgpt.site/",
+  schoolUrl: "/school",
   youtubeId: "TXuuAPqvXgo",
 };
 

@@ -17,7 +17,11 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins,
-    build: mode === "arquivo" ? { outDir: "dist-arquivo" } : {},
+    // school.html é a mesma aplicação, só com a prévia de compartilhamento da Outside School
+    build:
+      mode === "arquivo"
+        ? { outDir: "dist-arquivo" }
+        : { rollupOptions: { input: { main: path.resolve(import.meta.dirname, "index.html"), school: path.resolve(import.meta.dirname, "school.html") } } },
     resolve: { alias: { "@": path.resolve(import.meta.dirname, "src") } },
     // Em desenvolvimento, /api vai para o servidor de inscrições (ver README).
     server: process.env.VITE_DEV_API_PROXY
