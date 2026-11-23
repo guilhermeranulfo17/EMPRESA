@@ -36,14 +36,14 @@ export default function Hero() {
         />
       )}
 
-      <div className="wrap relative z-10 flex flex-1 flex-col justify-end pb-10 pt-28 sm:pb-14">
+      <div className="wrap relative z-10 flex flex-1 flex-col justify-end pb-[clamp(1.5rem,4vh,3.5rem)] pt-24">
         <motion.p {...subir(0.05)} className="font-serif text-xl italic text-white/85 sm:text-2xl" data-testid="hero-kicker">
           Outside Experience, {EVENT.edition}
         </motion.p>
 
         <motion.h1
           {...subir(0.15)}
-          className="display mt-3 max-w-[11ch] text-[clamp(3.6rem,15vw,9.5rem)] text-white"
+          className="display mt-3 max-w-[11ch] t-hero text-white"
           data-testid="hero-headline"
         >
           A fé não foi feita para ficar <span className="text-brand">dentro</span>

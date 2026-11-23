@@ -50,15 +50,20 @@ export const PHOTOS = {
   testemunho: { src: "/img/edicao-1/testemunho.jpg", alt: "Participante compartilhando o que viveu" },
 };
 
-// Galeria "Como foi a 1ª edição", na ordem em que aparece
+// Galeria "Como foi a 1ª edição": rola sozinha. tipo "foto", "loop" (vídeo curto sem som) ou "video" (abre com som)
+const loop = (nome, alt) => ({ tipo: "loop", src: `/video/${nome}.mp4`, poster: `/video/${nome}.jpg`, alt });
 export const GALLERY = [
-  PHOTOS.oracaoBanco,
-  PHOTOS.pregacao4,
-  PHOTOS.oracaoRua,
-  PHOTOS.camiseta,
-  PHOTOS.conversaRua,
-  PHOTOS.pregacao2,
-  PHOTOS.testemunho,
+  { tipo: "video", src: "/video/divulgacao.mp4", poster: "/video/divulgacao.jpg", alt: "Vídeo de divulgação do Outside Experience" },
+  loop("oracao-banco", "Equipe orando por um rapaz sentado num banco da praça"),
+  { tipo: "foto", ...PHOTOS.pregacao4 },
+  loop("maos-dadas", "Jovens de mãos dadas orando com uma pessoa na rua"),
+  { tipo: "foto", ...PHOTOS.camiseta },
+  loop("louvor", "Louvor com as mãos levantadas"),
+  { tipo: "foto", ...PHOTOS.oracaoRua },
+  loop("conversa-rua", "Conversa na rua, à noite"),
+  { tipo: "foto", ...PHOTOS.pregacao2 },
+  loop("adoracao", "Duas irmãs adorando"),
+  { tipo: "foto", ...PHOTOS.testemunho },
 ];
 
 // bio: uma frase sobre a pessoa; instagram: só o usuário, sem o "@"

@@ -3,19 +3,19 @@ import { PHOTOS } from "@/data/event";
 import { scrollToId } from "@/lib/scroll";
 
 const CALMA = [
-  ["Você não vai sem preparo.", "Pela manhã a gente treina junto, com ferramentas simples."],
+  ["Você não vai sem preparo.", "Antes de sair, a gente treina junto, com ferramentas simples."],
   ["Você não vai sozinho.", "Todo mundo sai em equipe e ora antes de sair."],
   ["Não é sobre falar bonito.", "É sobre estar disponível. O resto Deus faz."],
 ];
 
 export default function NaRua() {
   return (
-    <section id="na-rua" className="bg-ink py-20 sm:py-28" data-testid="envio-section">
+    <section id="na-rua" className="bg-ink secao" data-testid="envio-section">
       <div className="wrap grid gap-14 lg:grid-cols-12 lg:items-center">
         <div className="lg:col-span-6">
           <Reveal>
             <p className="label text-brand">A ida à rua</p>
-            <h2 className="display mt-4 text-[clamp(3rem,8vw,6rem)]" data-testid="envio-title">
+            <h2 className="display mt-4 t-h2-g" data-testid="envio-title">
               E se eu travar na hora?
             </h2>
             <p className="mt-6 max-w-lg text-lg text-white/80">

@@ -5,11 +5,11 @@ import { EVENT, GROUP_WHATSAPP_TEXT } from "@/data/event";
 
 export default function Groups() {
   return (
-    <section id="grupos" className="bg-brand py-16 text-ink sm:py-20" data-testid="groups-section">
+    <section id="grupos" className="bg-brand py-[clamp(3rem,8vh,5rem)] text-ink" data-testid="groups-section">
       <Reveal className="wrap grid gap-8 lg:grid-cols-12 lg:items-center">
         <div className="lg:col-span-7">
           <p className="label">Pastores e líderes</p>
-          <h2 className="display mt-3 text-[clamp(2.6rem,6vw,4.6rem)]" data-testid="groups-title">
+          <h2 className="display mt-3 t-h2-p" data-testid="groups-title">
             Traga sua célula, seus jovens, sua igreja
           </h2>
           <p className="mt-4 max-w-xl text-lg text-ink/80">

@@ -70,7 +70,7 @@ export default function Lideres() {
     <PaginaSimples titulo="Para pastores e líderes">
       <section className="wrap py-14 sm:py-20">
         <p className="label text-brand">Pastores e líderes</p>
-        <h1 className="display mt-3 max-w-3xl text-[clamp(3rem,8vw,6rem)]">Leve seu grupo para a rua</h1>
+        <h1 className="display mt-3 max-w-3xl t-h2-g">Leve seu grupo para a rua</h1>
         <p className="mt-5 max-w-xl text-lg text-white/80">
           Tudo o que você precisa para divulgar o Outside Experience na sua igreja. Com o link da sua igreja, a gente sabe quem veio com você.
         </p>

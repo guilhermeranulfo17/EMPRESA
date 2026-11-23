@@ -4,10 +4,10 @@ import { SPEAKERS } from "@/data/event";
 
 export default function Speakers() {
   return (
-    <section id="quem-vai" className="bg-ink py-20 sm:py-28" data-testid="speakers-section">
+    <section id="quem-vai" className="bg-ink secao" data-testid="speakers-section">
       <div className="wrap">
         <Reveal className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <h2 className="display text-[clamp(3rem,7vw,5.5rem)]" data-testid="speakers-title">
+          <h2 className="display t-h2" data-testid="speakers-title">
             Quem vai com você
           </h2>
           <p className="max-w-xs text-white/70">Quem ministra no Experience.</p>

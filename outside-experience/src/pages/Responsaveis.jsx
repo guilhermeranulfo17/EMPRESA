@@ -9,7 +9,7 @@ const BLOCOS = [
   },
   {
     t: "Como é o dia",
-    p: "Pela manhã: adoração, palavra e capacitação. À tarde: oração, consagração e saída em equipes. À noite: testemunhos, celebração e próximos passos. Os horários exatos são divulgados junto com a abertura das inscrições.",
+    p: "Ativação: adoração e palavra. Capacitação: ferramentas simples para falar de Jesus. Envio: oração, consagração e saída em equipes para a rua.",
   },
   {
     t: "A saída à rua",
@@ -31,7 +31,7 @@ export default function Responsaveis() {
       <section className="paper-grain bg-paper py-14 text-ink sm:py-20">
         <div className="wrap max-w-3xl">
           <p className="label text-brand-deep">Pais e responsáveis</p>
-          <h1 className="display mt-3 text-[clamp(2.8rem,7vw,5rem)]">Seu filho quer ir. Veja como funciona.</h1>
+          <h1 className="display mt-3 t-h2-p">Seu filho quer ir. Veja como funciona.</h1>
           <div className="mt-10 divide-y divide-paper-line border-y border-paper-line">
             {BLOCOS.map((b) => (
               <div key={b.t} className="py-6">

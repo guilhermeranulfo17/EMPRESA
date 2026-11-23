@@ -5,10 +5,10 @@ import { scrollToId } from "@/lib/scroll";
 
 export default function Encerramento() {
   return (
-    <section className="bg-ink py-24 sm:py-32" data-testid="final-cta-section">
+    <section className="bg-ink secao" data-testid="final-cta-section">
       <div className="wrap">
         <Reveal>
-          <h2 className="display max-w-4xl text-[clamp(3.6rem,12vw,9rem)]" data-testid="final-cta-title">
+          <h2 className="display max-w-4xl t-final" data-testid="final-cta-title">
             Chegou a hora de <span className="text-brand">sair</span>
           </h2>
           <div className="mt-10 flex flex-col gap-6 sm:flex-row sm:items-center">

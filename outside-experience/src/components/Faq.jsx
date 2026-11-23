@@ -74,10 +74,10 @@ function Item({ item, i, aberto, alternar }) {
 export default function Faq() {
   const [aberto, setAberto] = useState(0);
   return (
-    <section id="duvidas" className="paper-grain bg-paper py-20 text-ink sm:py-28" data-testid="faq-section">
+    <section id="duvidas" className="paper-grain bg-paper secao text-ink" data-testid="faq-section">
       <div className="wrap grid gap-10 lg:grid-cols-12">
         <Reveal className="lg:col-span-4">
-          <h2 className="display text-[clamp(3rem,7vw,5.5rem)]" data-testid="faq-title">
+          <h2 className="display t-h2" data-testid="faq-title">
             Dúvidas
           </h2>
           <p className="mt-5 max-w-xs text-lg text-muted-dark">

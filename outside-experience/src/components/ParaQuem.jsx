@@ -12,10 +12,10 @@ const SE = [
 
 export default function ParaQuem() {
   return (
-    <section id="pra-quem" className="paper-grain bg-paper py-20 text-ink sm:py-28" data-testid="for-who-section">
+    <section id="pra-quem" className="paper-grain bg-paper secao text-ink" data-testid="for-who-section">
       <div className="wrap">
         <Reveal>
-          <h2 className="display max-w-3xl text-[clamp(2.8rem,7vw,5.5rem)]" data-testid="for-who-title">
+          <h2 className="display max-w-3xl t-h2" data-testid="for-who-title">
             Esse dia é para você se…
           </h2>
         </Reveal>
@@ -28,7 +28,7 @@ export default function ParaQuem() {
           ))}
         </ul>
         <Reveal delay={0.1} className="mt-14">
-          <p className="font-serif text-[clamp(2rem,4.5vw,3.4rem)] leading-tight" data-testid="for-who-closing">
+          <p className="font-serif t-lead leading-tight" data-testid="for-who-closing">
             Você não precisa estar pronto. <em className="text-brand-deep">Precisa estar disponível.</em>
           </p>
         </Reveal>

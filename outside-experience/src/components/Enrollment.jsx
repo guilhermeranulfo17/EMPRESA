@@ -34,10 +34,10 @@ export default function Enrollment() {
   ];
 
   return (
-    <section id="inscricao" className="bg-ink-2 py-20 sm:py-28" data-testid="enrollment-section">
+    <section id="inscricao" className="bg-ink-2 secao" data-testid="enrollment-section">
       <div className="wrap grid gap-12 lg:grid-cols-12">
         <Reveal className="lg:col-span-5">
-          <h2 className="display text-[clamp(3rem,7vw,5.5rem)]" data-testid="enrollment-title">
+          <h2 className="display t-h2" data-testid="enrollment-title">
             Garanta seu lugar
           </h2>
           <p className="mt-5 max-w-md text-lg text-white/80" data-testid="enrollment-subtitle">

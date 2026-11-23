@@ -3,11 +3,11 @@ import { PHOTOS } from "@/data/event";
 
 export default function Sobre() {
   return (
-    <section id="sobre" className="paper-grain bg-paper py-20 text-ink sm:py-28" data-testid="about-event-section">
+    <section id="sobre" className="paper-grain bg-paper secao text-ink" data-testid="about-event-section">
       <div className="wrap grid items-center gap-12 lg:grid-cols-12">
         <Reveal className="lg:col-span-7">
           <p className="label text-brand-deep">O que é</p>
-          <p className="mt-5 font-serif text-[clamp(1.9rem,4.4vw,3.4rem)] leading-[1.08]" data-testid="about-event-lead">
+          <p className="mt-5 font-serif t-lead leading-[1.08]" data-testid="about-event-lead">
             Um encontro para cristãos que querem viver a fé fora das quatro paredes. A gente adora, aprende, ora junto e sai para a
             rua. <em className="text-brand-deep">Não falamos sobre missão. Vivemos.</em>
           </p>
