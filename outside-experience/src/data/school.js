@@ -12,8 +12,8 @@ export const SCHOOL = {
   minutos: 90,
   horasAoVivo: 12,
   formato: "On-line e ao vivo",
-  turma: "Próxima turma", // ex.: "Turma de março de 2027" quando houver data
-  turmaInfo: "Datas enviadas aos aprovados", // ex.: "Terças e quintas, 20h" quando estiver definido
+  turma: "Turma Uberlândia", // nome da turma aberta
+  turmaInfo: "Inscrições abertas", // ex.: "Terças e quintas, 20h" quando estiver definido
   whatsapp: "5534997066338",
   instagram: "outsideglobal.io",
   instagramUrl: "https://instagram.com/outsideglobal.io",
@@ -223,3 +223,27 @@ export const DUVIDAS = [
     a: "Não. A escola foi pensada para quem ama Jesus mas se sente travado ou despreparado para falar dele. A sequência começa na vida com Deus e só depois vai para a prática.",
   },
 ];
+
+// Os 90 minutos de um encontro, como estão na apostila da Aula 6
+export const ENCONTRO_EXEMPLO = {
+  aula: "Aula 6 · Laboratório de Palavras de Conhecimento",
+  blocos: [
+    { min: 15, nome: "Fundamento", d: "O que o texto bíblico diz, o que ele não diz e a definição que a escola usa." },
+    { min: 15, nome: "Limites", d: "O que pode e o que não se compartilha, e o protocolo de segurança." },
+    { min: 20, nome: "Rodada 1", d: "Em dupla: escutar, registrar e decidir, ainda sem compartilhar." },
+    { min: 30, nome: "Rodada 2", d: "Em trio, com observador e ficha de avaliação." },
+    { min: 10, nome: "Calibração", d: "Confiança e resultado, desafio da semana e oração final." },
+  ],
+};
+
+// Desafio de cinco dias depois do encontro, como está na apostila da Aula 8
+export const DESAFIO_EXEMPLO = {
+  aula: "Depois da Aula 8",
+  dias: [
+    ["Retomar quem ficou para trás", "Lucas 15:3–7"],
+    ["Encaminhar de verdade", "Atos 9:26–28"],
+    ["Abrir a Bíblia com alguém", "Atos 8:30–35"],
+    ["Servir sem plateia", "João 13:12–17"],
+    ["Convidar um aprendiz", "2 Timóteo 2:1–2"],
+  ],
+};

@@ -123,55 +123,43 @@
   body { background: #fff; color: #000; }
 }
 
-/* ---------- Outside School: caderno de campo ---------- */
+/* ---------- Outside School: identidade das apostilas (caderno de campo) ---------- */
 .school {
-  --pauta: 34px;
-  background-color: #f6f2ea;
-  color: #0c0b0a;
+  background-color: #f3efe7;
+  color: #121110;
 }
 .school ::selection {
   background: #f26a1b;
-  color: #0c0b0a;
-}
-/* folha pautada */
-.pautado {
-  background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--pauta) - 1px), rgba(12, 11, 10, 0.075) calc(var(--pauta) - 1px), rgba(12, 11, 10, 0.075) var(--pauta));
-}
-/* margem laranja do caderno, sempre à esquerda do texto */
-.margem {
-  position: relative;
-}
-@media (min-width: 640px) {
-  .margem::before {
-    content: "";
-    position: absolute;
-    inset-block: 0;
-    left: calc(max(0px, (100% - 84rem) / 2) + 1rem);
-    width: 1px;
-    background: rgba(242, 106, 27, 0.6);
-    pointer-events: none;
-  }
+  color: #121110;
 }
 
 @layer components {
-  /* rótulo em fonte de máquina, como nas apostilas */
+  /* títulos condensados, como nas apostilas */
+  .cond {
+    font-family: Archivo, system-ui, sans-serif;
+    font-stretch: 75%;
+    font-weight: 800;
+    letter-spacing: -0.012em;
+    line-height: 0.94;
+    text-wrap: balance;
+  }
+  /* rótulo em fonte de máquina */
   .etiqueta {
-    @apply font-mono text-[12px] font-medium uppercase tracking-[0.14em];
+    @apply font-mono text-[11.5px] font-medium uppercase tracking-[0.12em];
   }
-  /* número da aula no círculo laranja */
-  .bolinha {
-    @apply inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand font-mono text-[15px] font-semibold text-ink;
+  .t-s1 {
+    font-size: clamp(3.7rem, min(9.6vw, 12.5vh), 8.6rem);
   }
-  .t-school {
-    font-size: clamp(3rem, min(9vw, 11vh), 7.5rem);
+  .t-s2 {
+    font-size: clamp(2.3rem, min(5.4vw, 7vh), 4.4rem);
   }
-  .t-school-h2 {
-    font-size: clamp(2.3rem, min(5.6vw, 7vh), 4.4rem);
+  .t-s3 {
+    font-size: clamp(1.6rem, min(2.6vw, 3.6vh), 2.1rem);
   }
-  .linha-escrita {
-    @apply border-0 border-b border-dashed border-ink/30 bg-transparent px-0 text-[17px] text-ink placeholder:text-ink/35 focus:border-solid focus:border-brand focus:outline-none focus:ring-0;
+  .campo {
+    @apply mt-2 block w-full rounded-none border border-ink/20 bg-white/70 px-4 py-3 text-[16px] text-ink transition-colors placeholder:text-ink/35 hover:border-ink/40 focus:border-ink focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand/40;
   }
   .btn-tinta {
-    @apply btn bg-ink text-folha hover:bg-brand hover:text-ink;
+    @apply btn bg-ink text-[#F3EFE7] hover:bg-brand hover:text-ink;
   }
 }

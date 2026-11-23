@@ -1,39 +1,37 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, ArrowUpRight, Instagram, Menu, MessageCircle, Minus, Plus, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, Instagram, Menu, MessageCircle, X } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import Candidatura from "@/school/Candidatura";
-import { LOGO } from "@/data/event";
-import {
-  AULAS,
-  DUVIDAS,
-  INCLUSO,
-  METODO,
-  OBJETIVOS,
-  PRINCIPIOS,
-  PROCESSO,
-  PROFESSORES,
-  SCHOOL,
-  SEMANAS,
-} from "@/data/school";
+import { LOGO, PHOTOS } from "@/data/event";
+import { AULAS, DESAFIO_EXEMPLO, DUVIDAS, ENCONTRO_EXEMPLO, PRINCIPIOS, PROCESSO, PROFESSORES, SCHOOL, SEMANAS } from "@/data/school";
 import { scrollToId } from "@/lib/scroll";
 
 const NAV = [
-  { label: "Programa", href: "#programa" },
-  { label: "Como funciona", href: "#metodo" },
+  { label: "As 8 aulas", href: "#aulas" },
+  { label: "O encontro", href: "#encontro" },
   { label: "Professores", href: "#professores" },
-  { label: "Investimento", href: "#investimento" },
   { label: "Dúvidas", href: "#duvidas" },
 ];
 
 const dois = (n) => String(n).padStart(2, "0");
+
+function Marca({ claro = false }) {
+  return (
+    <span className="flex items-center gap-3">
+      <img src={LOGO} alt="Outside" className={`h-[18px] w-auto ${claro ? "" : "invert"}`} />
+      <span className={`h-4 w-px ${claro ? "bg-white/30" : "bg-ink/25"}`} aria-hidden />
+      <span className="etiqueta">School</span>
+    </span>
+  );
+}
 
 function Topo() {
   const [aberto, setAberto] = useState(false);
   const [rolou, setRolou] = useState(false);
 
   useEffect(() => {
-    const f = () => setRolou(window.scrollY > 16);
+    const f = () => setRolou(window.scrollY > 8);
     f();
     window.addEventListener("scroll", f, { passive: true });
     return () => window.removeEventListener("scroll", f);
@@ -45,192 +43,194 @@ function Topo() {
   };
 
   return (
-    <header className={`no-print fixed inset-x-0 top-0 z-50 border-b transition-colors ${rolou || aberto ? "border-ink/15 bg-folha/95 backdrop-blur" : "border-transparent bg-folha/0"}`}>
+    <header className={`no-print fixed inset-x-0 top-0 z-50 bg-[#F3EFE7]/95 backdrop-blur transition-shadow ${rolou || aberto ? "shadow-[0_1px_0_rgba(18,17,16,0.12)]" : ""}`}>
       <div className="wrap flex h-16 items-center justify-between gap-6">
-        <button onClick={() => ir("#topo")} className="flex items-center gap-3" aria-label="Outside School, voltar ao topo">
-          <img src={LOGO} alt="Outside" className="h-5 w-auto invert" />
-          <span className="font-serif text-xl italic leading-none">School</span>
+        <button onClick={() => ir("#topo")} aria-label="Outside School, voltar ao início">
+          <Marca />
         </button>
-        <nav className="hidden items-center gap-7 lg:flex" aria-label="Seções">
+        <nav className="hidden items-center gap-8 lg:flex" aria-label="Seções">
           {NAV.map((l) => (
-            <button key={l.href} onClick={() => ir(l.href)} className="text-[15px] text-ink/70 hover:text-ink">
+            <button key={l.href} onClick={() => ir(l.href)} className="text-[15px] text-ink/65 transition-colors hover:text-ink">
               {l.label}
             </button>
           ))}
         </nav>
-        <div className="flex items-center gap-2">
-          <button onClick={() => ir("#candidatura")} className="btn-tinta hidden min-h-[44px] px-5 text-sm sm:inline-flex" data-testid="school-header-cta">
-            Quero me candidatar
+        <div className="flex items-center gap-1">
+          <button onClick={() => ir("#candidatura")} className="btn-tinta hidden min-h-[42px] px-5 text-sm sm:inline-flex" data-testid="school-header-cta">
+            Candidatar-se
           </button>
-          <button onClick={() => setAberto((v) => !v)} className="flex h-11 w-11 items-center justify-center lg:hidden" aria-label={aberto ? "Fechar menu" : "Abrir menu"} aria-expanded={aberto}>
-            {aberto ? <X /> : <Menu />}
+          <button
+            onClick={() => setAberto((v) => !v)}
+            className="-mr-2 flex h-11 w-11 items-center justify-center lg:hidden"
+            aria-label={aberto ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={aberto}
+          >
+            {aberto ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
       {aberto && (
-        <nav className="wrap border-t border-ink/10 pb-6 lg:hidden" aria-label="Seções">
-          {NAV.map((l) => (
-            <button key={l.href} onClick={() => ir(l.href)} className="block w-full border-b border-ink/10 py-4 text-left text-lg">
+        <nav className="wrap pb-6 lg:hidden" aria-label="Seções">
+          {[...NAV, { label: "Candidatura", href: "#candidatura" }].map((l) => (
+            <button key={l.href} onClick={() => ir(l.href)} className="block w-full border-t border-ink/10 py-4 text-left text-lg">
               {l.label}
             </button>
           ))}
-          <button onClick={() => ir("#candidatura")} className="btn-tinta mt-5 w-full">
-            Quero me candidatar
-          </button>
         </nav>
       )}
     </header>
   );
 }
 
-// Folha de rosto: a capa do caderno de campo
-function Abertura() {
+function Foto({ src, alt, legenda, className = "" }) {
   return (
-    <section id="topo" className="pautado margem pt-16">
-      <div className="wrap grid gap-12 pb-16 pt-12 sm:pt-16 lg:grid-cols-12 lg:items-end lg:gap-10 lg:pb-24 lg:pt-20">
-        <div className="lg:col-span-7">
-          <p className="etiqueta text-ink/60 animate-fade-up">Outside School · Formação on-line e ao vivo</p>
-          <h1 className="t-school mt-6 font-serif leading-[0.95] tracking-[-0.01em] animate-fade-up" style={{ animationDelay: "80ms" }}>
-            Você foi chamado para <em className="text-brand">ir</em>.
-          </h1>
-          <p className="mt-7 max-w-xl text-lg text-ink/75 sm:text-xl animate-fade-up" style={{ animationDelay: "160ms" }}>
-            Quatro semanas para sair da passividade: aprofundar a intimidade com Jesus, anunciar o evangelho com clareza e viver a missão na prática.
+    <figure className={className}>
+      <div className="overflow-hidden bg-ink/10">
+        <img src={src} alt={alt} className="aspect-[3/4] w-full object-cover" />
+      </div>
+      <figcaption className="mt-2 text-[13px] leading-snug text-ink/55">{legenda}</figcaption>
+    </figure>
+  );
+}
+
+function Abertura() {
+  const fatos = [
+    ["Duração", `${SCHOOL.semanas} semanas, 2 encontros por semana`],
+    ["Encontros", `${SCHOOL.encontros} ao vivo, de ${SCHOOL.minutos} minutos`],
+    ["Material", "Apostila, áudio e vídeo de cada aula"],
+    ["Investimento", `${SCHOOL.preco}, pago após a aprovação`],
+  ];
+  return (
+    <section id="topo" className="pt-16">
+      <div className="wrap grid gap-12 pb-14 pt-10 sm:pt-14 lg:grid-cols-12 lg:gap-8 lg:pb-16 lg:pt-16">
+        <div className="lg:col-span-7 xl:col-span-7">
+          <p className="etiqueta flex flex-wrap items-center gap-x-3 gap-y-1 text-ink/60 animate-fade-up">
+            <span>Formação on-line e ao vivo</span>
+            <span className="hidden text-brand sm:inline" aria-hidden>
+              ■
+            </span>
+            <span>
+              {SCHOOL.turma}: {SCHOOL.turmaInfo.toLowerCase()}
+            </span>
           </p>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center animate-fade-up" style={{ animationDelay: "240ms" }}>
+          <h1 className="cond t-s1 mt-6 animate-fade-up" style={{ animationDelay: "60ms" }}>
+            Você foi chamado
+            <br />
+            para <span className="text-brand">ir.</span>
+          </h1>
+          <p className="mt-7 max-w-[34rem] text-lg leading-relaxed text-ink/75 sm:text-[19px] animate-fade-up" style={{ animationDelay: "120ms" }}>
+            Oito encontros ao vivo para quem ama Jesus e quer aprender a falar dele com clareza, cooperar com o Espírito com responsabilidade e ir para a rua acompanhado.
+          </p>
+          <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4 animate-fade-up" style={{ animationDelay: "180ms" }}>
             <button onClick={() => scrollToId("#candidatura")} className="btn-tinta" data-testid="school-hero-cta">
-              Quero me candidatar <ArrowRight size={18} />
+              Fazer minha candidatura <ArrowRight size={18} />
             </button>
-            <button onClick={() => scrollToId("#programa")} className="btn border border-ink/25 hover:border-ink">
-              Ver o programa
+            <button onClick={() => scrollToId("#aulas")} className="text-[15px] font-semibold underline decoration-ink/30 decoration-2 underline-offset-[6px] hover:decoration-brand">
+              Ver as 8 aulas
             </button>
           </div>
         </div>
 
-        {/* ficha técnica, como a capa da apostila */}
-        <Reveal delay={0.1} className="lg:col-span-5">
-          <div className="border border-ink bg-ink text-folha">
-            <div className="flex">
-              <div className="w-3 shrink-0 bg-brand" aria-hidden />
-              <div className="flex-1 p-6 sm:p-8">
-                <p className="etiqueta text-folha/60">Caderno de campo</p>
-                <p className="mt-3 font-serif text-3xl leading-tight sm:text-4xl">Escola de envios</p>
-                <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-6 border-t border-folha/15 pt-6">
-                  {[
-                    [dois(SCHOOL.semanas), "semanas"],
-                    [dois(SCHOOL.encontros), "encontros ao vivo"],
-                    [SCHOOL.minutos, "minutos cada"],
-                    [SCHOOL.preco.replace(",00", ""), "formação completa"],
-                  ].map(([v, l]) => (
-                    <div key={l}>
-                      <dt className="sr-only">{l}</dt>
-                      <dd className="font-mono text-3xl font-medium text-folha sm:text-4xl">{v}</dd>
-                      <dd className="etiqueta mt-1 text-folha/55">{l}</dd>
-                    </div>
-                  ))}
-                </dl>
-                <p className="etiqueta mt-8 border-t border-folha/15 pt-5 text-brand">{SCHOOL.lema}</p>
-              </div>
+        <div className="grid grid-cols-2 gap-4 self-end sm:gap-5 lg:col-span-5 xl:pl-6">
+          <Foto src={PHOTOS.pregacao4.src} alt={PHOTOS.pregacao4.alt} legenda="Ensino antes da saída" className="animate-fade-up" />
+          <Foto src={PHOTOS.oracaoBanco.src} alt={PHOTOS.oracaoBanco.alt} legenda="Oração na praça, Uberlândia" className="mt-12 animate-fade-up sm:mt-16" />
+        </div>
+      </div>
+
+      <div className="border-y border-ink/15">
+        <dl className="wrap grid grid-cols-2 lg:grid-cols-4">
+          {fatos.map(([t, v], i) => (
+            <div key={t} className={`py-5 pr-4 ${i % 2 ? "pl-5 border-l border-ink/15" : ""} ${i > 1 ? "border-t border-ink/15 lg:border-t-0" : ""} ${i === 2 ? "lg:border-l lg:pl-5" : ""}`}>
+              <dt className="etiqueta text-ink/45">{t}</dt>
+              <dd className="mt-1.5 text-[15px] font-medium leading-snug sm:text-base">{v}</dd>
             </div>
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-function Conviccao() {
-  return (
-    <section className="secao border-t border-ink/15 bg-folha">
-      <div className="wrap grid gap-12 lg:grid-cols-12">
-        <Reveal className="lg:col-span-5">
-          <p className="etiqueta text-brand">01 · Nossa convicção</p>
-          <h2 className="t-school-h2 mt-5 font-serif leading-[1.02]">
-            Jesus não chamou espectadores. <em>Chamou discípulos.</em>
-          </h2>
-          <p className="mt-6 max-w-md text-lg text-ink/75">
-            Tem muita gente que ama Jesus, mas se sente travada, despreparada ou distante da missão. A School existe para transformar essa convicção num próximo passo real.
-          </p>
-        </Reveal>
-        <ol className="grid gap-px self-start border border-ink/15 bg-ink/15 sm:grid-cols-2 lg:col-span-7">
-          {OBJETIVOS.map(([t, d], i) => (
-            <Reveal as="li" key={t} delay={i * 0.06} className="bg-folha p-6 sm:p-8">
-              <span className="etiqueta text-ink/45">{dois(i + 1)}</span>
-              <h3 className="mt-3 text-xl font-bold">{t}</h3>
-              <p className="mt-2 text-ink/70">{d}</p>
-            </Reveal>
           ))}
-        </ol>
+        </dl>
       </div>
     </section>
   );
 }
 
-function Aula({ a, aberta, alternar }) {
+function AEscola() {
+  return (
+    <section className="secao">
+      <div className="wrap grid gap-12 lg:grid-cols-12">
+        <Reveal className="lg:col-span-6">
+          <h2 className="cond t-s2">Para quem ama Jesus e trava na hora de falar dele.</h2>
+        </Reveal>
+        <Reveal delay={0.06} className="space-y-5 text-lg leading-relaxed text-ink/75 lg:col-span-5 lg:col-start-8">
+          <p>
+            A School é a formação da Outside para cristãos de qualquer igreja que querem viver a missão no dia a dia. A sequência vai de dentro para fora: começa na vida secreta com Jesus, passa pela mensagem e pelos dons, e termina na rua e no discipulado.
+          </p>
+          <p>
+            Cada encontro tem Palavra, prática em duplas e trios, feedback e um desafio para a semana. Você treina num ambiente seguro antes de falar com quem você não conhece.
+          </p>
+          <p className="etiqueta pt-2 text-brand">{SCHOOL.lema}</p>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function LinhaAula({ a, aberta, alternar }) {
   return (
     <li className="border-t border-ink/15">
-      <button onClick={alternar} className="group flex w-full items-start gap-5 py-6 text-left sm:items-center" aria-expanded={aberta} data-testid={`aula-${a.n}`}>
-        <span className="bolinha">{dois(a.n)}</span>
-        <span className="flex-1">
-          <span className="block font-serif text-2xl leading-tight sm:text-3xl">{a.titulo}</span>
-          <span className="mt-1 block text-ink/60">{a.frase}</span>
+      <button onClick={alternar} className="group grid w-full grid-cols-[2.5rem_1fr_auto] items-baseline gap-x-4 py-5 text-left sm:grid-cols-[3.5rem_1fr_auto]" aria-expanded={aberta} data-testid={`aula-${a.n}`}>
+        <span className="font-mono text-sm font-medium text-brand">{dois(a.n)}</span>
+        <span>
+          <span className="cond t-s3 block transition-colors group-hover:text-brand-deep">{a.titulo}</span>
+          <span className="mt-1.5 block text-[15px] text-ink/60">{a.frase}</span>
         </span>
-        <span className="mt-2 shrink-0 text-ink/50 group-hover:text-ink sm:mt-0">{aberta ? <Minus /> : <Plus />}</span>
+        <ChevronDown size={20} className={`self-center text-ink/40 transition-transform duration-300 ${aberta ? "rotate-180" : ""}`} aria-hidden />
       </button>
-      {aberta && (
-        <div className="grid gap-6 pb-8 pl-0 animate-fade-up sm:pl-16 md:grid-cols-2">
-          <div className="self-start border-l-4 border-brand bg-brand/[0.07] p-5">
-            <p className="etiqueta text-brand-deep">Ideia central</p>
-            <p className="mt-2 font-serif text-xl leading-snug">{a.ideia}</p>
-          </div>
-          <div>
-            <p className="etiqueta text-ink/50">Nesta aula</p>
-            <ul className="mt-3 space-y-2">
-              {a.pontos.map((p) => (
-                <li key={p} className="flex gap-3 text-ink/80">
-                  <span className="mt-[0.6em] h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden />
-                  {p}
-                </li>
-              ))}
-            </ul>
-            {a.textos && <p className="mt-5 font-mono text-[13px] text-ink/55">Base bíblica: {a.textos}</p>}
+      <div className={`grid transition-[grid-template-rows] duration-300 ease-out ${aberta ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
+        <div className="overflow-hidden">
+          <div className="grid gap-8 pb-8 sm:pl-[4.5rem] md:grid-cols-[1.1fr_1fr]">
+            <blockquote className="border-l-2 border-brand pl-5 text-lg leading-relaxed text-ink/85">
+              <span className="etiqueta mb-2 block text-ink/45">Ideia central</span>
+              {a.ideia}
+            </blockquote>
+            <div>
+              <span className="etiqueta block text-ink/45">Na aula</span>
+              <ul className="mt-2 divide-y divide-ink/10 text-[15px] text-ink/80">
+                {a.pontos.map((p) => (
+                  <li key={p} className="py-2">
+                    {p}
+                  </li>
+                ))}
+              </ul>
+              {a.textos && <p className="mt-3 text-[13px] text-ink/50">{a.textos}</p>}
+            </div>
           </div>
         </div>
-      )}
+      </div>
     </li>
   );
 }
 
-function Programa() {
+function Aulas() {
   const [aberta, setAberta] = useState(1);
   return (
-    <section id="programa" className="secao pautado border-t border-ink/15">
+    <section id="aulas" className="secao border-t border-ink/15">
       <div className="wrap">
-        <Reveal className="grid gap-6 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <p className="etiqueta text-brand">02 · Grade curricular</p>
-            <h2 className="t-school-h2 mt-5 font-serif leading-[1.02]">
-              De dentro <em>para fora.</em>
-            </h2>
-          </div>
-          <p className="text-lg text-ink/70 lg:col-span-5">
-            A sequência começa na vida com Deus, passa pela mensagem e pelos dons, e termina na rua e no discipulado. Dois encontros por semana, durante quatro semanas.
-          </p>
+        <Reveal className="flex flex-wrap items-end justify-between gap-6">
+          <h2 className="cond t-s2">As 8 aulas</h2>
+          <p className="max-w-md text-ink/65">Duas por semana, nesta ordem. Toque numa aula para ver o que ela trabalha.</p>
         </Reveal>
 
-        <div className="mt-14 space-y-14">
+        <div className="mt-12 space-y-12 lg:space-y-14">
           {SEMANAS.map((s) => (
-            <Reveal key={s.n} className="grid gap-4 lg:grid-cols-12 lg:gap-10">
-              <div className="lg:col-span-3">
-                <p className="etiqueta text-ink/50">Semana {dois(s.n)}</p>
-                <p className="mt-2 font-serif text-3xl italic">{s.tema}</p>
-                <p className="mt-2 text-ink/60">{s.resumo}</p>
+            <div key={s.n} className="grid gap-3 lg:grid-cols-12 lg:gap-8">
+              <div className="lg:col-span-3 lg:pt-5">
+                <p className="etiqueta text-ink/45">Semana {s.n}</p>
+                <p className="mt-1 text-lg font-semibold">{s.tema}</p>
               </div>
               <ol className="border-b border-ink/15 lg:col-span-9">
                 {AULAS.filter((a) => a.semana === s.n).map((a) => (
-                  <Aula key={a.n} a={a} aberta={aberta === a.n} alternar={() => setAberta(aberta === a.n ? 0 : a.n)} />
+                  <LinhaAula key={a.n} a={a} aberta={aberta === a.n} alternar={() => setAberta(aberta === a.n ? 0 : a.n)} />
                 ))}
               </ol>
-            </Reveal>
+            </div>
           ))}
         </div>
       </div>
@@ -238,175 +238,120 @@ function Programa() {
   );
 }
 
-function Metodo() {
+function Encontro() {
+  const total = ENCONTRO_EXEMPLO.blocos.reduce((s, b) => s + b.min, 0);
   return (
-    <section id="metodo" className="secao bg-ink text-folha">
+    <section id="encontro" className="secao bg-ink text-[#F3EFE7]">
       <div className="wrap">
-        <Reveal className="max-w-3xl">
-          <p className="etiqueta text-brand">03 · Como cada encontro funciona</p>
-          <h2 className="t-school-h2 mt-5 font-serif leading-[1.02]">
-            Menos plateia. <em className="text-brand">Mais prática.</em>
-          </h2>
+        <Reveal className="grid gap-6 lg:grid-cols-12 lg:items-end">
+          <h2 className="cond t-s2 lg:col-span-7">Como são os 90 minutos</h2>
+          <p className="text-white/65 lg:col-span-5">
+            Pouca aula expositiva e muita prática supervisionada. Este é o roteiro real de um dos encontros, tirado da apostila.
+          </p>
         </Reveal>
-        <ol className="mt-12 grid gap-px bg-folha/15 sm:grid-cols-2 lg:grid-cols-4">
-          {METODO.map(([t, d], i) => (
-            <Reveal as="li" key={t} delay={i * 0.06} className="bg-ink p-6 sm:p-8">
-              <span className="font-mono text-sm text-brand">{dois(i + 1)}</span>
-              <h3 className="mt-6 font-serif text-3xl">{t}</h3>
-              <p className="mt-3 text-folha/70">{d}</p>
+
+        <Reveal delay={0.05} className="mt-12">
+          <p className="etiqueta text-white/45">{ENCONTRO_EXEMPLO.aula}</p>
+          {/* barra proporcional ao tempo de cada bloco */}
+          <div className="mt-4 hidden h-2 gap-1 md:flex" aria-hidden>
+            {ENCONTRO_EXEMPLO.blocos.map((b, i) => (
+              <div key={b.nome} style={{ flexGrow: b.min }} className={i === 3 ? "bg-brand" : "bg-white/25"} />
+            ))}
+          </div>
+          <ol className="mt-0 grid md:mt-0 md:flex md:gap-1">
+            {ENCONTRO_EXEMPLO.blocos.map((b) => (
+              <li key={b.nome} style={{ flexGrow: b.min, flexBasis: 0 }} className="border-t border-white/15 py-4 md:border-t-0 md:pr-4">
+                <p className="font-mono text-sm text-brand">{b.min} min</p>
+                <p className="mt-1 font-semibold">{b.nome}</p>
+                <p className="mt-1 text-[14px] leading-snug text-white/60">{b.d}</p>
+              </li>
+            ))}
+          </ol>
+          <p className="sr-only">Total: {total} minutos.</p>
+        </Reveal>
+
+        <div className="mt-16 grid gap-12 border-t border-white/15 pt-12 lg:grid-cols-12">
+          <Reveal className="lg:col-span-5">
+            <h3 className="cond text-[clamp(1.8rem,3.2vw,2.6rem)]">Depois do encontro, cinco dias de prática</h3>
+            <p className="mt-4 text-white/65">
+              Cada aula termina com um desafio curto para viver onde você está, com um texto bíblico por dia. A aula seguinte começa pelo que aconteceu.
+            </p>
+            <p className="mt-6 text-white/65">Você também recebe o caderno de campo da aula, para escrever e guardar, e os resumos em áudio e em vídeo.</p>
+          </Reveal>
+          <Reveal delay={0.06} className="lg:col-span-6 lg:col-start-7">
+            <p className="etiqueta text-white/45">{DESAFIO_EXEMPLO.aula}</p>
+            <ol className="mt-3">
+              {DESAFIO_EXEMPLO.dias.map(([t, ref], i) => (
+                <li key={t} className="flex items-baseline justify-between gap-4 border-t border-white/15 py-3.5">
+                  <span>
+                    <span className="mr-4 font-mono text-sm text-white/40">Dia {i + 1}</span>
+                    {t}
+                  </span>
+                  <span className="shrink-0 text-[13px] text-white/45">{ref}</span>
+                </li>
+              ))}
+            </ol>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Combinados() {
+  return (
+    <section className="secao">
+      <div className="wrap grid gap-10 lg:grid-cols-12">
+        <Reveal className="lg:col-span-4">
+          <h2 className="cond t-s2">Os combinados da escola</h2>
+          <p className="mt-5 text-ink/65">Valem para todas as aulas e para a rua.</p>
+        </Reveal>
+        <ol className="grid gap-x-10 sm:grid-cols-2 lg:col-span-8">
+          {PRINCIPIOS.map((p, i) => (
+            <Reveal as="li" key={p} delay={i * 0.03} className="flex gap-4 border-t border-ink/15 py-5 text-lg">
+              <span className="pt-1 font-mono text-sm text-brand">{dois(i + 1)}</span>
+              {p}
             </Reveal>
           ))}
         </ol>
-
-        <div className="mt-16 grid gap-10 lg:grid-cols-12">
-          <Reveal className="lg:col-span-5">
-            <p className="etiqueta text-folha/50">Formação responsável</p>
-            <p className="mt-4 font-serif text-3xl leading-tight sm:text-4xl">
-              Fogo no coração, Bíblia na mão, <em>amor na prática.</em>
-            </p>
-          </Reveal>
-          <ul className="grid gap-x-10 sm:grid-cols-2 lg:col-span-7">
-            {PRINCIPIOS.map((p, i) => (
-              <Reveal as="li" key={p} delay={i * 0.04} className="flex items-baseline gap-4 border-b border-folha/15 py-4">
-                <span className="font-mono text-xs text-folha/40">{dois(i + 1)}</span>
-                <span className="text-lg">{p}</span>
-              </Reveal>
-            ))}
-          </ul>
-        </div>
       </div>
     </section>
   );
 }
 
 function Professores() {
+  const comFoto = PROFESSORES.filter((p) => p.photo);
+  const outros = PROFESSORES.filter((p) => !p.photo);
+  const lista = (xs) =>
+    xs.map((p, i) => (
+      <span key={p.name}>
+        {i > 0 && (i === xs.length - 1 ? " e " : ", ")}
+        <strong className="font-semibold text-ink">{p.name}</strong> ({p.org})
+      </span>
+    ));
   return (
-    <section id="professores" className="secao border-t border-ink/15 bg-folha">
+    <section id="professores" className="secao border-t border-ink/15">
       <div className="wrap">
         <Reveal className="grid gap-6 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <p className="etiqueta text-brand">04 · Corpo docente</p>
-            <h2 className="t-school-h2 mt-5 font-serif leading-[1.02]">
-              Quem vai <em>caminhar com você.</em>
-            </h2>
-          </div>
-          <p className="text-lg text-ink/70 lg:col-span-5">Evangelistas e pastores reunidos para ensinar, ativar e acompanhar cada etapa da formação.</p>
+          <h2 className="cond t-s2 lg:col-span-6">Quem ensina</h2>
+          <p className="text-ink/65 lg:col-span-5 lg:col-start-8">Evangelistas e pastores que estão na rua com a Outside e acompanham a turma do começo ao fim.</p>
         </Reveal>
-        <ul className="mt-12 grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 lg:grid-cols-6">
-          {PROFESSORES.map((p, i) => (
+        <ul className="mt-12 grid gap-x-5 gap-y-8 sm:grid-cols-3">
+          {comFoto.map((p, i) => (
             <Reveal as="li" key={p.name} delay={i * 0.05}>
-              <div className="aspect-[4/5] overflow-hidden bg-folha-2">
-                {p.photo ? (
-                  <img src={p.photo} alt={p.name} loading="lazy" className="h-full w-full object-cover grayscale-[35%]" />
-                ) : (
-                  <div className="pautado flex h-full items-end p-4">
-                    <span className="font-serif text-5xl italic text-ink/25">
-                      {p.name
-                        .replace(/^Pastor /, "")
-                        .split(" ")
-                        .map((x) => x[0])
-                        .join("")}
-                    </span>
-                  </div>
-                )}
+              <div className="overflow-hidden bg-ink/10">
+                <img src={p.photo} alt={p.name} loading="lazy" className="aspect-[4/5] w-full object-cover" />
               </div>
-              <p className="etiqueta mt-4 text-ink/45">{dois(i + 1)}</p>
-              <p className="mt-1 font-semibold leading-snug">{p.name}</p>
-              <p className="text-sm text-ink/60">{p.org}</p>
+              <p className="mt-4 text-lg font-semibold">{p.name}</p>
+              <p className="text-[15px] text-ink/55">{p.org}</p>
             </Reveal>
           ))}
         </ul>
-      </div>
-    </section>
-  );
-}
-
-function Depois() {
-  const etapas = [
-    ["Formação", "Outside School", "Quatro semanas de fundamento, prática e feedback.", null],
-    ["Ativação", "Outside Experience", "O dia presencial em que a gente sai junto para a rua.", "/"],
-    ["Continuidade", "Igreja local", "Encaminhar, acompanhar e permanecer enviado onde você congrega.", null],
-  ];
-  return (
-    <section className="secao pautado border-t border-ink/15">
-      <div className="wrap">
-        <Reveal className="max-w-3xl">
-          <p className="etiqueta text-brand">05 · Depois da School</p>
-          <h2 className="t-school-h2 mt-5 font-serif leading-[1.02]">
-            O curso termina. <em>A missão continua.</em>
-          </h2>
-          <p className="mt-6 max-w-xl text-lg text-ink/70">A School não foi pensada para produzir um pico emocional. A formação prepara, a rua ativa e a igreja sustenta.</p>
-        </Reveal>
-        <ol className="mt-12 grid gap-px border border-ink/15 bg-ink/15 md:grid-cols-3">
-          {etapas.map(([fase, nome, d, href], i) => (
-            <Reveal as="li" key={fase} delay={i * 0.06} className="bg-folha p-6 sm:p-8">
-              <p className="etiqueta text-ink/45">
-                {dois(i + 1)} · {fase}
-              </p>
-              <h3 className="mt-4 font-serif text-3xl">{nome}</h3>
-              <p className="mt-2 text-ink/70">{d}</p>
-              {href && (
-                <Link to={href} className="mt-5 inline-flex items-center gap-2 font-semibold underline decoration-brand decoration-2 underline-offset-4 hover:text-brand-deep">
-                  Conhecer o Experience <ArrowUpRight size={16} />
-                </Link>
-              )}
-            </Reveal>
-          ))}
-        </ol>
-      </div>
-    </section>
-  );
-}
-
-function Investimento() {
-  return (
-    <section id="investimento" className="secao border-t border-ink/15 bg-folha">
-      <div className="wrap grid gap-12 lg:grid-cols-12">
-        <Reveal className="lg:col-span-5">
-          <p className="etiqueta text-brand">06 · Investimento</p>
-          <div className="mt-6 border border-ink bg-folha p-7 sm:p-9">
-            <p className="etiqueta text-ink/55">Formação completa</p>
-            <p className="mt-3 font-serif text-7xl leading-none sm:text-8xl" data-testid="school-preco">
-              {SCHOOL.preco}
-            </p>
-            <p className="mt-3 text-ink/65">
-              {SCHOOL.semanas} semanas · {SCHOOL.encontros} encontros · {SCHOOL.horasAoVivo} horas ao vivo
-            </p>
-            <ul className="mt-7 space-y-3 border-t border-ink/15 pt-6">
-              {INCLUSO.map((x) => (
-                <li key={x} className="flex gap-3">
-                  <span className="mt-[0.6em] h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden />
-                  {x}
-                </li>
-              ))}
-            </ul>
-            <p className="mt-7 border-l-4 border-brand bg-brand/[0.07] px-4 py-3 text-[15px]">
-              <strong>Pagamento somente após a aprovação</strong> no processo seletivo.
-            </p>
-          </div>
-        </Reveal>
-
-        <div className="lg:col-span-7">
-          <Reveal>
-            <h2 className="t-school-h2 font-serif leading-[1.02] lg:mt-12">
-              Não buscamos só inscritos. <em>Buscamos quem está pronto para responder.</em>
-            </h2>
-            <p className="mt-6 max-w-xl text-lg text-ink/70">
-              A candidatura não garante a vaga. Queremos conhecer sua caminhada, ouvir sua liderança e discernir se esta é a turma certa para você.
-            </p>
+        {outros.length > 0 && (
+          <Reveal className="mt-10 max-w-3xl border-t border-ink/15 pt-6 text-lg leading-relaxed text-ink/70">
+            Também ensinam na School: {lista(outros)}.
           </Reveal>
-          <ol className="mt-10">
-            {PROCESSO.map(([t, d], i) => (
-              <Reveal as="li" key={t} delay={i * 0.06} className="flex gap-5 border-t border-ink/15 py-5">
-                <span className="bolinha">{dois(i + 1)}</span>
-                <div>
-                  <h3 className="text-lg font-bold">{t}</h3>
-                  <p className="text-ink/70">{d}</p>
-                </div>
-              </Reveal>
-            ))}
-          </ol>
-        </div>
+        )}
       </div>
     </section>
   );
@@ -414,24 +359,40 @@ function Investimento() {
 
 function Inscricao() {
   return (
-    <section id="candidatura" className="secao pautado margem border-t border-ink/15">
-      <div className="wrap grid gap-12 lg:grid-cols-12">
-        <Reveal className="lg:col-span-4">
-          <p className="etiqueta text-brand">07 · Candidatura</p>
-          <h2 className="t-school-h2 mt-5 font-serif leading-[1.02]">
-            Dê o <em>primeiro passo.</em>
-          </h2>
-          <p className="mt-6 text-lg text-ink/70">Leva uns cinco minutos. Depois disso a gente fala com a sua liderança e te chama no WhatsApp.</p>
-          <a
-            href={`https://wa.me/${SCHOOL.whatsapp}?text=${encodeURIComponent("Olá! Tenho uma dúvida sobre a Outside School.")}`}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-8 inline-flex items-center gap-2 font-semibold underline decoration-brand decoration-2 underline-offset-4"
-          >
-            <MessageCircle size={18} /> Tirar uma dúvida antes
-          </a>
-        </Reveal>
-        <Reveal delay={0.08} className="lg:col-span-8">
+    <section id="candidatura" className="secao border-t border-ink/15 bg-[#EAE4D8]">
+      <div className="wrap grid gap-12 lg:grid-cols-12 lg:gap-10">
+        <div className="lg:col-span-5">
+          <Reveal>
+            <h2 className="cond t-s2">Candidatura</h2>
+            <p className="mt-6 text-lg leading-relaxed text-ink/75">
+              As vagas passam por uma seleção com recomendação da sua liderança, porque a turma pratica junto e lida com pessoas de verdade.
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.05} className="mt-10 border-t border-ink pt-6">
+            <p className="etiqueta text-ink/50">Investimento</p>
+            <p className="cond mt-2 text-[clamp(3rem,6vw,4.5rem)]" data-testid="school-preco">
+              {SCHOOL.preco}
+            </p>
+            <p className="mt-2 text-ink/70">Valor único pela formação completa. Você só paga depois de aprovado.</p>
+          </Reveal>
+
+          <Reveal delay={0.08} className="mt-10">
+            <p className="etiqueta text-ink/50">Como funciona a seleção</p>
+            <ol className="mt-3">
+              {PROCESSO.map(([t, d], i) => (
+                <li key={t} className="grid grid-cols-[2rem_1fr] border-t border-ink/15 py-4">
+                  <span className="font-mono text-sm text-brand">{i + 1}.</span>
+                  <span>
+                    <span className="font-semibold">{t}.</span> <span className="text-ink/70">{d}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </Reveal>
+        </div>
+
+        <Reveal delay={0.06} className="lg:col-span-7">
           <Candidatura />
         </Reveal>
       </div>
@@ -442,22 +403,31 @@ function Inscricao() {
 function Duvidas() {
   const [aberta, setAberta] = useState(-1);
   return (
-    <section id="duvidas" className="secao border-t border-ink/15 bg-folha">
+    <section id="duvidas" className="secao">
       <div className="wrap grid gap-10 lg:grid-cols-12">
         <Reveal className="lg:col-span-4">
-          <p className="etiqueta text-brand">08 · Dúvidas frequentes</p>
-          <h2 className="t-school-h2 mt-5 font-serif leading-[1.02]">
-            Antes de <em>começar.</em>
-          </h2>
+          <h2 className="cond t-s2">Dúvidas</h2>
+          <a
+            href={`https://wa.me/${SCHOOL.whatsapp}?text=${encodeURIComponent("Olá! Tenho uma dúvida sobre a Outside School.")}`}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-6 inline-flex items-center gap-2 font-semibold underline decoration-ink/30 decoration-2 underline-offset-[6px] hover:decoration-brand"
+          >
+            <MessageCircle size={18} /> Perguntar no WhatsApp
+          </a>
         </Reveal>
         <ul className="border-b border-ink/15 lg:col-span-8">
           {DUVIDAS.map((d, i) => (
             <li key={d.q} className="border-t border-ink/15">
               <button onClick={() => setAberta(aberta === i ? -1 : i)} className="flex w-full items-center justify-between gap-6 py-5 text-left text-lg font-semibold" aria-expanded={aberta === i}>
                 {d.q}
-                {aberta === i ? <Minus className="shrink-0" /> : <Plus className="shrink-0" />}
+                <ChevronDown size={20} className={`shrink-0 text-ink/40 transition-transform duration-300 ${aberta === i ? "rotate-180" : ""}`} aria-hidden />
               </button>
-              {aberta === i && <p className="max-w-2xl pb-6 text-ink/75 animate-fade-up">{d.a}</p>}
+              <div className={`grid transition-[grid-template-rows] duration-300 ease-out ${aberta === i ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
+                <p className="max-w-2xl overflow-hidden text-ink/70">
+                  <span className="block pb-6">{d.a}</span>
+                </p>
+              </div>
             </li>
           ))}
         </ul>
@@ -466,58 +436,63 @@ function Duvidas() {
   );
 }
 
-function Manifesto() {
+function Rodape() {
   return (
-    <section className="secao bg-ink text-folha">
-      <div className="wrap text-center">
-        <Reveal>
-          <p className="etiqueta text-brand">Romanos 10:14</p>
-          <p className="t-school mx-auto mt-6 max-w-5xl font-serif leading-[0.98]">
-            Como ouvirão, se não há <em className="text-brand">quem pregue?</em>
-          </p>
-          <p className="mx-auto mt-8 max-w-xl text-lg text-folha/70">
-            Sucesso não é só uma sala cheia. É Jesus anunciado, pessoas amadas, discípulos formados e uma igreja em movimento.
-          </p>
-          <button onClick={() => scrollToId("#candidatura")} className="btn-brand mt-10">
-            Quero me candidatar <ArrowRight size={18} />
-          </button>
-        </Reveal>
+    <footer className="bg-ink pb-28 pt-16 text-white/70 sm:pb-12">
+      <div className="wrap">
+        <p className="cond max-w-3xl text-[clamp(2rem,4.4vw,3.4rem)] text-[#F3EFE7]">
+          “Como ouvirão, se não há quem pregue?”
+        </p>
+        <p className="etiqueta mt-3 text-white/45">Romanos 10:14</p>
+        <div className="mt-14 flex flex-col gap-8 border-t border-white/15 pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <Marca claro />
+          <ul className="flex flex-wrap gap-x-7 gap-y-3 text-[15px]">
+            <li>
+              <Link to="/" className="inline-flex items-center gap-1 hover:text-white">
+                Outside Experience <ArrowUpRight size={14} />
+              </Link>
+            </li>
+            <li>
+              <a href={`https://wa.me/${SCHOOL.whatsapp}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-white">
+                <MessageCircle size={16} /> WhatsApp
+              </a>
+            </li>
+            <li>
+              <a href={SCHOOL.instagramUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-white">
+                <Instagram size={16} /> @{SCHOOL.instagram}
+              </a>
+            </li>
+          </ul>
+        </div>
+        <p className="mt-8 text-sm text-white/35">
+          © {new Date().getFullYear()} Outside · {SCHOOL.assinatura}
+        </p>
       </div>
-    </section>
+    </footer>
   );
 }
 
-function Rodape() {
+// barra fixa no celular, some quando o formulário aparece
+function BarraCelular() {
+  const [mostrar, setMostrar] = useState(false);
+  const alvo = useRef(null);
+  useEffect(() => {
+    alvo.current = document.getElementById("candidatura");
+    const f = () => {
+      const r = alvo.current?.getBoundingClientRect();
+      const noForm = r && r.top < window.innerHeight && r.bottom > 0;
+      setMostrar(window.scrollY > 500 && !noForm);
+    };
+    f();
+    window.addEventListener("scroll", f, { passive: true });
+    return () => window.removeEventListener("scroll", f);
+  }, []);
   return (
-    <footer className="border-t border-folha/10 bg-ink pb-12 pt-12 text-folha/70">
-      <div className="wrap flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <div className="flex items-center gap-3">
-            <img src={LOGO} alt="Outside" className="h-5 w-auto" />
-            <span className="font-serif text-xl italic text-folha">School</span>
-          </div>
-          <p className="etiqueta mt-4 text-folha/45">
-            Outside School · {SCHOOL.assinatura}
-          </p>
-        </div>
-        <ul className="flex flex-wrap gap-x-7 gap-y-3">
-          <li>
-            <Link to="/" className="hover:text-folha">Outside Experience</Link>
-          </li>
-          <li>
-            <a href={`https://wa.me/${SCHOOL.whatsapp}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-folha">
-              <MessageCircle size={16} /> WhatsApp
-            </a>
-          </li>
-          <li>
-            <a href={SCHOOL.instagramUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-folha">
-              <Instagram size={16} /> @{SCHOOL.instagram}
-            </a>
-          </li>
-        </ul>
-      </div>
-      <p className="wrap mt-10 text-sm text-folha/35">© {new Date().getFullYear()} Outside. Uberlândia, MG.</p>
-    </footer>
+    <div className={`no-print fixed inset-x-0 bottom-0 z-40 border-t border-ink/15 bg-[#F3EFE7]/95 p-3 backdrop-blur transition-transform duration-300 sm:hidden ${mostrar ? "translate-y-0" : "translate-y-full"}`}>
+      <button onClick={() => scrollToId("#candidatura")} className="btn-tinta w-full" tabIndex={mostrar ? 0 : -1}>
+        Fazer minha candidatura · {SCHOOL.preco}
+      </button>
+    </div>
   );
 }
 
@@ -536,17 +511,16 @@ export default function School() {
       <Topo />
       <main>
         <Abertura />
-        <Conviccao />
-        <Programa />
-        <Metodo />
+        <AEscola />
+        <Aulas />
+        <Encontro />
+        <Combinados />
         <Professores />
-        <Depois />
-        <Investimento />
         <Inscricao />
         <Duvidas />
-        <Manifesto />
       </main>
       <Rodape />
+      <BarraCelular />
     </div>
   );
 }

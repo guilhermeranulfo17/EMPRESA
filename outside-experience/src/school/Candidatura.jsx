@@ -41,13 +41,22 @@ function textoWhats(f) {
     .join("\n");
 }
 
-function Campo({ id, label, dica, children }) {
+function Campo({ id, label, dica, children, className = "" }) {
   return (
-    <label htmlFor={id} className="block">
-      <span className="etiqueta text-ink/60">{label}</span>
+    <label htmlFor={id} className={`block ${className}`}>
+      <span className="text-[15px] font-semibold">{label}</span>
       {children}
-      {dica && <span className="mt-1 block text-sm text-ink/50">{dica}</span>}
+      {dica && <span className="mt-1.5 block text-[13px] leading-snug text-ink/55">{dica}</span>}
     </label>
+  );
+}
+
+function Grupo({ titulo, children }) {
+  return (
+    <fieldset className="border-t border-ink/15 pt-6">
+      <legend className="etiqueta float-left mb-5 w-full text-ink/50">{titulo}</legend>
+      <div className="clear-both grid gap-5 sm:grid-cols-2">{children}</div>
+    </fieldset>
   );
 }
 
@@ -66,6 +75,15 @@ export default function Candidatura() {
     e.preventDefault();
     setErro("");
     setFalhou(false);
+    const idade = Number(f.age);
+    if (!f.name.trim() || !f.whatsapp || !f.age || !f.city.trim() || !f.church.trim() || !f.pastor_name.trim() || !f.pastor_contact.trim() || f.motivation.trim().length < 10) {
+      setErro("Preencha todos os campos. Só o e-mail é opcional.");
+      return;
+    }
+    if (!(idade >= 14 && idade <= 120)) {
+      setErro("A School é a partir de 14 anos.");
+      return;
+    }
     if (!autoriza) {
       setErro("Marque a autorização para falarmos com a sua liderança.");
       return;
@@ -94,71 +112,70 @@ export default function Candidatura() {
 
   if (pronto) {
     return (
-      <div className="border border-ink bg-folha p-7 sm:p-10" role="status" data-testid="school-candidatura-ok">
-        <span className="bolinha">
+      <div className="bg-white p-7 shadow-[0_1px_0_rgba(18,17,16,0.08)] sm:p-10" role="status" data-testid="school-candidatura-ok">
+        <span className="flex h-11 w-11 items-center justify-center rounded-full bg-brand text-ink">
           <Check size={20} />
         </span>
-        <h3 className="mt-6 font-serif text-4xl leading-tight sm:text-5xl">
-          Candidatura recebida, {pronto.split(" ")[0]}.
-        </h3>
+        <h3 className="cond mt-6 text-[clamp(2.2rem,4vw,3.2rem)]">Recebemos sua candidatura, {pronto.split(" ")[0]}.</h3>
         <p className="mt-4 max-w-xl text-lg text-ink/75">
-          Agora a gente conversa com a sua liderança e te chama no WhatsApp com os próximos passos. O pagamento só acontece depois da aprovação.
+          Agora a gente fala com a sua liderança e te chama no WhatsApp com os próximos passos. O pagamento só acontece depois da aprovação.
         </p>
-        <p className="etiqueta mt-8 text-ink/50">{SCHOOL.lema}</p>
       </div>
     );
   }
 
-  const input = "linha-escrita mt-2 block w-full py-2";
-
   return (
-    <form onSubmit={enviar} className="border border-ink bg-folha p-6 sm:p-10" noValidate data-testid="school-candidatura-form">
-      <div className="flex items-baseline justify-between gap-4 border-b border-ink pb-4">
-        <p className="etiqueta">Ficha de candidatura</p>
-        <p className="etiqueta text-ink/50">{SCHOOL.turma}</p>
+    <form onSubmit={enviar} noValidate className="bg-white p-6 shadow-[0_1px_0_rgba(18,17,16,0.08)] sm:p-9" data-testid="school-candidatura-form">
+      <div className="mb-8 flex flex-wrap items-baseline justify-between gap-2">
+        <p className="cond text-3xl">Ficha de candidatura</p>
+        <p className="text-sm text-ink/55">Leva uns 5 minutos</p>
       </div>
 
-      <div className="mt-8 grid gap-7 sm:grid-cols-2">
-        <Campo id="c-nome" label="Nome completo">
-          <input id="c-nome" className={input} value={f.name} onChange={set("name")} autoComplete="name" required minLength={2} />
-        </Campo>
-        <Campo id="c-whats" label="WhatsApp com DDD">
-          <input id="c-whats" className={input} value={f.whatsapp} onChange={set("whatsapp")} inputMode="tel" autoComplete="tel" placeholder="(34) 99999-9999" required />
-        </Campo>
-        <Campo id="c-email" label="E-mail (opcional)">
-          <input id="c-email" type="email" className={input} value={f.email} onChange={set("email")} autoComplete="email" />
-        </Campo>
-        <div className="grid grid-cols-[6rem_1fr] gap-5">
-          <Campo id="c-idade" label="Idade">
-            <input id="c-idade" className={input} value={f.age} onChange={set("age")} inputMode="numeric" maxLength={3} required />
+      <div className="space-y-8">
+        <Grupo titulo="Sobre você">
+          <Campo id="c-nome" label="Nome completo" className="sm:col-span-2">
+            <input id="c-nome" className="campo" value={f.name} onChange={set("name")} autoComplete="name" required minLength={2} />
+          </Campo>
+          <Campo id="c-whats" label="WhatsApp">
+            <input id="c-whats" className="campo" value={f.whatsapp} onChange={set("whatsapp")} inputMode="tel" autoComplete="tel" placeholder="(34) 99999-9999" required />
+          </Campo>
+          <Campo id="c-email" label="E-mail (opcional)">
+            <input id="c-email" type="email" className="campo" value={f.email} onChange={set("email")} autoComplete="email" />
+          </Campo>
+          <Campo id="c-idade" label="Idade" dica="A partir de 14 anos.">
+            <input id="c-idade" type="number" min={14} max={120} className="campo" value={f.age} onChange={set("age")} inputMode="numeric" required />
           </Campo>
           <Campo id="c-cidade" label="Cidade">
-            <input id="c-cidade" className={input} value={f.city} onChange={set("city")} autoComplete="address-level2" required />
+            <input id="c-cidade" className="campo" value={f.city} onChange={set("city")} autoComplete="address-level2" required />
           </Campo>
-        </div>
-        <Campo id="c-igreja" label="Igreja onde congrega">
-          <input id="c-igreja" className={input} value={f.church} onChange={set("church")} required />
-        </Campo>
-        <Campo id="c-pastor" label="Nome do seu pastor ou líder">
-          <input id="c-pastor" className={input} value={f.pastor_name} onChange={set("pastor_name")} required />
-        </Campo>
-        <Campo id="c-pastor-contato" label="WhatsApp ou e-mail da liderança" dica="Usamos só para pedir a recomendação pastoral.">
-          <input id="c-pastor-contato" className={input} value={f.pastor_contact} onChange={set("pastor_contact")} required />
-        </Campo>
-        <div className="sm:col-span-2">
-          <Campo id="c-motivo" label="Por que você quer fazer a School?" dica="Conte do seu momento com Deus e o que te trava hoje. Não precisa ser bonito, precisa ser sincero.">
-            <textarea id="c-motivo" rows={4} className={`${input} resize-y leading-[34px]`} value={f.motivation} onChange={set("motivation")} required minLength={10} maxLength={1500} />
+        </Grupo>
+
+        <Grupo titulo="Sua igreja">
+          <Campo id="c-igreja" label="Igreja onde você congrega" className="sm:col-span-2">
+            <input id="c-igreja" className="campo" value={f.church} onChange={set("church")} required />
           </Campo>
-        </div>
+          <Campo id="c-pastor" label="Nome do pastor ou líder">
+            <input id="c-pastor" className="campo" value={f.pastor_name} onChange={set("pastor_name")} required />
+          </Campo>
+          <Campo id="c-pastor-contato" label="Contato dele" dica="WhatsApp ou e-mail. Usamos só para pedir a recomendação.">
+            <input id="c-pastor-contato" className="campo" value={f.pastor_contact} onChange={set("pastor_contact")} required />
+          </Campo>
+        </Grupo>
+
+        <Grupo titulo="Sua motivação">
+          <Campo id="c-motivo" label="Por que você quer fazer a School?" dica="Conte do seu momento com Deus e do que te trava hoje. Pode ser simples." className="sm:col-span-2">
+            <textarea id="c-motivo" rows={5} className="campo resize-y" value={f.motivation} onChange={set("motivation")} required minLength={10} maxLength={1500} />
+          </Campo>
+        </Grupo>
       </div>
 
-      <label className="mt-8 flex cursor-pointer items-start gap-3 text-[15px] text-ink/80">
-        <input type="checkbox" checked={autoriza} onChange={(e) => setAutoriza(e.target.checked)} className="mt-1 h-5 w-5 shrink-0 accent-[#F26A1B]" data-testid="school-autoriza" />
+      <label className="mt-8 flex cursor-pointer items-start gap-3 border-t border-ink/15 pt-6 text-[15px] text-ink/80">
+        <input type="checkbox" checked={autoriza} onChange={(e) => setAutoriza(e.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-[#121110]" data-testid="school-autoriza" />
         Autorizo a Outside a falar com a minha liderança sobre esta candidatura e a me chamar no WhatsApp.
       </label>
 
       {erro && (
-        <div className="mt-6 border-l-4 border-brand bg-brand/10 px-4 py-3 text-[15px]" role="alert" data-testid="school-erro">
+        <div className="mt-6 border-l-2 border-brand bg-brand/10 px-4 py-3 text-[15px]" role="alert" data-testid="school-erro">
           {erro}
           {falhou && (
             <a href={linkWhats} target="_blank" rel="noreferrer" className="mt-2 flex items-center gap-2 font-semibold underline decoration-brand underline-offset-4">
@@ -168,11 +185,11 @@ export default function Candidatura() {
         </div>
       )}
 
-      <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <button type="submit" disabled={enviando} className="btn-tinta disabled:opacity-60" data-testid="school-enviar">
+      <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <button type="submit" disabled={enviando} className="btn-tinta w-full disabled:opacity-60 sm:w-auto" data-testid="school-enviar">
           {enviando ? "Enviando…" : "Enviar candidatura"} <ArrowRight size={18} />
         </button>
-        <p className="text-sm text-ink/55">Sem pagamento agora. Você só paga se for aprovado.</p>
+        <p className="text-sm text-ink/55">Nenhum pagamento agora.</p>
       </div>
     </form>
   );
