@@ -4,6 +4,8 @@
 
 Quando o usuário mandar um vídeo para editar, use a skill `/editar-video` (efeitos visuais, trilha original e
 efeitos sonoros, com conferência no final).
+O estilo aprovado pelo usuário (textos no estilo do logo OUTSIDE com corte diagonal, voz isolada por cima da música,
+imagem tratada com cara atual) está na seção "Estilo padrão aprovado" da skill: siga sempre, salvo pedido diferente.
 
 ## Efeitos sonoros em vídeos
 

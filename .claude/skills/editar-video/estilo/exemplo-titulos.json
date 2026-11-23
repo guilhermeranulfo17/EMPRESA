@@ -1,0 +1,465 @@
+{
+ "titulos": {
+  "onda": {
+   "linhas": [
+    [
+     [
+      "ESSA",
+      "b"
+     ],
+     [
+      "É",
+      "b"
+     ],
+     [
+      "A",
+      "b"
+     ]
+    ],
+    [
+     [
+      "TERCEIRA",
+      "b"
+     ],
+     [
+      "ONDA",
+      "l"
+     ]
+    ]
+   ],
+   "tamanho": 190,
+   "dur": 2.35
+  },
+  "trabalhadores": {
+   "linhas": [
+    [
+     [
+      "OS",
+      "b"
+     ],
+     [
+      "TRABALHADORES",
+      "b"
+     ]
+    ],
+    [
+     [
+      "JÁ",
+      "b"
+     ],
+     [
+      "ESTÃO",
+      "b"
+     ],
+     [
+      "DE",
+      "b"
+     ],
+     [
+      "PÉ",
+      "l"
+     ]
+    ]
+   ],
+   "tamanho": 170,
+   "dur": 3.3
+  },
+  "alguem": {
+   "linhas": [
+    [
+     [
+      "ALGUÉM",
+      "b"
+     ]
+    ],
+    [
+     [
+      "PRECISA",
+      "b"
+     ],
+     [
+      "IR.",
+      "l"
+     ]
+    ]
+   ],
+   "tamanho": 260,
+   "dur": 1.4
+  },
+  "espirito": {
+   "linhas": [
+    [
+     [
+      "O",
+      "b"
+     ],
+     [
+      "ESPÍRITO",
+      "b"
+     ],
+     [
+      "DO",
+      "b"
+     ],
+     [
+      "SENHOR",
+      "b"
+     ]
+    ],
+    [
+     [
+      "ESTÁ",
+      "b"
+     ],
+     [
+      "SOBRE",
+      "b"
+     ],
+     [
+      "MIM",
+      "l"
+     ]
+    ]
+   ],
+   "tamanho": 150,
+   "dur": 3.7
+  },
+  "boasnovas": {
+   "linhas": [
+    [
+     [
+      "PARA",
+      "b"
+     ],
+     [
+      "PREGAR",
+      "b"
+     ],
+     [
+      "AS",
+      "b"
+     ]
+    ],
+    [
+     [
+      "BOAS",
+      "l"
+     ],
+     [
+      "NOVAS",
+      "l"
+     ]
+    ]
+   ],
+   "tamanho": 190,
+   "dur": 1.85
+  },
+  "diaadia": {
+   "linhas": [
+    [
+     [
+      "ENQUANTO",
+      "b"
+     ],
+     [
+      "VOCÊ",
+      "b"
+     ],
+     [
+      "VIVE",
+      "b"
+     ]
+    ],
+    [
+     [
+      "O",
+      "b"
+     ],
+     [
+      "SEU",
+      "b"
+     ],
+     [
+      "DIA",
+      "l"
+     ],
+     [
+      "A",
+      "l"
+     ],
+     [
+      "DIA",
+      "l"
+     ]
+    ]
+   ],
+   "tamanho": 160,
+   "dur": 3.2
+  },
+  "pregando": {
+   "linhas": [
+    [
+     [
+      "VOCÊ",
+      "b"
+     ],
+     [
+      "ESTÁ",
+      "b"
+     ],
+     [
+      "PREGANDO",
+      "b"
+     ]
+    ],
+    [
+     [
+      "O",
+      "b"
+     ],
+     [
+      "EVANGELHO",
+      "l"
+     ]
+    ]
+   ],
+   "tamanho": 170,
+   "dur": 2.1
+  },
+  "dons": {
+   "linhas": [
+    [
+     [
+      "VOCÊ",
+      "b"
+     ],
+     [
+      "QUE",
+      "b"
+     ],
+     [
+      "DESEJA",
+      "b"
+     ]
+    ],
+    [
+     [
+      "VIVER",
+      "b"
+     ],
+     [
+      "OS",
+      "b"
+     ],
+     [
+      "DONS",
+      "l"
+     ]
+    ]
+   ],
+   "tamanho": 175,
+   "dur": 2.75
+  },
+  "chamado": {
+   "linhas": [
+    [
+     [
+      "QUE",
+      "b"
+     ],
+     [
+      "SENTE",
+      "b"
+     ],
+     [
+      "O",
+      "b"
+     ]
+    ],
+    [
+     [
+      "CHAMADO",
+      "l"
+     ]
+    ]
+   ],
+   "tamanho": 200,
+   "dur": 2.7
+  },
+  "mais": {
+   "linhas": [
+    [
+     [
+      "QUE",
+      "b"
+     ],
+     [
+      "SABE",
+      "b"
+     ],
+     [
+      "QUE",
+      "b"
+     ]
+    ],
+    [
+     [
+      "EXISTE",
+      "b"
+     ],
+     [
+      "MAIS",
+      "l"
+     ]
+    ]
+   ],
+   "tamanho": 200,
+   "dur": 2.85
+  },
+  "pravoce": {
+   "linhas": [
+    [
+     [
+      "ESSE",
+      "b"
+     ],
+     [
+      "DIA",
+      "b"
+     ],
+     [
+      "É",
+      "b"
+     ]
+    ],
+    [
+     [
+      "PRA",
+      "b"
+     ],
+     [
+      "VOCÊ",
+      "l"
+     ]
+    ]
+   ],
+   "tamanho": 240,
+   "dur": 3.4
+  },
+  "salvacoes": {
+   "linhas": [
+    [
+     [
+      "10",
+      "l"
+     ],
+     [
+      "SALVAÇÕES",
+      "b"
+     ]
+    ],
+    [
+     [
+      "NA",
+      "b"
+     ],
+     [
+      "1ª",
+      "b"
+     ],
+     [
+      "EDIÇÃO",
+      "b"
+     ]
+    ]
+   ],
+   "tamanho": 150,
+   "dur": 2.7
+  },
+  "anuncia": {
+   "linhas": [
+    [
+     [
+      "AQUELE",
+      "b"
+     ],
+     [
+      "QUE",
+      "b"
+     ],
+     [
+      "ANUNCIA",
+      "b"
+     ]
+    ],
+    [
+     [
+      "AS",
+      "b"
+     ],
+     [
+      "BOAS",
+      "l"
+     ],
+     [
+      "NOVAS",
+      "l"
+     ]
+    ]
+   ],
+   "tamanho": 165,
+   "dur": 4.7
+  },
+  "fe": {
+   "linhas": [
+    [
+     [
+      "A",
+      "b"
+     ],
+     [
+      "FÉ",
+      "b"
+     ],
+     [
+      "NÃO",
+      "b"
+     ],
+     [
+      "FOI",
+      "b"
+     ]
+    ],
+    [
+     [
+      "FEITA",
+      "b"
+     ],
+     [
+      "PARA",
+      "b"
+     ]
+    ],
+    [
+     [
+      "FICAR",
+      "b"
+     ],
+     [
+      "DENTRO",
+      "l"
+     ]
+    ]
+   ],
+   "tamanho": 175,
+   "dur": 4.3
+  }
+ },
+ "fim": {
+  "serif": "Experience · 2ª edição",
+  "grande": "JANEIRO DE 2027",
+  "medio": "UBERLÂNDIA – MG",
+  "botao": "INSCREVA-SE PELO LINK DA BIO",
+  "dur": 8
+ }
+}

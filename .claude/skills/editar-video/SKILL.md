@@ -8,6 +8,29 @@ description: Edita um vídeo falado de ponta a ponta para Reels/TikTok - efeitos
 O usuário não é técnico. Respostas curtas, em português, sem pedir que ele rode comandos. Faça tudo e entregue o
 vídeo pronto com `SendUserFile`. Se ele mandou instruções junto ("coloca a palavra X", "sem música"), elas mandam.
 
+## Estilo padrão aprovado (use sempre, salvo pedido diferente)
+
+O usuário aprovou o vídeo de divulgação do Outside Experience e pediu que **todo vídeo novo siga essa pegada**.
+Ferramentas e modelo em `SK/estilo/` (o `exemplo_montagem.py` é o vídeo aprovado, inteiro):
+- **Textos animados no estilo do logo OUTSIDE** (`estilo/titulos.py` + um JSON como `estilo/exemplo-titulos.json`):
+  Anton condensado e grande, branco com a palavra-chave no laranja da marca (#F26A1B), cada linha cortada na
+  diagonal como o logo; as metades entram de lados opostos e ficam com uma fresta fina. Encerramento com o logo se
+  montando pela diagonal (`"fim"` no JSON). Nada de legenda o vídeo todo: só as falas e frases mais importantes,
+  em 2 linhas curtas, grandes, no terço de baixo (centro ~1290 px) ou acima do rosto quando ele estiver baixo.
+- **Áudio**: tire todo o áudio original e deixe só os trechos falados, com a voz isolada (`estilo/separar_voz.py`,
+  Demucs; tira música de fundo de reels e eco de sala). Música do usuário no fundo do vídeo inteiro, começando num
+  trecho forte e com a maior pancada da música alinhada ao clímax do vídeo (ache-a pela subida de grave depois de
+  uma quebra). Mixe com `estilo/mix_musica.sh`: voz 6 a 9 dB acima da música nas falas, música presente (não sumida).
+  Efeitos sonoros: poucos (pancada no título de impacto, logo no final), a música já carrega a energia.
+- **Imagem com cara atual, não de vídeo antigo**: por cena `hqdn3d`, upscale lanczos, `zoompan` com aproximação ou
+  afastamento lento (7%), `unsharp`, cor viva (contraste 1.08, saturação 1.18, sombras frias e luzes quentes),
+  vinheta leve e grão fino; câmera lenta com `minterpolate`. Clarão (`eq=brightness` por expressão) nas pancadas.
+  Cortes no tempo da música (2 ou 4 batidas) no clímax. Exporte com `-crf 19 -maxrate 11M` (60 s ≈ 70 MB).
+- **Roteiro**: não narre o que aconteceu ("a gente saiu pra rua"); mostre nas imagens e use o texto para chamar
+  quem assiste ("você que deseja viver os dons", "esse dia é pra você"). Termine com logo e chamada curta.
+- Sempre entregue também uma versão só com as vozes, para trocar a música pela biblioteca do Instagram se
+  a música escolhida tiver direitos autorais.
+
 Caminhos: `SK` = a pasta desta skill, `FX` = `.claude/skills/effects` (efeitos visuais), `KIT` = `sfx-kit/` na raiz
 do projeto. `PY` = `FX/.venv/bin/python`. Trabalhe numa pasta só para este vídeo (no scratchpad) e copie o vídeo
 para lá.
