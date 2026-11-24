@@ -46,11 +46,14 @@ export default function Hero() {
 
         <motion.h1
           {...subir(0.15)}
-          className="display mt-3 max-w-[11ch] t-hero text-white"
+          className="display mt-3 max-w-[13ch] t-hero text-white"
           data-testid="hero-headline"
         >
-          A fé não foi feita para ficar <span className="text-brand">dentro</span>
+          Como ouvirão se não há <span className="text-brand">quem pregue?</span>
         </motion.h1>
+        <motion.p {...subir(0.22)} className="mt-3 text-sm font-semibold uppercase tracking-label text-white/60" data-testid="hero-verse">
+          Romanos 10:14
+        </motion.p>
 
         <motion.p {...subir(0.3)} className="mt-6 max-w-md text-lg leading-snug text-white/85" data-testid="hero-subheadline">
           Um dia inteiro de adoração, palavra e preparo que termina na rua, falando de Jesus com quem passa.
